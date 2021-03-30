@@ -1,0 +1,69 @@
+{block styles}
+	<style>
+		{sass}
+			.contacts {
+			    overflow: hidden;
+			    border: 1px solid #f5f5f5;
+			    max-width: 500px;
+			    margin: 0 auto;
+			    padding: 2em;
+			    box-shadow: 0px 6px 21px -17px black;
+			    line-height: 180%;
+
+			    &:hover {
+				    box-shadow: 0px 21px 61px -22px black;
+				}
+
+				.name {
+					font-size: 1.2em;
+				}
+				.image {
+				    width: 150px;
+				    height: 150px;
+				    border-radius: 100%;
+				    border: 1px solid #f5f5f5;
+				    background-position: center;
+				    background-size: cover;
+				}
+
+				div:not(.image) {
+				    /*font-size: 1.2em;*/
+				    /*line-height: 160%;*/
+				}
+				span {
+				    color: #d6d6d6;
+				}				
+			}		
+		{/sass}
+	</style>
+	
+{/block}
+
+{block content}
+	<div class="contacts transition-500 mb-5">
+		<div class="row">
+			<div class="col-8">
+				<div class="name mb-3">Mgr. Beata Barbořík Brošová</div>
+				<div class="ico"><span>IČO: </span>66959446</div>
+				<div class="tel t200"><span>TEL: </span><a href="tel:+420 777 887 606">+420 777 887 606</a></div>
+				<div class="mail t200"><span>E-MAIL: </span><a href="mailto:beata@bbleisure.cz?subject=Dotaz">beata@bbleisure.cz</a></div>
+			</div>
+			<div class="col-4">
+				<div class="image" style="background-image: url({$basePath}/images/bee.jpg)"></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="other-contacts text-center">
+		<b>Sídlo provozovny:</b>
+		<p>
+		Aplikační centrum Baluo<br>
+		U Letiště 976/32<br>
+		779 00 Olomouc
+		</p>
+		<b>Číslo bankovního účtu:</b>
+		<p>
+		1029929002/2700
+		</p>
+	</div>
+{/block}

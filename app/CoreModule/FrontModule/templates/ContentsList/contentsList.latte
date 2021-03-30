@@ -1,0 +1,104 @@
+{import $_contentBlocks}
+
+{* {block title}{_global.content.types.$type->short,2}{/block} *}
+{block title}{$pageHeading}{/block}
+
+{block styles}
+	{include parent}
+	<style>
+		h1 {
+			margin-bottom: 0;
+		}
+	</style>
+{/block}
+
+{block header}
+	{include parent}
+	{include contentHeaderImage}
+	<div class="page-heading-wrap">
+		<div class="container">
+			<h1>{$pageHeading}</h1>
+		</div>
+	</div>	
+{/block}
+
+{block content}
+	{* {dump $items->fetchAll()} *}
+	<fieldset n:if="$filter" class="mb-3">
+		<legend>Filtr</legend>
+		<form n:name="filter">
+			<div class="form-group">
+				<input n:name="text" class="form-control" autocomplete="off" placeholder="Text...">
+			</div>
+			<div class="form-group">
+				<select n:name="category" class="form-control" placeholder="Kategorie..."></select>
+			</div>
+			<div class="form-group">
+				<select n:name="tags" class="form-control" placeholder="Štítky..."></select>
+			</div>
+			<div class="text-right">
+				<button n:name="submit" class="btn btn-sm btn-success">Filtrovat</button>
+			</div>
+		</form>
+	</fieldset>
+
+	<div class="row" n:snippet="items" data-ajax-append>
+		<div n:foreach="$items as $item" n:class="$colClass, mb-4">
+			{if $type->short == "event"}
+				{var $date = $item}
+				{var $item = $date->ref(content)}
+				{var $link = $control->link(":Core:Front:Contents:contentDetail", [id => $item->id, date => $date->id])}
+			{else}
+				{var $link = $control->link(":Core:Front:Contents:contentDetail", [id => $item->id])}
+			{/if}
+
+			{var $typeShort = $type->short}
+			{var $title = $item->title}
+			{var $image = $item->image ? $control->getThumb($item->image) : "dist/images/item-no-image.jpg"}
+			{var $imageH = "200px"}
+
+			{var $textLen = 400}
+			{var $text = $item->short_text ? $item->short_text : $item->text}
+			{var $customData = $control->getContentCustomData($item->id)}
+			{* {dump $customData} *}
+
+			<div n:class="item-box, border, p-2, h-100, $link ? link, $typeShort">
+				<div class="row">
+					<a n:class="$type->short == product ? 'col-12 col-md-4' : col-12" n:attr="href => $link">
+						<div n:if="$image" class="image-wrap mb-2">
+							<div class="image">{include imageCover, $image, $imageH}</div>
+						</div>
+					</a>
+					<div n:class="$typeShort == product ? 'col-12 col-md-6' : col-12, col-text, mb-4">
+						<h2 n:class="title, $type->short == product ? text-left : text-center">{$title}</h2>
+						{* <div n:if="$type->short == product" class="price h3">{$customData->price|price} Kč</div> *}
+						<div n:if="!empty($date)" class="item-date text-center">
+							{* {dump $date} *}
+							<div>{$date->start|interval, $date->end, true, true}</div>
+						</div>
+						<div n:ifset="$customData" class="custom-data border-bottom pb-2 mb-2">
+							<div n:if="!empty($cField->value)" n:foreach="$customData as $cField">
+								<label class="data-title bold">{$cField->title}:</label>
+								<span class="data-value">
+									{include contentCustomField, $cField}
+								</span>
+							</div>
+						</div>
+						<div n:ifset="$text" class="text">
+							{$text|striptags|noescape|truncate:$textLen}
+						</div>
+					</div>
+					<div n:if="$link" class="col-12 col-md-2 col-link-btn">
+						<a href="{$link}" class="btn btn-soft no-radius item-detail-btn">
+							<i class="fas fa-chevron-right"></i>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="text-center mt-3" n:snippet="items-buttons">
+		<a n:if="!$allItems" n:href="moreItems!" class="btn btn-sm btn-outline-green ajax" data-loader="this">Načíst víc</a>
+		{* <a n:href=":Front:ContentsList:contentsList, type => news" class="btn btn-sm btn-outline-green">Všechny aktuality</a> *}
+	</div>
+{/block}

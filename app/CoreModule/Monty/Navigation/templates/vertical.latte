@@ -1,0 +1,7 @@
+{extends @layout.latte}
+
+{block navigation}
+	{foreach $control->getItems() as $item}
+		{$item->getHtml()}
+	{/foreach}
+{/block}

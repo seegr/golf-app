@@ -1,0 +1,35 @@
+{snippet modal}
+	<div class="modal fade" id="{$id}" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 n:if="$title" class="modal-title" id="{$id}Label">{$title}</h5>
+					<button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					{$content|noescape}
+				</div>
+				<div n:if="$buttonCloseTitle" class="modal-footer">
+					<button type="button" class="btn modal-close" data-dismiss="modal">{$buttonCloseTitle}</button>
+					{* <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> *}
+					{* <button type="button" class="btn btn-primary">Save changes</button> *}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			var show = {isset($show) ? true : false};
+
+			// console.log("modal show", show);
+			if (show) {
+				// console.log({$id});
+				// console.log("showing modal", $({$id}))
+				$("#"+{$id}).modal("show");
+			}
+		});
+	</script>
+{/snippet}

@@ -1,0 +1,26 @@
+{extends @layout.latte}
+
+{block navigation}
+	<div class="row">
+		<div n:if="$leftItems" class="col-{$itemsCol} text-left left-items">
+			{foreach $leftItems as $item}
+				{$item->getHtml()}
+			{/foreach}
+		</div>
+		<div n:if="$centerItems" class="col-{$itemsCol} text-center items">
+			{foreach $centerItems as $item}
+				{$item->getHtml()}
+			{/foreach}
+		</div>
+		<div n:if="$rightItems" class="col-{$itemsCol} text-right right-items">
+			{foreach $rightItems as $item}
+				{$item->getHtml()}
+			{/foreach}
+		</div>
+	</div>
+
+	{include scripts.latte}
+{/block}
+
+
+{* <div class="clearfix"></div> *}

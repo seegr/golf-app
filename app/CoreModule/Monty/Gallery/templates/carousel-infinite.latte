@@ -1,0 +1,26 @@
+<div id="{$id}">
+	<div n:if="count($images)" n:snippet="gallery">
+		{* {dump $images} *}
+		<div n:if=$title class="gallery-title">{$title}</div>
+		<div class="gallery-control layout-thumb" id="{$id}">		
+			<div id="{$id}-carousel" class="carousel-infinite {$id}">
+			  <div class="carousel">
+			    {foreach $images as $image}
+			    	<div class="carousel-cell mx-1">
+						<img class="gallery-image-thumb gallery-image-zoom" src="{$image->getSrc('thumb')}" href="{$image->getSrc()}" style="height: 200px; width: auto">
+			    	</div>
+			    {/foreach}
+			  </div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$(function() {
+			var flky = new Flickity( '.carousel-infinite .carousel', {
+				contain: true,
+				//wrapAround: true
+			});		
+		});
+	</script>
+</div>

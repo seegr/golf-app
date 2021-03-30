@@ -1,0 +1,170 @@
+{import "blocks.latte"}
+
+{var $controlName = $control->getName()}
+
+{snippet calendar}
+	<div n:class="m-calendar, month, 'dayLayout-' . $dayLayout, 'size-' . $layoutSize, $control->showEvents ? 'show-events' : 'hidden-events'" data-year="{$Date->year}" data-month="{$Date->month}">
+		<table>
+			<thead>
+				<tr class="nav">
+					{snippet year}
+						<td><a n:href="changeDate!, year => $Date->tYear, month => $Date->tMonth" n:class="today-btn, $control->getElementClass(today-btn) ? $control->getElementClass(today-btn) : 'btn btn-sm btn-success', d-block, ajax" data-loader=".m-calendar tbody"><i class="fas fa-home"></i></a></td>
+						<td><a n:class="ajax, d-block, $control->getElementClass(year-btn) ? $control->getElementClass(year-btn) : 'btn btn-sm btn-primary'" data-loader=".m-calendar" n:href="changeDate!, year => $Date->year - 1, month => $Date->month"><i class="fas fa-caret-left"></i></a></td>
+						<td colspan="4" class="text-center selector-td border">
+							{form yearSelectForm}
+								<select n:name="year" class="calendar-stepper year-selector not-selectize"></select>
+							{/form}
+						</td>
+						<td><a n:class="ajax, d-block, $control->getElementClass(year-btn) ? $control->getElementClass(year-btn) : 'btn btn-sm btn-primary'" data-loader=".m-calendar" n:href="changeDate!, year => $Date->nextMonthYear + 1, month => $Date->month"><i class="fas fa-caret-right"></i></a></td>
+					{/snippet}
+				</tr>
+				<tr class="nav">
+					{snippet month}
+						<td n:if="$confirmButton"><button class="btn btn-sm btn-success d-block date-confirm" style="width: 100%"><i class="fas fa-search"></i></button></td>
+						<td><a n:class="ajax, d-block, $control->getElementClass(month-btn) ? $control->getElementClass(month-btn) : 'btn btn-sm btn-primary'" data-loader=".m-calendar" n:href="changeDate!, year => $Date->prevMonthYear, month => $Date->prevMonth"><i class="fas fa-caret-left"></i></a></td>
+						<td n:attr="colspan => $confirmButton ? 4 : 5" class="text-center selector-td border">
+							{form monthSelectForm}
+								<select n:name="month" class="calendar-stepper month-selector not-selectize"></select>
+							{/form}</td>
+						<td><a n:class="ajax, d-block, $control->getElementClass(month-btn) ? $control->getElementClass(month-btn) : 'btn btn-sm btn-primary'" data-loader=".m-calendar" n:href="changeDate!, year => $Date->nextMonthYear, month => $Date->nextMonth"><i class="fas fa-caret-right"></i></a></td>
+					{/snippet}
+				</tr>
+				<tr>
+					<td class="separator"></td>
+				</tr>
+				<tr class="days-header">
+					{for $day = 1; $day <= 7; $day++}
+						<td n:class="$day >= 6 ? weekend">{$labels->daysShort[$day]}</td>
+					{/for}
+				</tr>
+			</thead>
+			{snippet days}
+				<tbody class="days">
+					{var $firstDay = strtotime("$Date->year-$Date->month-1")}
+					{var $startOffset = date("N", $firstDay)}
+					{var $rows = ceil(($Date->daysInMonth + $startOffset - 1) / 7)}
+					{var $numberOfDays = $rows * 7}
+					{var $weekDay = 1}
+
+					{var $day = 1}
+					{var $nextMonthDay = 1}
+					{for $i = 1; $i <= $numberOfDays; $i++}
+						{var $timestamp = strtotime("$Date->year-$Date->month-$day")}
+						{var $dayDate = date("Y-m-d", $timestamp)}
+						{var $dayLabel = $day . "."}
+						{var $dateLabel = date("j.n.Y", $timestamp)}
+
+						{if $weekDay == 1}
+							<tr>
+						{/if}
+
+							{var $class = "day"}
+							{var $class .= ($timestamp == $Date->tTimestamp) ? " today"}
+							{var $class .= ($weekDay >= 6) ? " weekend"}
+
+							{var $holiday = $control->isHoliday($dayDate)}
+							{if $holiday}
+								{var $class .= " holiday"}
+								{var $holidayStr = implode("<br>", $holiday)}
+								{var $dataToggle = "tooltip"}
+							{else}
+								{var $dataToggle}
+								{var $holidayStr}
+							{/if}
+							
+							{if $i >= $startOffset && $day <= $Date->daysInMonth}
+								{if $dayCallback}
+									{* <td class="curr-month {$class}">
+										<div>{$dayLabel}</div>
+										{$control->callDayCallback($dayDate)}
+									</td> *}
+									<td class="curr-month {$class}" n:attr="data-toggle => $dataToggle, title => $holidayStr">
+										{* {include day, day => $day, date => $dayDate, dayLabel => $dayLabel, dateLabel => $dateLabel} *}
+										{* <div>{$dayLabel}</div> *}
+										{$control->callDayCallback($dayDate)}
+									</td>
+								{else}
+									<td class="curr-month {$class}" n:attr="data-toggle => $dataToggle, title => $holidayStr">
+										{include day, day => $day, date => $dayDate, dayLabel => $dayLabel, dateLabel => $dateLabel}
+									</td>
+								{/if}
+								{php $day++}
+							{elseif $i < $startOffset}
+								{var $prevMonthDay = $Date->daysInPrevMonth - $startOffset + $i + 1}
+								<td class="diff-month {$class}">{$prevMonthDay}</td>
+							{else}
+								<td class="diff-month {$class}">{$nextMonthDay}</td>
+								{php $nextMonthDay++}
+							{/if}
+
+						{if $weekDay == 7}
+							</tr>
+							{var $weekDay = 1}
+						{else}
+							{php $weekDay++}
+						{/if}
+					{/for}
+
+				</tbody>
+			{/snippet}
+		</table>
+	</div>
+{/snippet}
+
+<script>
+	$(function() {
+
+		popover();
+
+		$.nette.ext({
+			success: function() {
+				popover();
+			}
+		});
+
+		var confirmButton = {$confirmButton};
+
+		if (confirmButton) {
+			$(document).on("click", ".date-confirm", function() {
+				dateChange();
+			});
+		} else {
+			$(document).on("change", ".calendar-stepper", function() {
+				dateChange();
+			});
+		}
+
+		function dateChange() {
+			$.nette.ajax({
+				url: {link changeDate!},
+				data: {
+					{$controlName . "-year"}: $(".year-selector").val(),
+					{$controlName . "-month"}: $(".month-selector").val()
+				},
+				beforeSend: loaderOn(".m-calendar tbody")
+			});
+		}
+
+		function popover() {
+			$(".day-label[data-content]").popover({
+				trigger: "hover",
+				placement: "top"
+			});
+
+			$(".m-calendar .day-wrap.has-event").popover({
+				trigger: "hover",
+				placement: "top",
+				template: '<div class="popover event-calendar-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>',
+				html: true,
+				content: function() {
+					var content = "";
+					$.each($(this).parent().find(".event"), function(i, el) {
+						// console.log($(el).text());
+						content += "<div>" + $(el).text() + "</div>";
+					});
+					return content;
+				}
+			});
+		}
+	});
+</script>

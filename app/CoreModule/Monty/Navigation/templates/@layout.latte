@@ -1,0 +1,7 @@
+{import blocks.latte}
+
+<div n:if="$control->hasItems()" n:class="monty-navigation, navigation-control, navigation, implode(' ', $control->class)" id="{$id}">
+	{block navigation}{/block}
+</div>
+
+{include scripts.latte}

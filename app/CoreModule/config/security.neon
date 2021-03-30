@@ -1,0 +1,38 @@
+services:
+	authorizator:
+		class: App\CoreModule\Components\Authorizator
+		setup:
+			# - addRole("guest")
+			# - addRole("registered", "guest")
+			# - addRole("admin", "guest")
+			# - addRole("superadmin", "admin")
+			- defineRoles()
+
+			- addResource("Core:Admin:Dashboard")
+			- addResource("Core:Admin:Users")
+			- addResource("Core:Admin:Contents")
+			- addResource("Core:Admin:Navigations")
+			- addResource("Core:Admin:Maintenance")
+			- addResource("Core:Admin:Custom")
+			- addResource("Core:Admin:FilesList")
+			- addResource("Core:Front:Homepage")
+			- addResource("Core:Front:Users")
+			- addResource("Core:Front:Contents")
+			- addResource("Core:Front:ContentsList")
+			- addResource("Core:Front:User")
+			- addResource("Core:Front:Custom")
+			- addResource("Core:Front:Api")
+			
+
+			- allow("superadmin")
+			- allow("admin", "Core:Admin:Users")
+			- allow("admin", "Core:Admin:Contents")
+			- allow("admin", "Core:Admin:Dashboard")
+			- allow("admin", "Core:Admin:FilesList")
+			- allow("guest", "Core:Front:Homepage")
+			- allow("guest", "Core:Front:Custom")
+			- allow("guest", "Core:Front:Users")
+			- allow("guest", "Core:Front:Contents")
+			- allow("guest", "Core:Front:ContentsList")
+			- allow("guest", "Core:Front:Api")
+			- allow("registered", "Core:Front:User")

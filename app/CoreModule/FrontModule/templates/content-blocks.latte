@@ -1,0 +1,104 @@
+{block contentHeaderImage}
+	<div n:if="!empty($headerImage)"class="header-image-wrap">
+		{* <div n:class="header-image" style="background-image: url({$basePath}/{$headerImage|noescape})"></div> *}
+		<img src="{$basePath}/{$headerImage|noescape}" class="img-fluid header-image" alt="Úvodní obrázek">
+	</div>
+{/block}
+
+{block contentCustomData}
+	<div n:if="!empty($customData)" class="custom-data">
+		<div n:foreach="$customData as $cField" n:if="$cField->value" class="data-row">
+			<span class="label">{$cField->title}:</span>
+			<span class="val">
+				{include contentCustomField, $cField}
+			</span>
+		</div>
+	</div>
+{/block}
+
+{block contentBody}
+	<div n:if="$content->short_text" class="content-intro font-italic opacity-7 font-size-12">{$content->short_text}</div>
+	<div class="content-text mt-5">{$content->text|noescape}</div>
+{/block}
+
+{block contentGallery}
+	{control contentGallery}
+{/block}
+
+{block contentTime}
+	{if $type == "event"}
+		<span n:if="!empty($date)" class="event-date">{$date->start|interval, $date->end, true, true}</span>
+	{else}
+		<span class="contet-created">{$content->created|datetime}</span>
+	{/if}	
+{/block}
+
+
+{define itemBox, $attrs, $bgCover}
+	{* {dump $attrs} *}
+	{var $link = !empty($attrs[link]) ? $attrs[link] : null}
+	{if !empty($attrs["intro"])}
+		{var $text = $attrs["intro"]}
+	{elseif !empty($attrs["text"])}
+		{var $text = $attrs["text"]}
+	{/if}
+	{* {var $text = !empty($attrs["intro"]) ? $attrs["intro"] : $attrs["text"]} *}
+	{var $target = !empty($attrs["external"]) ? "_blank" : null}
+	{var $titleClass = !empty($attrs["titleClass"]) ? $attrs["titleClass"] : "h3"}
+
+	<div n:class="item-box, border, p-2, h-100, $link ? link, !empty($attrs[type]) ? $attrs[type]">
+		<a class="d-block" n:attr="href => $link, target => $target">
+			<div n:if="!isset($attrs[image]) || $attrs[image] !== false" class="image-wrap mb-2">
+				{var $img = !empty($attrs["image"]) ? $attrs["image"] : "dist/images/item-no-image.jpg"}
+				{var $imgH = !empty($attrs["imageH"]) ? $attrs["imageH"] : null}
+				<div class="image">{include imageCover, $img, $imgH, $bgCover}</div>
+			</div>
+			<div n:class="title, text-center, $titleClass">{$attrs["title"]}</div>
+		</a>
+		<div n:if="!empty($attrs[date])" class="item-date text-center">
+			{var $date = $attrs[date]}
+			{* {dump $date} *}
+			<div>{$date->start|interval, $date->end, true, true}</div>
+		</div>
+		<div n:ifset="$attrs[info]" class="item-info border-bottom pb-2 mb-2">
+			<div n:if="$iText" n:foreach="$attrs[info] as $iLabel => $iText">
+				<label class="bold">{$iLabel}:</label>
+				<span>
+					{if is_array($iText)}
+						{$iText|implode:", "}
+					{else}
+						{$iText}
+					{/if}
+				</span>
+			</div>
+		</div>
+		<div n:ifset="$text" class="text">
+			{var $len = !empty($attrs[textLen]) ? $attrs[textLen] : 200}
+			{if empty($attrs[fulltext])}
+				{$text|striptags|noescape|truncate:$len}
+			{else}
+				{$text|noescape}
+			{/if}
+		</div>
+		<div n:if="$link" class="mt-4 pt-3">
+			<a href="{$link}" class="btn btn-soft no-radius item-detail-btn">Víc info...</a>
+		</div>
+	</div>
+{/define}
+
+{define contentCustomField, $field}
+	{if is_array($field->value)}
+		{$field->value|implode:", "}
+	{else}
+		{switch $field->type}
+			{case "tel"}
+				{$field->value|tel}
+			{case "price"}
+				{$field->value|price}
+			{case "url"}
+				<a href="{$val}" target="_blank">{$val}</a>
+			{default}
+				{$field->value}
+		{/switch}
+	{/if}
+{/define}

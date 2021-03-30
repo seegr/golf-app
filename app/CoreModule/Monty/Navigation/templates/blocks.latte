@@ -1,0 +1,13 @@
+{define submenu, $items}
+	<div class="submenu">
+		<div n:foreach="$items as $item">
+			<span>{$item->text}</span>
+		</div>
+	</div>
+{/define}
+
+{define itemsLoop, $items}
+	{foreach $items as $item}
+		{$item->getHtml()}
+	{/foreach}
+{/define}

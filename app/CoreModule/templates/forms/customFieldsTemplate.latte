@@ -1,0 +1,62 @@
+{* {dump $form} *}
+
+<div class="row">
+	{foreach $_customFields as $input}
+		{* {dump $input} *}
+		{var $name = $input->name}
+		{var $label = $input->caption}
+		{var $objType = \Monty\Helper::getObjectClassName($input)}
+		{var $type = $objType == "ReCaptchaField" ? "captcha" : $input->getOptions()[type]}
+		{* {dump $objType} *}
+		{* {var $fieldId = explode("field_", $name)}
+		{var $fieldId = end($fieldId)} *}
+		{* {var $fieldHash = $name} *}
+		{* {dump $form[$name]} *}
+		
+		{if !in_array($type, ["button", "hidden", "captcha"])}
+			{var $attrs = []}
+			{* {if $field->desc}
+				{var $attrs[data-toggle] = "tooltip"}
+				{var $attrs[title] = $field->desc}
+			{/if} *}
+
+			<div class="form-group col-12 col-md-6" n:attr="$attrs">
+				{* {dump $type} *}
+
+				{switch $type}
+					{case "text"}
+						<label>{$label}</label>
+						{input $form[$name]}
+					{case "radio"}
+						<label n:if="!empty($form[$name]->items)">{$label}</label>
+						<div class="row">
+							{foreach $form[$name]->items as $key => $child_label}
+								<div class="col-12">
+									<div class="custom-control custom-radio">
+										<input n:name="$name:$key" class="custom-control-input">
+										<label n:name="$name:$key" class="custom-control-label">{$child_label}</label>
+									</div>
+								</div>
+							{/foreach}
+						</div>
+					{case "checkbox"}
+						<div class="custom-control custom-checkbox">
+							<input n:name="$name" class="custom-control-input">
+							<label n:name="$name" class="custom-control-label">{$label}</label>
+						</div>
+					{case "textarea"}
+						<textarea n:name="$name" class="form-control" rows="4"></textarea>
+					{case "file"}
+						<input n:name="$name" class="form-control" accept="image/x-png,image/gif,image/jpeg">
+					{case "select"}
+						{input $form[$name]}
+				{/switch}
+				{* {if $field->desc}
+					{include modal, $hash, $label, $field->desc}
+				{/if} *}
+			</div>
+		{elseif $type == "captcha"}
+			<div n:name="captcha" class="form-group col-12 g-recaptcha"></div>
+		{/if}
+	{/foreach}
+</div>

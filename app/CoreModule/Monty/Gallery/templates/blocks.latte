@@ -1,0 +1,90 @@
+{define actionButtons}
+	<div class="gallery-buttons px-2 mb-3" n:if="$editable && isset($images) && count($images) && $actionButtonsVisible">
+		<div class="row">
+			<div class="col-sm-4">
+				<button n:if="$imagesForm" class="btn btn-sm btn-success gallery-save-edits" disabled>Uložit změny</button>
+			</div>
+			<div class="col-sm-4 my-2 my-sm-0">
+				<button class="btn btn-sm btn-primary gallery-select-all">Vybrat všechno</button>
+			</div>
+			<div class="col-sm-4">
+				<button class="btn btn-sm btn-danger gallery-selected-delete" disabled>Smazat vybrané</button>
+			</div>
+		</div>
+		{foreach $actions as $action}
+			{$action->getButton()}
+		{/foreach}
+	</div>	
+{/define}
+
+{define image, $image, $src, $thumbSrc}
+	<div n:class="$image->getClass(), grid-item">
+		<div n:class="$layout == grid ? m-1">
+			<div class="image-wrap gallery-image gallery-item" n:attr="$image->getAttrs()">
+				<div class="border rounded image-box">
+					<a href="{$src}" n:attr="title => $image->title, alt => $image->getAlt(), data-desc => $image->desc" class="image-wrap gallery-image-zoom">
+						<img src="{$thumbSrc}" class="img-fluid" alt="{$image->getAlt()}">
+					</a>
+					<div class="image-zoom-box">
+						<div n:if="$image->title" class="image-label text-center">{$image->title|noescape}</div>
+						<div class="image-zoom-box-in d-flex align-items-center justify-content-center">
+							{* <div class="image-zoom-icon"><i class="fas fa-search"></i></div> *}
+						</div>
+					</div>
+					<div class="image-buttons position-absolute" style="bottom:.25em; right:.25em">
+						{foreach $image->getActions() as $action}
+							{$action->getButton($image->imageId)}
+						{/foreach}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{/define}
+
+{define imageEditable, $image, $src, $thumbSrc}
+	<div n:class="$image->getClass(), grid-item, gallery-image, gallery-item" n:attr="$image->getAttrs()">
+		<div class="border rounded m-2 p-2 image-box">
+			<div class="d-flex align-items-center bg-dark border rounded">
+				<div class="image-wrap d-flex align-items-center position-relative" style="width:100%;height:150px;">
+					<img class="d-table mx-auto my-auto gallery-image-zoom" src="{$thumbSrc}" href="{$src}" title="{$image->title}" alt="{$image->alt}" style="max-height:100%;max-width:100%">
+					<div class="h2 text-white position-absolute text-center image-order" style="top: 0; left:0; width: 100%; -webkit-text-stroke-width: 1px; -webkit-text-stroke-color: black;">{$image->order}</div>
+					<div class="position-absolute btn btn-sm btn-light action image-select" style="top:.25em; left:.25em"><i class="fas fa-check checked" style="opacity: 0"></i></div>
+					<div n:if="$sortable" class="btn btn-sm btn-primary position-absolute action image-sorter" style="top:.25em; right:.25em;cursor:all-scroll"><i class="fas fa-arrows"></i></div>
+					<div class="image-buttons position-absolute" style="bottom:.25em; right:.25em">
+						{foreach $image->getActions() as $action}
+							{$action->getButton($image->imageId)}
+						{/foreach}
+					</div>
+				</div>
+				
+			</div>
+			{if $imagesForm}
+				{include imageForm.latte, image => $image}
+			{/if}
+			<ul n:ifset="$columns" class="columns list-group p-2">
+				{foreach $columns as $key => $col}
+					<div n:if="$image->$key" class="list-group-item bg-dark py-0 px-2 column {$key}">
+						<div class="row">
+							<div class="col-4">{$col->label}</div>
+							<div class="col-8">{$control->getColumnValue($image, $col)}</div>
+						</div>
+					</div>
+				{/foreach}
+			</ul>
+		</div>
+	</div>
+{/define}
+
+{define loadMoreButtons, $imagesCount, $limit, $offset}
+	<div class="text-center mt-4 load-more-buttons-wrap" n:if="$loadMore || $loadAll" n:snippet="loadMoreButtons">
+		<span class="load-more-buttons">
+			{* {dump $imagesCount}
+			{dump $offset + $limit} *}
+			{if $offset + $limit < $imagesCount}
+				<a n:if="$loadMore" href="javascript:void(0)" class="btn btn-sm btn-outline-success load-more" data-page="{$page + 1}">Další fotky</a>
+				<a n:if="$loadAll" href="javascript:void(0)" class="btn btn-sm btn-success load-all" data-page="{$page + 1}">Celá galerie</a>
+			{/if}
+		</span>
+	</div>
+{/define}

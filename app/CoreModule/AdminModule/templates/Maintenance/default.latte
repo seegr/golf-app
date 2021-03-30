@@ -1,0 +1,16 @@
+{block title}Maintenance{/block}
+
+{block content}
+	{if $act}
+		<h2 style="text-transform: inherit">{$act} <span class="text-grey">executed</span></h2>
+	{else}
+		<h2>Handles</h2>
+		<div n:foreach="$handles as $h">
+			<a n:href="$h . '!'" class="ajax" data-loader="#content" data-confirm="Fakt?">{$h}</a>
+		</div>
+		<h2>Methods</h2>
+		<div n:foreach="$methods as $m">
+			<a n:href="$m" class="ajax" data-loader="#content" data-confirm="Fakt?">{$m}</a>
+		</div>
+	{/if}
+{/block}

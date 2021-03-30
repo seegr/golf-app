@@ -1,0 +1,55 @@
+<div class="monty-cropper" id="{$id}">
+	{form imageUploadForm}
+		<div class="form-group">
+			{* <label>Obrázek</label> *}
+			<input n:name="image" class="form-control">
+		</div>
+		<button n:name="upload" class="btn btn-success ajax" data-loader="this">Nahrát obrázek</button>
+	{/form}
+
+	<div class="mt-3" n:snippet="cropper">
+		<div class="row" n:if="$image">
+			<div class="col-9">
+				<div class="orig-image">
+					<div>
+						<img src="data:image/jpeg;base64, {$image}" class="img-fluid">
+						<script>
+							Croppers[{$id}]["image"] = {$image};
+						</script>
+					</div>		
+				</div>
+			</div>
+			<div class="col-3">
+				<div class="sticky">
+					<div class="buttons mb-3">
+						<button class="btn btn-sm btn-primary crop-btn" data-image="{$imageName}">Vyříznout</button>
+						{* <button class="btn btn-sm btn-danger image-remove">Odstranit</button> *}
+					</div>
+					<div class="preview-image"></div>
+					{form cropperForm}
+						<input n:name="image" class="image-input">
+						<input n:name="image_data" class="image-data-input">
+						<button n:name="save" n:class="btn, btn-success, save-cropped-image, ajax" style="display: none">Uložit výřez</button>
+					{/form}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	console.log("define cropper");
+	var Croppers = Croppers != undefined ? Croppers : {};
+
+	var settings = {
+		id: {$id},
+		settings: {
+			ratio: {$control->getRatio()},
+			image: {$image}
+		},
+	};
+
+	Croppers[{$id}] = settings;
+
+	console.log(Croppers[{$id}]);
+</script>

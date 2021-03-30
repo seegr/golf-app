@@ -1,0 +1,70 @@
+{block styles}
+    {include parent}
+    <style>
+        {sass}
+        .container {
+            max-width: 100%;
+        }
+        table {
+            table-layout: fixed;
+        }
+        thead th {
+            font-size: 1.1em;
+        }
+        td.day-time {
+            background: #343a40;
+            color: white;
+            font-size: 1.1em;
+        }
+        td.events {
+            padding: 4px;
+            &.no-events {
+                background: #f3f3f3;
+            }
+            .event {
+                border: 1px solid #dadada;
+                padding: 4px 6px;
+            }
+            .event:not(:last-child) {
+                margin-bottom: 4px;
+            }
+        }        
+        {/sass}
+    </style>
+{/block}
+
+{block content}
+	<table class="table table-bordered">
+        <thead class="thead-dark">
+            <th>Čas</th>
+            <th>Pondělí</th>
+            <th>Úterý</th>
+            <th>Středa</th>
+            <th>Čtvrtek</th>
+            <th>Pátek</th>
+            <th>Sobota</th>
+            <th>Neděle</th>
+        </thead>
+        <tbody>
+            <tr n:foreach="$range as $time">
+                <td class="day-time">{$time->format("H:i")}</td>
+                {* <td n:for="$day = 1; $day <= 7; $day++">{$day}</td> *}
+                {for $day = 1; $day <= 7; $day++}
+                    <td n:class="events, empty($courses[$day][$time->format('H:i')]) ? no-events">
+                        <div class="event" n:foreach="$courses[$day][$time->format('H:i')] as $ev">
+                            <div>{$ev->ref(content)->title}</div>
+                            <small>{$ev->start->format("H:i")}</small>
+                            <div>
+                                {for $i=1; $i <= 4; $i++}
+                                    <span class="badge badge-success">
+                                        <i class="fad fa-golf-club"></i>
+                                    </span>
+                                {/for}
+                            </div>
+                        </div>
+                    </td>
+                {/for}
+            </tr>
+        </tbody>
+    </table>
+{/block}

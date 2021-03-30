@@ -1,0 +1,14 @@
+<div class="monty-forms event-spots event-registration">
+	<div class="progress">
+		<div class="progress-bar bg-green" style="width: {$submitters->participantsPercent|noescape|number:3}%" data-toggle="tooltip" title="Zbývá míst: {$submitters->participantsLeft}">
+			<div class="px-2 text-left font-weight-bold text-dark">{$submitters->participantsCount}/{$submitters->maxParticipants}</div>
+			<div class="progress-label">Účastníci</div>
+		</div>
+		{if $submitters->maxSubstitutes && $submitters->participantsLeft == 0}
+			<div class="progress-bar bg-greenLight" style="width: {$submitters->substitutesPercent|noescape|number:3}%" data-toggle="tooltip" title="Zbývá náhradníků: {$submitters->substitutesLeft}">
+				<div class="px-2 text-left font-weight-bold text-dark">{$submitters->substitutesCount}/{$submitters->maxSubstitutes}</div>
+				<div class="progress-label">Náhradníci</div>
+			</div>
+		{/if}
+	</div>
+</div>

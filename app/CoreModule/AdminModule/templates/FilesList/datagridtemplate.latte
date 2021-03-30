@@ -1,0 +1,16 @@
+{* {extends $originalTemplate} *}
+{extends $original_template}
+
+{block data}
+	<div class="row">
+		{foreach $rows as $row}
+			{var $item = $row->getItem()}
+			{dump $row}
+			{dump $item}
+
+			<div class="col-3">
+				{$item->name}
+			</div>
+		{/foreach}
+	</div>
+{/block}

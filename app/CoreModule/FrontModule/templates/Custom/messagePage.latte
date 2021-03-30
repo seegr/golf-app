@@ -1,0 +1,8 @@
+{block title}{if $heading}{$heading}{else}informace{/if}{/block}
+
+{block content}
+	<p>{$message|noescape}</p>
+	<p n:if="$actions" class="mt-3">
+		<a n:foreach="$actions as $title => $link" href="{$link}" class="btn btn-primary">{$title}</a>
+	</p>
+{/block}

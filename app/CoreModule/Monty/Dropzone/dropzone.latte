@@ -1,0 +1,271 @@
+<div id="{$id}">
+	<div class="h5" n:if="$title">{$title}</div>
+	
+	<form n:name="inputs" class="inputs-form">
+		<div class="row">
+			{include inputsLoop, $inputs, $inputsCol}
+		</div>
+	</form>
+
+	<div class="preview-template" style="display: none">
+		<div n:class="$itemColClass, file-col">
+			<div class="file-box bg-light border p-2 mt-4 mx-1">
+				<div class="file-header">
+					<div class="file-name" data-dz-name></div>
+					<div class="file-size" data-dz-size></div>
+				</div>
+				<div class="position-relative file-body">
+					<img class="d-block" style="width:100%" data-dz-thumbnail />
+					<div class="dz-remove position-absolute file-remove btn btn-sm btn-danger" style="top:0;right:0" data-dz-remove><i class="fas fa-times"></i></div>
+					<div n:if="count($fileInputs)" class="mt-3 file-inputs accepted-only">
+						{* {dump $fileInputs} *}
+						<form n:name="fileInputs" class="file-inputs-form mb-2">
+							<div class="row">
+								{include inputsLoop, $fileInputs}
+							</div>
+						</form>
+					</div>
+					<div class="file-complete-marks position-absolute" style="display: none; left: 0; top: 0; width: 100%; height: 100%; background: white; z-index: 100;opacity: .9; font-size: 3em;">
+						<div class="d-flex align-items-center justify-content-center" style="height: 100%">
+							<div class="file-success dz-success-mark" style="display: none"><span><i class="fas fa-check-circle text-success"></i></span></div>
+							<div class="file-error dz-error-mark" style="display: none"><span><i class="fas fa-times-circle text-danger"></i></span></div>
+						</div>
+					</div>
+				</div>
+				<div class="progress accepted-only">
+				  <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%" data-dz-uploadprogress></div>
+				</div>
+				<div class="dz-error-message mt-3 alert alert-danger" style="display: none"><span data-dz-errormessage></span></div>
+			</div>
+		</div>
+	</div>
+
+	<form n:name="dropzoneForm" class="dropzone bg-dark p-2">
+		<div class="dz-message text-light my-0 py-5" style="border: 4px dashed #2196F3">{$message}</div>
+		<div class="files-container row no-gutters"></div>
+	</form>
+	<div class="progress progress-striped active progress-bar-complete-wrap" style="display: none" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+	  <div class="progress-bar progress-bar-complete" style="width:0%;" data-dz-uploadprogress></div>
+	</div>		
+	<button class="btn btn-success mt-3 dropzone-start-upload" data-dropzone-id="{$id}" style="display: none">{$uploadButtonLabel}</button>
+
+	<script>
+		window.addEventListener("dragover",function(e){
+		  e = e || event;
+		  e.preventDefault();
+		},false);
+		window.addEventListener("drop",function(e){
+		  e = e || event;
+		  e.preventDefault();
+		},false);	
+		
+		Dropzone.autoDiscover = false;
+
+		var Dropzones = Dropzones === undefined ? {} : Dropzones;
+
+		$(function() {
+			var dropzoneId = {$id};
+			var $dropzone = $("#" + dropzoneId);
+			var dropzoneFormId = {$formId};
+			var autoUpload = {$autoUpload}
+			var inputs = {$inputsNames};
+			var fileInputs = {$fileInputsNames};
+			var $totalProgress = $("#" + dropzoneId + " .progress-bar-complete");
+			var isUploadCompleteCallback = {count($control->onUploadComplete)};
+			//var filesCompleted;
+			//console.log("dropzoneId: " + dropzoneId);
+			//console.log("formId: " + dropzoneFormId);
+
+			previewTemplateObj = $(".preview-template");
+			previewTemplate = previewTemplateObj.html();
+			previewTemplateObj.remove();
+
+
+			Dropzones[dropzoneId] = new Dropzone("#" + dropzoneFormId, {
+				previewsContainer: "#" + dropzoneFormId + " .files-container",
+				previewTemplate: previewTemplate,
+				// dictDefaultMessage: {$message},
+				dictRemoveFile: "Odstranit soubor",
+				dictCancelUpload: "Zrušit nahrávání",
+				autoProcessQueue: autoUpload,
+				autoQueue: true,
+				parallelUploads: 1,
+				acceptedFiles: "{$acceptedFiles|noescape}",
+				maxFilesize: {$maxFileSize},
+				dictInvalidFileType: "Tento typ souboru není povolený",
+				createImageThumbnails: true,
+				thumbnailWidth: 250,
+				sending: function(file, xhr, formData) {
+					$.each(inputs, function(key, name) {
+						var inputId = "#" + dropzoneFormId + "-" + name;
+						var input = $(inputId);
+						var val = $(inputId).val();
+						var inputName = input.attr("name");
+
+						// console.log(val);
+						if (Array.isArray(val)) {
+							$.each(val, function(key, value) {
+								formData.append(inputName, value);
+							});
+						} else {
+							formData.append(inputName, val);
+						}
+					});
+				}
+			});
+
+			var dropzone = Dropzones[dropzoneId];
+
+			$(document).on("click", "#" + dropzoneId + " .dropzone-start-upload", function() {
+				var id = $(this).data("dropzone-id");
+				//console.log(Dropzones[id]);
+
+				dropzone = Dropzones[id];
+				console.log(dropzone);
+				if (dropzone.getQueuedFiles().length > 0) {
+					hideRemovLinks(dropzoneFormId);
+					dropzone.processQueue();
+					dropzone.options.autoProcessQueue = true;
+				}
+
+				$(".dz-image-preview").find(".file-inputs").hide();
+				$(this).hide();
+				$dropzone.find(".dz-message").hide();
+				$progressBarWrap = $dropzone.find(".progress-bar-complete-wrap");
+				$progressBarWrap.show();
+				var windowH = $(window).height();
+				var pos = $progressBarWrap.offset().top - (windowH / 2);
+				$("html, body").scrollTop(pos);
+			});
+
+			Dropzones[dropzoneId].on("addedfile", function(file) {
+				console.log("added");
+				console.log(file);
+
+				var fileCol = $(file.previewElement);				
+				fileCol.find("[name=_do]").remove();
+
+				setTimeout(function () {
+					getFilesSummary(dropzone);
+					if (dropzone.filesSummary.accepted > 0) {
+						$dropzone.find(".dropzone-start-upload").show();
+					}
+				}, 100);
+
+
+				var callbacks = {$control->addedFileCallback};
+				//console.log(callbacks);
+
+				$.each(callbacks, function(key, callback) {
+					window[callback]();
+				});				
+			});
+
+			dropzone.on("thumbnail", function(file) {
+				console.log("added and generated...")
+			});
+
+			Dropzones[dropzoneId].on("success", function(file) {
+				console.log("success");
+				//console.log(file);
+				//console.log(this);
+
+				var fileBox = $(file.previewElement);
+
+				//filesCompleted = filesCompleted + 1;
+
+				fileBox.find(".file-complete-marks").show();
+				fileBox.find(".file-success").show();
+
+				if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+					console.log("hotovo");
+					this.options.autoProcessQueue = false;
+	
+					if (isUploadCompleteCallback) {
+						$.nette.ajax({
+							url: {link uploadComplete!}
+						});
+					}
+				} else {
+					this.options.autoProcessQueue = true;
+				}
+
+				//this.options.autoProcessQueue = false;
+				// console.log("active: " + this.getActiveFiles());
+				// console.log("uploading: " + this.getUploadingFiles());
+
+				getFilesSummary(this);
+				console.log(this.filesSummary);
+				var filesSummary = this.filesSummary;
+				var progress = ((filesSummary.accepted - filesSummary.queue) / filesSummary.accepted) * 100;
+				console.log(progress);
+				$dropzone.find(".progress-bar-complete").width(progress + "%");
+
+				//if (progress == 100) this.removeAllFiles();
+			});
+
+			Dropzones[dropzoneId].on("error", function(file) {
+				var fileBox = $(file.previewElement);
+				fileBox.find(".accepted-only").remove();
+				fileBox.find(".dz-error-message").show();
+				fileBox.find(".file-complete-marks").show();
+				fileBox.find(".file-error").show();
+			});
+
+			Dropzones[dropzoneId].on("totaluploadprogress", function(progress) {
+				//console.log(progress);
+				//getFilesSummary(dropzone);
+				//console.log("uploadingFiles: " + this.getUploadingFiles());
+			});
+
+
+			Dropzones[dropzoneId].on("queuecomplete", function() {
+				this.options.autoProcessQueue = false;
+			});
+			
+
+			function hideRemovLinks(dropzoneFormId) {
+				$("#" + dropzoneFormId).find(".dz-remove").remove();;
+			}
+
+			function getFilesSummary(dropzone) {
+				var data = {};
+		
+				//data["files"] = dropzone.files.length;
+				data["queue"] = dropzone.getQueuedFiles().length;
+				data["accepted"] = dropzone.getAcceptedFiles().length;
+				data["rejected"] = dropzone.getRejectedFiles().length;
+
+				dropzone.filesSummary = data;
+			}
+
+		});
+	</script>
+</div>
+
+{define inputsLoop, $inputs, $inputsCol}
+	{foreach $inputs as $input}
+		{var $type = $input->getOptions()["type"]}
+		{var $label = $input->caption}
+		{var $name = $input->name}
+
+		{* {dump $type}
+		{dump $label}
+		{dump $name} *}
+
+		{if !isset($inputsCol)}
+			{var $inputsCol = "col-12"}
+		{/if}
+
+		<div n:class="form-group, $inputsCol">
+			{switch $type}
+				{case "text"}
+					<input n:name="$name" class="form-control" placeholder="{$label}">
+				{case "textarea"}
+					<textarea n:name="$name" class="form-control" placeholder="{$label}"></textarea>
+				{case "select"}
+					<select n:name="$name" class="form-control"></select>
+			{/switch}
+		</div>
+	{/foreach}
+{/define}

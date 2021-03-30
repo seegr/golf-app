@@ -1,0 +1,41 @@
+{dump $type}
+
+{block content}
+	<h1 n:block="title"><span class="opacity-2">{$type->title}</span>{if isset($content)} | {$content->title}{else}{/if}</h1>
+	{* <a n:href="contentsList, $type->short">Zpátky na výpis</a> *}
+	{include backButton, "Zpátky na výpis", "contentsList", $type->short}
+
+	{snippetArea formWrap}
+	{snippet form}
+		{include $control->getFormTemplate()}
+	{/snippet}
+	{/snippetArea}
+
+
+{* content form template *}
+
+{* content form template end *}
+
+	<fieldset n:if="!empty($content) && in_array($type->short, [article, page, product]) && $headerImageConf == cropper" n:snippet="headerImageCropper" class="mt-4">
+		<legend>Obrázek v hlavičce</legend>
+		{include imageThumbDeleter, $content->header_image ? $content->ref(header_image) : null}
+		<div class="header-image-cropper">
+			<div class="mt-3">
+				{control headerImageCropper}
+			</div>
+		</div>
+	</fieldset>
+	
+	<fieldset n:if="in_array($type->short, [article, gallery, product])" class="mt-4" n:snippet="images">
+		<legend>Galerie</legend>
+		{if !isset($content)}
+			<div class="alert alert-warning">Galerii můžeš upravovat až po uložení :)</div>
+		{else}
+			{control galleryImagesDropzone}
+			<fieldset class="mt-4">
+				{* <legend>Nahrané obrázky</legend> *}
+				{control imagesGallery}
+			</fieldset>
+		{/if}
+	</fieldset>	
+{/block}

@@ -1,0 +1,35 @@
+@import "core-style";
+
+body.contents-list {
+	&:not(.product) {
+		.item-box {
+			position: relative;
+		}
+		.col-text {
+			position: unset;
+		}
+		.col-link-btn {
+			position: absolute;
+			bottom: 0;
+			right: 0;
+		    padding: 0;
+		    width: auto;
+		}
+	}
+
+	&.product {
+		.col-link-btn {
+		    align-self: center;
+		    text-align: center;
+
+		    a {
+				width: 60px;
+				height: 60px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				margin: 0 auto;
+		    }
+		}
+	}
+}

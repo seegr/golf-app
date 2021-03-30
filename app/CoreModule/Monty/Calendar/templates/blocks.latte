@@ -1,0 +1,53 @@
+{define day}
+	{* {dump $date} *}
+	{var $events = $control->getDayEvents($date)}
+	{if $control->dayAction}
+		{var $dayAction = $control->getDayAction($date)}
+	{else}
+		{var $dayAction = null}
+	{/if}
+
+	{var $eventsWrapStyle = null}
+	{var $eventsWrapStyle .= $dayHeight ? "height:" . $dayHeight . "px" : null}
+
+	<a n:class="day-wrap, d-block, $events ? 'has-event' : 'no-event', $dayAction ? 'link'" n:attr="href => $dayAction, target => $control->dayActionTargetAttr">
+		{if $dayLayout == "day"}
+			{if $eventsTable}
+				{var $dateEvents = $db->table($eventsTable)->where("DATE(start) <= ?", $date)->where("DATE(end) >= ?", $Date)}
+				{var $content = ""}
+				{foreach $dateEvents as $event}
+					{var $content .= "<div class='event'>"}
+						{var $content .= "<div class='event-title'>{$event->title}</div>"}
+						{var $content .= "<div class='event-desc'>{$event->intro_text}</div>"}
+					{var $content .= "</div>"}
+				{/foreach}
+				{if $content == ""}
+					{$content = null}
+					{$date = null}
+				{/if}
+				<div data-date="{$date}" data-toggle="popover" data-trigger="hover" data-html="true" n:class="($content) ? 'day-label event' : 'day-label'" n:attr="data-content => $content, title => $dateLabel">
+					{$dayLabel}		
+				</div>
+			{else}
+				{if $onDayClick}
+					<a class="day-label ajax" n:href="onDayClick!, $date">{$dayLabel}</a>
+				{else}
+					<div class="day-label">{$dayLabel}</div>
+				{/if}
+				<div class="events-wrap" n:attr="style => $eventsWrapStyle">
+					{if $events}
+						<div class="events">
+							{foreach $events as $event}
+								{$event->getEventHtml()}
+							{/foreach}
+						</div>
+					{/if}
+				</div>
+			{/if}
+		{elseif $dayLayout == "half"}
+			<div class="day-label">{$dayLabel}</div>
+			<div class="day-half day-am">dopo</div>
+			<div class="day-half day-pm">odpo</div>
+		{/if}
+	</a>
+{/define}

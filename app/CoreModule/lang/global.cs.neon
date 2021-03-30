@@ -1,0 +1,10 @@
+content:
+	types:
+		article: "Článek|Články"
+		event: "Událost|Události"
+		page: "Stránka|Stránky"
+		news: "Aktualita|Aktuality"
+		gallery: "Galerie"
+		product: "Produkt|Produkty"
+
+home: "Domů"

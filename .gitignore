@@ -1,0 +1,12 @@
+app/config/local.neon
+vendor/
+node_modules/
+www/node_modules/
+www/files/
+www/dist/
+.htaccess
+www/.htaccess
+temp/
+session/
+log/
+db_backup/

@@ -1,0 +1,36 @@
+{import blocks.latte}
+
+<div n:class="gallery-justified-grid"{if !$editable} style="visibility: hidden"{/if}>
+	<div n:snippet="gallery">
+		{include actionButtons}
+
+		<div n:if=$title class="gallery-title">{$title}</div>
+
+		<div n:class="grid, $editable ? 'editable row no-gutters'" n:snippet="galleryImages" data-ajax-append>
+			<div n:if="!$editable && $layout == grid" class="grid-sizer col-1"></div>
+			{for $i = $offset + 1; $i <= $limit + $offset && $i <= $imagesCount; $i++}
+				{var $image = $images[$i]}
+				{var $src = $image->getSrc()}
+				{var $thumbSrc = $image->getSrc("thumb")}
+
+				{if $editable}
+					{include imageEditable, $image, $src, $thumbSrc}
+				{else}
+					{include image, $image, $src, $thumbSrc}
+				{/if}
+				
+			{/for}
+		</div>
+	</div>
+
+	<div class="text-center mt-4 load-more-buttons-wrap" n:if="$loadMore || $loadAll" n:snippet="loadMoreButtons">
+		<span class="load-more-buttons">
+			{* {dump $imagesCount}
+			{dump $offset + $limit} *}
+			{if $offset + $limit < $imagesCount}
+				<a n:if="$loadMore" href="javascript:void(0)" class="btn btn-sm btn-outline-success load-more" data-page="{$page + 1}">Další fotky</a>
+				<a n:if="$loadAll" href="javascript:void(0)" class="btn btn-sm btn-success load-all" data-page="{$page + 1}">Celá galerie</a>
+			{/if}
+		</span>
+	</div>
+</div>

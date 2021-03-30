@@ -1,0 +1,538 @@
+{define loader}
+	<div class="loader">
+		<div class="loader-wrap">
+			<div class="spinner-wrap">
+				<div class="spinner spinner-big"></div>
+				<div class="spinner spinner-small">
+					<div class="rect1"></div>
+					<div class="rect2"></div>
+					<div class="rect3"></div>
+					<div class="rect4"></div>
+					<div class="rect5"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+{/define}
+
+{define GA}
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id={$GA}"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){ dataLayer.push(arguments); }
+	  gtag('js', new Date());
+
+	  gtag('config', {$GA});
+	</script>
+{/define}
+
+{define formButtons, $class, $parentWrapIdSelector}
+	{* {dump $this->global} *}
+	{var $form = end($this->global->formsStack)}
+	{var $trace = !empty($form["buttons"]) ? "buttons-" : ""}
+	
+	{if !$parentWrapIdSelector}
+		<div n:class="form-buttons, d-inline-block, $class">
+			<input n:name="$trace.save" class="btn btn-success form-button save ajax" data-target="save" data-loader="this" data-naja-force-redirect>
+			<input n:ifset="$form[save_stay]" n:name="$trace.save_stay" class="btn btn-outline-success form-button save-stay ajax" data-target="save-stay" data-loader="this" data-naja-force-redirect>
+			<input n:ifset="$form[cancel]" n:name="$trace.cancel" class="btn btn-outline-warning form-button cancel ajax" data-target="cancel" data-loader="this" data-naja-force-redirect>
+		</div>
+	{else}
+		<div id="{$parentWrapIdSelector}-fake" n:class="form-buttons-fake, $class ? $class : 'mt-3'">
+			<button class="btn btn-success form-button save" data-target="save"></button>
+			<button class="btn btn-outline-success form-button save-stay" data-target="save-stay"></button>
+			<button class="btn btn-outline-warning form-button cancel" data-target="cancel"></button>
+		</div>
+		<script>
+			$(function() {
+				// console.log("#" + {$parentWrapIdSelector} + " .form-button");
+				// console.log($("#" + {$parentWrapIdSelector} + " .form-button"));
+				var parentSelector = "#" + {$parentWrapIdSelector};
+
+				$.each($(parentSelector + " .form-button"), function() {
+					var title = $(this).val();
+					var target = $(this).data("target");
+					var classes = $(this).attr("class");
+
+					var $fakeBtn = $(".form-buttons-fake").find(".form-button." + target);
+					// console.log(target);
+					// console.log(title);
+					// console.log(classes);
+					// console.log($(".form-buttons-fake").find(".form-button." + target));
+
+					$fakeBtn.text(title).attr("class", classes);
+					if ($(this).hasClass("ajax")) {
+						$fakeBtn.addClass("ajax");
+						$fakeBtn.attr("data-confirm", $(this).data("confirm"));
+					}
+				});
+
+				$(".form-buttons-fake .form-button").click(function() {
+					// console.log("click");
+					var target = $(this).data("target");
+					// console.log(target);
+					$(parentSelector).find("." + target).click();
+				});
+			});
+		</script>
+	{/if}
+{/define}
+
+{define submitButtons, $class, $parentWrapIdSelector}
+	{include formButtons, $class, $parentWrapIdSelector}
+{/define}
+
+{define backButton, $text, $route, $pars}
+	{if strpos($route, ",") !== false}
+		{var $route = str_replace(" ", "", $route)}
+		{var $route = explode(",", trim($route))}
+		{var $link = $control->link($route[0], $route[1])}
+	{else}
+		{if $pars}
+			{var $link = $control->link($route, $pars)}
+		{else}
+			{var $link = $control->link($route)}
+		{/if}
+	{/if}
+
+	<a href="{$link}" class="btn btn-sm btn-light mb-3"><i class="fas fa-caret-square-left"></i>{if $text} {$text}{/if}</a>
+{/define}
+
+{define noImage, $type, $class, $width}
+	{switch $type}
+		{case "event"}
+			{var $path = "dist/images/item-no-image.jpg"}
+	{/switch}
+
+	<img src="{$path}" class="img-fluid {$class}">
+{/define}
+
+{define imageBox, $imageSrc, $height, $class}
+	<div style="background-image: url({$imageSrc|noescape}); height: {$height|noescape}; background-size: cover; background-position: center" n:class="image-box, $class"></div>
+{/define}
+
+{define itemImage, $type, $item, $class, $height, $magnific}
+	{dump $item}
+	{if !empty($item->image)}
+		{var $img = $control->getThumb($item->image)}
+	{else}
+		{var $img = "dist/images/" . $type . "-no-image.jpg"}
+	{/if}
+
+	{var $imageFullSrc = $magnific ? $item->ref(image)->url : null}
+
+	{if $height}
+		{include imageBox, $img, $height, $class, $imageFullSrc}
+	{else}
+		<img src="{$basePath}/{$img}" alt="{$item->title}" n:class="img-fluid, $class, $magnific ? magnific-popup" n:attr="href => $imageFullSrc">
+	{/if}
+{/define}
+
+{define button, $type, $title, $link, $class, $id, $color}
+	{* {dump $link} *}
+	{if strpos($link, ":") !== false && strpos($link, "mailto") === false}
+		{var $link = $control->link($link)}
+	{/if}
+
+	{if in_array($color, ["gray", "gray-light"])}
+		{var $clr = "gray"}
+	{else}
+		{var $clr = "orange"}
+	{/if}
+
+	{var $typeClass = $type == "small" ? "btn-brand-small" : "btn-brand-big"}
+
+	{if $type == "big"}
+		<a href="{$link}" n:attr="id => $id" n:class="d-inline-block, btn-brand, 'btn-brand-'.$clr, $typeClass, $class">
+			<span class="d-flex btn-wrap">
+				{include brandIcon, $color}
+				<div class="btn-brand-big-wrap">
+					{* <div class="btn-brand-bg"></div> *}
+					<div class="d-flex align-items-center" style="height: 100%">
+						{include buttonLink, $title, $link, $class, $id}
+					</div>
+				</div>
+			</span>
+			<span class="btn-shadow"></span>
+		</a>	
+	{else}
+		<a href="{$link}" n:attr="id => $id" n:class="btn-brand, btn-brand-small, $typeClass, $class">
+			{include brandIcon, $color}{include buttonLink, $title, $link, $class, $id}
+		</a>
+	{/if}
+{/define}
+
+{define orangeButton, $type, $title, $link, $class, $id}
+	{include button, $type, $title, $link, $class, $id, "orange"}
+{/define}
+
+{define grayButton, $type, $title, $link, $class, $id}
+	{include button, $type, $title, $link, $class, $id, "gray-light"}
+{/define}
+
+{define buttonLink, $title, $link, $class, $id}
+	<div class="d-inline-block btn-text">{$title|noescape}</div>
+{/define}
+
+{define brandIcon, $color, $size}
+	{var $size = $size ? $size . "px" : "45px"}
+	{var $color = $color ? $color : "orange"}
+	{var $iconSrc = "images/icons/" . "brand-icon-" . $color . ".svg"}
+	{* <div class="d-inline-block btn btn-orange btn-icon"><i class="fas fa-chevron-right"></i></div> *}
+	<span class="brand-icon">
+		<img src="{$iconSrc}" class="img-fluid">
+		{* <svg version="1.1" id="Vrstva_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+			 width="{$size}" height="{$size}" viewBox="0 0 57.262 57.328" enable-background="new 0 0 57.262 57.328" xml:space="preserve">
+			<rect y="0.066" width="100%" height="100%" style="fill: var(--orange)"/>
+			<polygon fill="#FFFFFF" points="35.851,0 35.851,8.37 28.513,8.37 47.89,27.976 23.124,57.327 10.512,57.327 10.512,48.957 
+			17.047,48.957 36.768,27.059 17.621,8.37 10.855,8.37 10.855,0 "/>
+		</svg> *}
+	</span>
+{/define}
+
+{define smallButton, $title, $link, $class, $id}
+	{include button, "small", $title, $link, $class, $id}
+{/define}
+
+{define bigButton, $title, $link, $class, $id}
+	{include button, "big", $title, $link, $class, $id}
+{/define}
+
+{define promptBtn, $title, $link, $class, $id}
+	{var $clss = "btn-brand-prompt"}
+	{var $clss .= $class ? " " . $class : null}
+	{include grayButton, "big", $title, $link, $clss}
+{/define}
+
+{define actionButton, $title, $link, $class, $id}
+	{include promptBtn, $title, $link, $class, $id}
+{/define}
+
+{* {define heading, $text, $level, $class, $invert}
+	{var $level = $level ? $level : 1}
+	{var $color = $invert ? "gray" : "orange"}
+	<h{$level} n:class="heading, $class"><span class="icon">{include brandIcon, $color}</span><span n:class="text, $invert ? text-primary">{$text}</span></h{$level}>
+{/define} *}
+
+{define articleBox, $title, $imgSrc, $fullText, $introText}
+	{var $imgSrc = $imgSrc ? $imgSrc : $control->getRandomImage()}
+
+	<div class="item-box">
+		<div class="image-wrap" style="background-image:url({$imgSrc}); background-size: cover; background-position: center; height: 200px"></div>
+		<div class="item-texts">
+			<div class="item-title">{include heading, $title, 2}</div>
+			<div class="item-introtext">{$introText|truncate:200}</div>
+			<div class="item-fulltext">{$fullText|truncate:100}</div>
+			<div class="text-right">
+				{include smallButton, "", "#"}
+			</div>
+		</div>
+	</div>
+{/define}
+
+{define imageCover, $url, $height, $bgCover}
+	{var $height = $height ?? "200px"}
+	{var $height .= strpos($height, "px") === false ? "px"}
+	{if $bgCover === null || $bgCover === true}
+		{var $bgStyle = "background-size: cover"}
+	{else}
+		{var $bgStyle = "background-size: contain; background-repeat: no-repeat"}
+	{/if}
+	<div class="img-box img-cover" style="background-image: url('{$basePath . '/' . $url|noescape}'); height: {$height}; {$bgStyle|noescape}; background-position: center"></div>
+{/define}
+
+{define itemBox, $attrs, $bgCover}
+	{* {dump $attrs} *}
+	{var $link = !empty($attrs[link]) ? $attrs[link] : null}
+	{if !empty($attrs["intro"])}
+		{var $text = $attrs["intro"]}
+	{elseif !empty($attrs["text"])}
+		{var $text = $attrs["text"]}
+	{/if}
+	{* {var $text = !empty($attrs["intro"]) ? $attrs["intro"] : $attrs["text"]} *}
+	{var $target = !empty($attrs["external"]) ? "_blank" : null}
+	{var $titleClass = !empty($attrs["titleClass"]) ? $attrs["titleClass"] : "h3"}
+
+	<div n:class="item-box, border, p-2, h-100, $link ? link, !empty($attrs[type]) ? $attrs[type]">
+		<a class="d-block" n:attr="href => $link, target => $target">
+			<div n:if="!isset($attrs[image]) || $attrs[image] !== false" class="image-wrap mb-2">
+				{var $img = !empty($attrs["image"]) ? $attrs["image"] : "dist/images/item-no-image.jpg"}
+				{var $imgH = !empty($attrs["imageH"]) ? $attrs["imageH"] : null}
+				<div class="image">{include imageCover, $img, $imgH, $bgCover}</div>
+			</div>
+			<div n:class="title, text-center, $titleClass">{$attrs["title"]}</div>
+		</a>
+		<div n:if="!empty($attrs[date])" class="item-date text-center">
+			{var $date = $attrs[date]}
+			{* {dump $date} *}
+			<div>{$date->start|interval, $date->end, true, true}</div>
+		</div>
+		<div n:ifset="$attrs[info]" class="item-info border-bottom pb-2 mb-2">
+			<div n:if="$iText" n:foreach="$attrs[info] as $iLabel => $iText">
+				<label class="bold">{$iLabel}:</label>
+				<span>
+					{if is_array($iText)}
+						{$iText|implode:", "}
+					{else}
+						{$iText}
+					{/if}
+				</span>
+			</div>
+		</div>
+		<div n:ifset="$text" class="text">
+			{var $len = !empty($attrs[textLen]) ? $attrs[textLen] : 200}
+			{if empty($attrs[fulltext])}
+				{$text|striptags|noescape|truncate:$len}
+			{else}
+				{$text|noescape}
+			{/if}
+		</div>
+		<div n:if="$link" class="mt-4 pt-3">
+			<a href="{$link}" class="btn btn-soft no-radius item-detail-btn">Víc info...</a>
+		</div>
+	</div>
+{/define}
+
+{define cloneElement, $elementSelector, $appendTo}
+	<script>
+		$(function() {
+			var parent = $({$elementSelector});
+			var clone = parent.clone();
+			var childs = clone.find("*");
+			console.log(parent);
+			// console.log(childs);
+
+			// console.log(clone);
+			cleanClone(parent);
+			$.each(clone.find("*"), function(){
+				// console.log($(this));
+				el = cleanClone($(this));
+				console.log(el);
+			});
+			
+			// console.log(clone);
+			$({$appendTo}).append(clone);
+
+			function cleanClone(el) {
+				var id = $(this).attr("id");
+
+				el.attr("id", null);
+				el.attr("data-id", id);
+
+				return el;
+			}
+		});
+	</script>
+{/define}
+
+{define userImage, $id}
+	{var $src = $usr->image ? $usr->ref(image)->url : "dist/images/user-no-image.png"}
+	<div class="border p-3">
+		<img src="{$src}" alt="$usr->fullname" class="img-fluid">
+	</div>
+{/define}
+
+{define socialIcon, $icon, $link}
+	{switch $icon}
+		 {case "facebook"}
+		 {case "fb"}
+			{var $icon = '<i class="fab fa-facebook-square text-facebook"></i>'}
+		 {case "instagram"}
+		 {case "insta"}
+			{var $icon = '<i class="fab fa-instagram text-instagram"></i>'}
+	{/switch}
+
+	<a href="{$link}" target="_blank">{$icon|noescape}</a>
+{/define}
+
+{define readmoreIcon, $color, $link}
+	{var $color = $color ? $color : "orange"}
+	<a n:attr="href => $link" class="readmore-btn readmore-btn-{$color}">
+		<img src="images/icons/readmore-icon-{$color}.png" class="readmore-icon img-fluid">
+	</a>
+{/define}
+
+{define userButtons}
+	<div id="user-buttons">
+		{if !$user->isLoggedIn()}
+			<span class="mr-5">{include smallButton, $_cs ?  "Přihlásit" : "Sign In", ":Front:Users:loginForm"}</span>
+		{else}
+			<span class="mr-5">{$control->getUserNotifyEl()}</span>
+			<span class="mr-5">{include smallButton, $_cs ?  "Odhlásit" : "Logout", ":Front:Users:logout"}</span>
+			<span class="mr-5">{include smallButton, $_cs ? "Správa" : "Management", ":Admin:Users:userMemberDetail"}</span>
+		{/if}
+		{var $link = $control->link(":Front:Pages:home", [locale => $_cs ? "en" : null])}
+		<span class="mr-5">{include smallButton, $_cs ? "EN" : "CZ", $link}</span>
+	</div>
+{/define}
+
+{define footerBox}
+	<footer>
+		<div class="pl-5 pr-5 pr-lg-0">
+			<div class="mb-5">
+				{if $control->name == 'Front:Eshop'}
+					<div class="eshop-basket w-100">
+						{var $link = $control->link(":Front:Eshop:basket")}
+						{include bigButton, "<span>košík </span>(<span class='items-count'>{$basketItems}</span>)", $link, "main-prompt-btn"}
+					</div>
+					{* <div class="eshop-basket" n:snippet="basket">
+						<div class="eshop-basket-icon">
+							<i class="fas fa-shopping-basket"></i>
+						</div>
+						<div class="items-count">{$basketItems}</div>
+					</div> *}
+				{else}
+					{if !$user->isLoggedIn()}
+						{include bigButton, "stát se členem spolku Keramikum", $control->link(":Front:Pages:memberForm"), "main-prompt-btn"}
+					{else}
+						{var $link = $control->link(":Front:EventsList:eventsList", ["type" => "club"])}
+						{include bigButton, $_cs ? "akce spolku" : "community events", $link, "main-prompt-btn"}
+					{/if}
+				{/if}
+			</div>
+		</div>
+		<div class="footer-content border-top px-5">
+			<p><strong>Keramikum</strong>, z. s.<br>
+			Popovice čp. 5, obec, Třesovice, 503 15<br>
+			<a href="https://www.facebook.com/keramikum" target="_blank">www.facebook.com/keramikum</a></p>
+			
+			<p><span class="font-weight-regular">václav kugler</span>, {if $_cs}předseda spolku{else}chairman of the association{/if}<br>
+			<a href="mailto:info@keramikum.cz">info@keramikum.cz</a>, tel.&nbsp;+420&nbsp;608&nbsp;658&nbsp;320</p>
+			<p><span class="font-weight-regular">petr toms</span>, {if $_cs}šéfredaktor{else}chief editor{/if}<br>
+			<a href="mailto:toms@keramikum.cz">toms@keramikum.cz</a>, tel.&nbsp;+420&nbsp;608&nbsp;311&nbsp;529</p>
+		</div>
+	</footer>
+{/define}
+
+{define itemComments, $type, $title}
+	{var $title = $title ? $title : "Diskuze"}
+
+	<div class="pt-5"></div>
+	<div class="comments-wrap {$type}-comments mt-5 border-top border-primary pt-4">
+		<div class="h2 mb-2">{$title}</div>
+		<div class="comments-control">
+			{control itemComments}
+		</div>
+	</div>
+{/define}
+
+{define mainLogo}
+<a n:href=":Front:Pages:home" id="logo-wrap">
+	<img src="{$basePath}/images/logo_claim.png" alt="keramikum logo" id="header-logo" class="img-fluid logo">
+</a>
+{/define}
+
+{define imageInput, $file, $inputName, $label}
+	{var $inputName = $inputName ? $inputName : "image"}
+
+	{if $label !== false}
+		<div>{label $inputName}</div>
+	{/if}
+	<input n:name="$inputName" class="mb-2">
+	{include imageThumbDeleter, $file}
+{/define}
+
+{define imageThumbDeleter, $file}
+	<div n:if="$file" class="image-wrap">
+		<img src="{$basePath}/{$control->getThumb($file->id)}" class="img-fluid" style="max-height: 200px">
+		<div class="mt-2">
+			<a n:href="deleteFile!, $file->id" class="btn btn-sm btn-danger ajax"><i class="fad fa-trash"></i> Odstranit obrázek</a>
+		</div>
+	</div>
+{/define}
+
+{define pageLoader}
+	<div id="monty-page-loader">
+		<div class="progress"></div>
+	</div>
+{/define}
+
+{define fileThumb, $file, $notImages}
+	{if $control->isImage($file->id)}
+		<img src="{$basePath}/{$control->getThumb($file->id)}" style="max-width: 80px; max-height: 80px">
+	{elseif $notImages}
+		<div class="d-inline-block" style="padding: 30px; background-color: #1a77b9; color: white">{$file->ext}</div>
+	{/if}
+{/define}
+
+{define pageTitle}
+	{if !empty($this->blockQueue["title"])}
+		{capture $title}
+			{include #title}
+		{/capture}
+	{elseif !empty($this->blockQueue["heading"])}
+		{capture $title}
+			{include #heading}
+		{/capture}
+	{/if}
+
+	<title>{if !empty($title)}{$title|stripHtml} | {/if}{$appName}</title>
+{/define}
+
+{* {define pageHeading}
+	{if !empty($this->blockQueue["heading"])}
+		{capture $heading}
+			{include #heading}
+		{/capture}
+	{elseif !empty($this->blockQueue["title"])}
+		{capture $heading}
+			{include #title}
+		{/capture}
+	{/if}
+
+	<h1 n:if=!empty($heading)>{$heading}</h1>
+{/define} *}
+
+{* {define pageHeading, $heading}
+	{dump $heading}
+	<div n:if="$heading" class="page-heading-wrap">
+		<div class="container">
+			<h1 n:block="title">{$heading}</h1>
+		</div>
+	</div>
+{/define} *}
+
+{define formValsSummary, $vals}
+	<div class="form-summary">
+		<div n:foreach="$vals as $label => $val">
+			<div class="label">{$label}:</div>
+			<div class="val">{$val}</div>
+		</div>
+	</div>
+{/define}
+
+{define langsSelector}
+	<div n:if="count($langs) > 1" class="langs-selector">
+		<div class="container">
+			{foreach $langs as $_lang}
+				<a n:foreach="$langs as $_lang" n:href="this, lang => $_lang->code" class="lang">
+					<span class="flag">
+						{* <img class="img-fluidx"
+							src="{$basePath}/core/node_modules/flag-icon-css/flags/4x3/{$_lang->iso}.svg"
+							alt="{$_lang->title}"
+							height=10> *}
+					</span>
+					<span>
+						{$_lang->title}
+					</span>
+				</a>
+			{/foreach}
+		</div>
+	</div>
+{/define}
+
+{* {define imageCropper, $title, $image}
+	{dump $title}
+	{dump $image}
+	<fieldset n:snippet="headerImageCropper" class="mt-4">
+		<legend>{$title}</legend>
+		<a n:if="!empty($image)" n:href="deleteFile!, $image->id" class="btn btn-sm btn-danger mb-2 ajax"><i class="fad fa-trash"></i> Odstranit obrázek</a>
+		<div class="header-image-cropper">
+			<div n:if="!empty($image)" class="header-image mb-3">
+				<img src="{$basePath}/{$image->url}" class="img-fluid" style="max-height: 200px">
+			</div>
+			{control headerImageCropper}
+		</div>
+	</fieldset>
+{/define} *}

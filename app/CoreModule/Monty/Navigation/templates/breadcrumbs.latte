@@ -1,0 +1,21 @@
+<div n:if="count($breadcrumbs) > 1" id="{$id}" class="monty-breadcrumbs">
+	{* {dump $breadcrumbs} *}
+	{foreach $breadcrumbs as $title => $link}
+		{if $link}
+			<a class="link" href="{$link}">
+				{if $title == "home"}
+					{_global.home}
+				{else}
+					{$title}
+				{/if}
+			</a>
+		{else}
+			<span class="link-separator text-link">{$title}</span>
+		{/if}
+		{sep}
+			<span class="separator">
+				<i class="{$icon}"></i>
+			</span>
+		{/sep}
+	{/foreach}
+</div>

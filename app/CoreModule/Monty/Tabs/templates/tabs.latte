@@ -1,0 +1,33 @@
+<div class="tabs-control" id="{$id}">
+	{snippetArea tabsWrap}
+		{snippet tabs}
+			<ul class="nav nav-tabs mb-3" id="{$id}-tabs" role="tablist">
+				{foreach $tabs as $tab}
+					{$tab->getButtonHtml()}
+				{/foreach}
+			</ul>
+
+			<div class="tab-content" id="{$id}-content">
+			  	{foreach $tabs as $tab}
+					<div n:class="tab-pane, fade, $tab->active ? 'show active'" id="{$tab->id}" role="tabpanel" aria-labelledby="{$tab->id}-tab">
+						{switch $tab->getContentType()}
+							{case "template"}
+								{dump "template"}
+								{snippetArea $tab->id . "-snippetArea"}
+									{snippet $tab->id . "-snippet"}
+										{include $tab->content}
+									{/snippet}
+								{/snippetArea}
+							{case "control"}
+								{dump "control"}
+								{$tab->content->render()}
+							{case "string"}
+								{dump "string"}
+								{$tab->content|noescape}
+						{/switch}
+					</div>
+				{/foreach}
+			</div>
+		{/snippet}
+	{/snippetArea}
+</div>

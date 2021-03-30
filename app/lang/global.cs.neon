@@ -1,0 +1,5 @@
+content:
+	types:
+		event: "Kurz|Kurzy"
+
+home: "Domů"

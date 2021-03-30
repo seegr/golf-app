@@ -1,0 +1,11 @@
+.monty-tree {
+	.item-title:hover .actions {
+		visibility: visible !important;
+	}
+	.sorter {
+		cursor: n-resize;
+	}
+	.item.unactive {
+		text-decoration: line-through;
+	}
+}

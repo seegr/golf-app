@@ -1,0 +1,64 @@
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px
+) !default;
+
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1200px
+) !default;
+
+$grid-gutter-width: 15px !default;
+
+$yiq-contrasted-threshold:  150 !default;
+
+$border-radius:               .2rem !default;
+$border-radius-lg:            .25rem !default;
+$border-radius-sm:            .15rem !default;
+
+$input-btn-focus-width: 0 !default;
+
+
+$colors: (
+	"red": #ED8066,
+	"green": #C3E06C,
+	"blue": #469CF0,
+	"yellow": #FAF077,
+	"orange": #FAD47F
+) !default;
+
+
+$theme-colors: () !default;
+
+$core-colors: (
+	"primary": map-get($colors, "blue"),
+	"success": map-get($colors, "green"),
+	"danger": map-get($colors, "red"),
+	"warning": map-get($colors, "orange"),
+	"secondary": #c3c3c3,
+	"red": map-get($colors, "red"),
+	"green": map-get($colors, "green"),
+	"blue": map-get($colors, "blue"),
+	"yellow": map-get($colors, "yellow"),
+	"orange": map-get($colors, "orange"),
+	"soft": #eaeaea,
+	"grey": #b7b7b7,
+	"dark": #3E3E3E,
+	"dark-light": #676767,
+	"light-dark": #676767,
+	"transparent": rgba(255,255,255,0),
+	"instagram": #CA0866,
+	"facebook": #3B5998,
+	"google-blue": #4081ED,
+	"google": #EA4335,
+) !default;
+
+$theme-colors: map-merge($core-colors, $theme-colors);
+
+$spinner-color: var(--primary);
+$spinner-size: 20px;

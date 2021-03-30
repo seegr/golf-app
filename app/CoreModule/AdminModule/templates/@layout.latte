@@ -1,0 +1,20 @@
+{extends "../../templates/@layout.latte"}
+
+{block scripts}
+	{include parent}
+{/block}
+
+{block head}
+	{include parent}
+	<title>{ifset title}{include title|stripHtml} | Admin - Toulcův dvůr{else}Admin - Toulcův dvůr{/ifset}</title>
+	<link rel="stylesheet" href="{$basePath}/dist/css/admin.style.css?{time()}">
+	<script src="{$basePath}/dist/js/admin.bundle.js?{time()}"></script>
+{/block}
+
+{block topPage}
+	{control adminNav}
+{/block}
+
+{block content}
+	
+{/block}

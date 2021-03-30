@@ -1,0 +1,193 @@
+{import "blocks.latte"}
+
+<!DOCTYPE html>
+<html lang="{$lang->code}">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<base href="{$baseUrl}/">
+	{* <link rel="canonical" href="http://www.domain.cz/"> *}
+	{block meta}{/block}
+
+	{block favicon}
+		<link rel="shortcut icon" href="{$basePath}/dist/images/favicon.ico" type="image/x-icon">
+	{/block}
+
+	{* {include pageTitle} *}
+	<title>{ifset title}{include title|stripHtml} | {$appName}{else}{$appName}{/ifset}</title>
+
+	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.15.2/css/all.css" integrity="sha384-yJpxAFV0Ip/w63YkZfDWDTU6re/Oc3ZiVqMa97pi8uPt92y0wzeK3UFM2yQRhEom" crossorigin="anonymous">
+	<script>
+		window.filePicker = {$control->link(":Core:Admin:FilesList:filesList")};
+		window.basePath = {$basePath};
+		window.baseUrl = {$baseUrl};
+	</script>
+	{block head}{/block}
+	{block styles}{/block}
+</head>
+
+<body n:class="!empty($control->bodyClass) ? implode(' ', $control->bodyClass)">
+
+	{block bodyTop}{/block}
+	{* {include tinymce.js.latte}
+	{include app.js.latte} *}
+
+	{include pageLoader}
+
+	{block editButton}{/block}
+	{snippet body}
+	{block body}
+		{* {if !$cookiesAccept}
+			<div class="cookies-alert">
+				<div class="container text-center">
+					<p class="h5">Cookies</p>
+					<p>Tento web používá k poskytování služeb a analýze návštěvnosti soubory cookie. Používáním tohoto webu s tím souhlasíte.</p>
+					<a n:href="cookiesAccept!" class="btn btn-sm btn-success ajax" onclick="$(this).parents('.cookies-alert').hide(200)">V pořádku</a>
+					<a href="https://www.google.com/policies/technologies/cookies/" class="btn btn-sm btn-warning">Více informací</a>
+				</div>
+			</div>
+		{/if} *}
+
+		{* <div n:class="loader, $_loader ? show">
+			<div class="loader-wrap">
+				<div class="spinner-wrap">
+					<div n:class="spinner, spinner-big">
+						<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+					</div>
+					<div class="spinner spinner-small">
+						<div class="rect rect1"></div>
+						<div class="rect rect2"></div>
+						<div class="rect rect3"></div>
+						<div class="rect rect4"></div>
+						<div class="rect rect5"></div>
+					</div>
+				</div>
+			</div>
+		</div> *}
+
+		<div n:ifset="$_maintenance" class="alert alert-danger mb-0">Maintenance ON!</div>
+
+		{block siteLangs}{/block}
+		{block topPage}{/block}
+
+		<div class="row no-gutters main-row">
+			<div class="col" id="main-col">
+				{snippet alertBar}
+					{block alertBar}{/block}
+				{/snippet}
+
+
+				<div id="main-nav">
+					{block mainNav}{/block}
+					<div id="sub-nav">
+						{block subNav}{/block}
+					</div>
+				</div>
+
+				<div id="page-wrap">
+					{block header}{/block}
+					{block breadcrumbs}{/block}
+
+					{snippet content}
+						{var $contentClass = []}
+						{if isset($contentWidth)}
+							{var $contentClass[] = "col-" . $contentWidth}
+							{if !isset($contentCenter)}
+								{var $contentClass[] = "mx-auto"}
+							{/if}
+						{else}
+							{var $contentClass[] = "col-" . 12}
+						{/if}
+
+						<section id="content-wrap">
+							{block contentWrap}
+								<div id="main-container" class="container">
+									{* {include pageHeading} *}
+									{block content}{/block}
+								</div>
+							{/block}
+						</section>
+						<section id="content-footer">
+							<div class="container">
+								{block contentFooter}{/block}
+							</div>
+						</section>
+					{/snippet}
+
+					<footer id="footer">
+						<div class="container">
+							{block footer}{/block}
+						</div>
+					</footer>
+				</div>
+			</div>
+		</div>
+
+		{block floatContent}{/block}
+		
+		{block flashes}
+			{snippet flashes}
+				<div n:class="flashes, count($flashes) ? '' : 'collapse'" style="display: none">
+					<div n:if="$flashes" n:foreach="$flashes as $flash" n:class="flash, 'alert-' . $flash->type, $flash->stay ? stay">
+						{* {dump $flash} *}
+						<div class="row align-items-center">
+							<div class="col-1 p-2 msg-icon bg-{$flash->type}">
+								<i class="fas fa-exclamation"></i>
+							</div>
+							<div class="col-11 p-2">{$flash->message|noescape}</div>
+						</div>
+					</div>
+				</div>
+			{/snippet}
+		{/block}
+
+		{block bigMessage}
+			{snippet bigMessage}
+				<div n:if="!empty($bigMessage)" id="big-message-wrap">
+					<div id="big-message" n:class="message, h1, $bigMessage[fixed] ? fixed">{$bigMessage[text]}</div>
+				</div>
+			{/snippet}
+		{/block}
+
+		{snippetArea modalWrap}
+			<div n:snippet="modal" class="modal-wrap">
+				{* <script>
+					$(function() {
+						$(".modal").modal("hide");
+					});
+				</script> *}
+				<div id="modal-wrap">
+					<div id="modal-content">
+						<div id="modal" n:class="iziMmodal, modal" style="display:none"></div>
+					</div>
+				</div>
+			</div>
+		{/snippetArea}
+	{/block}
+	{/snippet}
+	
+	{block addContent}{/block}
+	{block bottomPage}{/block}
+
+	{* <!-- COMPONENTS SCRIPTS -->
+	{block componentScripts}
+		{dump }
+		{foreach $control->getComponentsScripts() as $_com}
+			{control $_com:scripts}
+		{/foreach}
+	{/block} *}
+
+	<!-- APP SCRIPTS -->	
+	{block scripts}
+	{/block}
+
+	{* <script type="text/javascript">
+		Nette.addLinks({
+			filePicker: {$control->link(":Core:Admin:FilesList:filesList")},
+			basePath: {$basePath},
+			baseUrl: {$baseUrl}
+		});
+	</script> *}
+</body>
+</html>

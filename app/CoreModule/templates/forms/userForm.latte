@@ -1,0 +1,56 @@
+{import $_blocks}
+
+{form userForm}
+	<div class="row">
+		<div class="form-group col-6">
+			{label email}
+			<input n:name="email" class="form-control">
+		</div>
+		<div class="form-group col-6">
+			{label password}
+			<input n:name="password" class="form-control">
+			{* {input password} *}
+		</div>
+		<div class="form-group col-6">
+			{label password_again}
+			<input n:name="password_again" class="form-control">
+		</div>
+		<div class="form-group col-6">
+			{label firstname}
+			<input n:name="firstname" class="form-control">
+		</div>
+		<div class="form-group col-6">
+			{label lastname}
+			<input n:name="lastname" class="form-control">
+		</div>
+		<div n:ifset="$form[username]" class="form-group col-6">
+			{label username}
+			<input n:name="username" class="form-control">
+		</div>
+		<div n:ifset="$form[username]" class="form-group col-6">
+			{label short}
+			<input n:name="short" class="form-control">
+		</div>
+		<div class="form-group col-6">
+			{label pre_title}
+			<input n:name="pre_title" class="form-control">
+		</div>
+		<div class="form-group col-6">
+			{label suf_title}
+			<input n:name="suf_title" class="form-control">
+		</div>
+		<div n:ifset="$form[username]" class="form-group col-6">
+			{label vocative}
+			<input n:name="vocative" class="form-control">
+		</div>
+		<div n:ifset="$form[username]" class="form-group col-6">
+			{label gmail}
+			<input n:name="gmail" class="form-control">
+		</div>
+		<div class="form-group col-6">
+			{label tel}
+			<input n:name="tel" class="form-control">
+		</div>
+	</div>
+	{include formButtons}
+{/form}

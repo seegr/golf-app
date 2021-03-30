@@ -1,0 +1,56 @@
+{extends @layout.latte}
+
+{block navigation}
+	<nav class="navbar">
+		<div class="container">
+			<div class="d-flex d-lg-none mx-auto">
+				{foreach $control->getItems("brand") as $brand}
+					{$brand->getHtml()}
+				{/foreach}
+			</div>
+			{foreach $control->getItems("alwaysVisible") as $item}
+				{$item->getHtml()}
+			{/foreach}
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#{$id}-nav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="navbar-containers collapse navbar-collapse justify-content-space-between" id="{$id}-nav">
+				<div n:if="$control->getItems(brand)" class="nav-container container-brand d-none d-lg-flex">
+					{foreach $control->getItems("brand") as $brand}
+						{$brand->getHtml()}
+					{/foreach}
+				</div>
+				{foreach $positions as $pos}
+					<div n:if="$control->getItems($pos)"
+						n:class="nav-container, 'container-' . $pos, navbar-nav, 'items-' . $pos, mx-autox, $pos == right ? 'mt-3 mt-md-0'"
+					>
+						{include itemsLoop, $control->getItems($pos)}
+					</div>
+				{/foreach}
+			</div>
+		</div>
+	</nav>
+{/block}
+
+{* {block navigation}
+	<nav class="navbar">
+		<div class="container">
+			{foreach $control->getItems("brand") as $brand}
+				{$brand->getHtml()}
+			{/foreach}
+			{foreach $control->getItems("alwaysVisible") as $item}
+				{$item->getHtml()}
+			{/foreach}
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#{$id}-nav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="{$id}-nav">
+				{foreach $positions as $pos}
+					<div n:if="$control->getItems($pos)" n:class="navbar-nav, 'items-' . $pos, $pos == right ? ml-auto, align-items-center">
+						{include itemsLoop, $control->getItems($pos)}
+					</div>
+				{/foreach}
+			</div>
+		</div>
+	</nav>
+{/block} *}

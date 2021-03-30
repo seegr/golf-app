@@ -1,0 +1,6 @@
+Calendar methods
+
+setDayLayout($layout)
+	layout:
+		- whole (default)
+		- half

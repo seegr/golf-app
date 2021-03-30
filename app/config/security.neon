@@ -1,0 +1,9 @@
+services:
+	authorizator:
+		class: App\CoreModule\Components\Authorizator
+		setup:
+			- addResource("Admin:Dashboard")
+			- addResource("Front:Home")
+
+			- allow("admin", "Admin:Dashboard")
+			- allow("guest", "Front:Home")

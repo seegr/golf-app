@@ -1,0 +1,32 @@
+{extends "../../CoreModule/FrontModule/templates/@layout.latte"}
+
+{block styles}
+	{include parent}
+	<style>
+		#footer {
+			border-top: 1px solid #dcdcdc;
+		}
+	</style>
+{/block}
+
+{block head}
+	{include parent}
+	<link href="https://fonts.googleapis.com/css?family=Amatica+SC:400,700&amp;subset=latin-ext" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700&amp;subset=latin-ext" rel="stylesheet">
+{/block}
+
+{block favicon}
+	<link rel="shortcut icon" href="{$basePath}/images/favicon.png" type="image/x-icon">
+{/block}
+
+{block bodyTop}
+{/block}
+
+{block header}
+{/block}
+
+{block footer}
+	<div class="text-center py-5 font-size-12">
+		<div>Golf Hostivař App  © {time()|date, "Y"}</div>
+	</div>
+{/block}

@@ -1,0 +1,84 @@
+<div id="{$id}" n:class="filebrowser-control, $filePicker ? filepicker, $filePickerMultiple ? filepicker-multiple">
+	<div class="selected-actions px-1 mb-3">
+		{foreach $selectedActions as $action}
+			<a class="{$action->getClass()}" data-action="{$action->name}">{$action->label}</a>
+		{/foreach}
+	</div>
+	<div class="row no-gutters files">
+		{foreach $files as $file}
+			<div class="{$fileColClass} file-col">
+				<div n:class="mx-1, mb-1, border, file, $filePicker ? file-selector" data-id="{$file->id}" data-src="{$file->getSrc()}" data-name="{$file->getBasename()}" data-ext="{$file->getExt()}" data-filename="{$file->fileInfo->filename}">
+					<div class="position-relative file-thumb">
+						<div class="position-absolute file-thumb-icons">
+							<div class="d-flex align-items-center justify-content-center" style="height: 100%">
+								<i class="fas fa-check-circle text-white icon icon-selected"></i>
+							</div>
+						</div>
+						{$file->getThumb()}
+					</div>
+					<div class="file-label px-2" data-toggle="tooltip" data-delay="300" title="{$file->label}">{$file->label}</div>
+				</div>
+			</div>
+		{/foreach}
+	</div>
+</div>
+
+{include filebrowser-scripts.latte}
+
+<script>
+	var FileBrowsers = FileBrowsers === undefined ? {} : FileBrowsers;
+
+	$(function() {
+		var id = {$id};
+		var browserSelector = "#" + id;
+		var $browser = $(browserSelector);
+		var selected = [];
+
+		FileBrowsers[id] = {
+			id: id,
+			selector: browserSelector,
+			element: $browser,
+			selected: selected
+		};
+
+		$browser.find(".file-selector").click(function() {
+			var id = $(this).data("id");
+			//console.log(id);
+
+			if (!$browser.hasClass("filepicker-multiple")) {
+				$browser.find(".file-selector").not(this).removeClass("selected");
+			}
+
+			$(this).toggleClass("selected");
+			selectedFiles();
+		});
+
+		$browser.find(".selected-action").click(function() {
+			var action = $(this).data("action");
+			var lookup = {$lookupPath};
+
+			data = {};
+			data[lookup + "-action"] = action;
+			data[lookup + "-selected"] = selected;
+
+			console.log(FileBrowsers[id].selected);
+
+			$.nette.ajax({
+				url: {link selectedAction!},
+				method: "post",
+				data: data
+			});
+		});
+		
+		function selectedFiles() {
+			ids = [];
+			$.each($browser.find(".file-selector.selected"), function(key, file) {
+				ids.push($(file).data("id"));
+			});
+
+			console.log(ids);
+
+			FileBrowsers[id].selected = selected = ids;
+		}
+	});
+</script>

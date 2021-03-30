@@ -1,0 +1,25 @@
+<form n:name="imageForm-$image->id" class="image-form">
+	{foreach $form->getComponents() as $input}
+		{var $type = $input->getOptions()["type"]}
+		{var $label = $input->caption}
+		{var $name = $input->name}
+
+		{* {dump $type}
+		{dump $label}
+		{dump $name} *} 
+
+		<div n:if="!in_array($type, ['hidden', 'button'])" n:class="form-group, mb-0, mt-1">
+			{switch $type}
+				{case "text"}
+					<input n:name="$name" class="form-control" placeholder="{$label}" autocomplete="off">
+				{case "textarea"}
+					<textarea n:name="$name" class="form-control" placeholder="{$label}"></textarea>
+				{case "select"}
+					<select n:name="$name" class="form-control"></select>
+			{/switch}
+		</div>
+		<div class="text-right" n:if="$type == button" style="display: none">
+			<button n:name="$name" class="btn btn-sm btn-default ajax image-form-submit">Uložit</button>
+		</div>
+	{/foreach}
+</form>

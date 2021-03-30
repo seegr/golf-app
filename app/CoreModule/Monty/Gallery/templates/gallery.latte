@@ -1,0 +1,32 @@
+<div id="{$id}"
+	n:class="monty-gallery, $editable ? editable, $imagePicker ? imagepicker">
+	{snippetArea galleryWrap}
+		{include $layout . ".latte"}
+	{/snippetArea}
+
+	<script>
+		// console.log("define gallery");
+		var Galleries = Galleries != undefined ? Galleries : {};
+		var settings = {
+			id: {$id},
+			rowHeight: {$gridRowHeight},
+			imagePicker: {$imagePicker},
+			multiSelect: {$multiselect},
+			lookupPath: {$lookupPath},
+			editable: {$editable},
+			isEditsSaveCallback: {$isEditsSaveCallback},
+			layout: {$layout},
+			links: {
+				loadMore: {link loadMore!},
+				loadAll: {link loadAll!},
+				orderChange: {link orderChange!},
+				editsSave: {link editsSave!},
+				selectionDelete: {link selectionDelete!}
+			}
+		};
+
+		Galleries[{$id}] = settings;
+
+		console.log(Galleries[{$id}]);
+	</script>
+</div>

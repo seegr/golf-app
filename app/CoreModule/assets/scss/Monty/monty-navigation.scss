@@ -1,0 +1,54 @@
+.monty-navigation {
+	position: relative;
+	z-index: 1021;
+
+	&.navigation-navbar {
+		.item-wrap {
+	    	position: relative;
+		    white-space: nowrap;
+
+	    	.childs {
+				display: none;
+				position: absolute;
+				z-index: 100;
+				white-space: nowrap;
+				min-width: 200px;
+				box-shadow: 0 8px 10px -6px #00000094;
+				background: white;
+			}
+		}
+		.navbar-nav > .item-wrap > .childs .parent .childs {
+			top: 0;
+			right: -150px;
+		}
+		.item-wrap.parent:hover > .childs {
+			display: block;
+		}
+		.item-wrap.parent:hover .submenu-arrow {
+			color: var(--success);
+		}
+		.item-wrap.active {
+		    background-color: #cbde76;
+		}
+		.item-wrap.child-active > .item {
+		    color: #b2c60d;
+		}		
+	}
+
+	&.navigation-vertical {
+		.childs {
+			padding-left: .8em;
+		}		
+	}
+
+	.navbar-containers {
+		width: 50%;
+	}
+	.container-brand, .container-right {
+		width: 25%;
+	}
+	.container-right {
+	    display: flex;
+	    justify-content: flex-end;
+	}
+}

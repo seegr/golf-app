@@ -1,0 +1,12 @@
+<fieldset>
+	<legend>Filtr</legend>
+	<form n:name="filter" class="ajax">
+		<div class="form-group">
+			<input n:name="text" class="form-control" autocomplete="off">
+		</div>
+		<div n:if="isset($form[order])" class="form-group">
+			<select n:name="order" class="form-control"></select>
+		</div>
+		<input n:name="submit" class="btn btn-sm btn-success">
+	</form>
+</fieldset>

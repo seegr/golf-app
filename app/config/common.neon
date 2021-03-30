@@ -1,0 +1,30 @@
+translation:
+    dirs:
+        - %appDir%/lang
+
+parameters:
+	appName: "GolfApp"
+	
+router:
+	homeRoute: "Front:Home:home"
+	routers:
+		- App\Router\RouterFactory
+
+contents:
+	# allow: ["event"]
+	event:
+		exclude: ["short", "text", "heading", "image", "meta_keys", "meta_desc"]
+		fields:
+			lektor:
+				title: "Lektor"
+				type: "text"
+	# event:
+	# 	fields:
+	# 		place:
+	# 			title: "Místo"
+	# 			type: "text"
+	# 			required: true
+	# 		register_url:
+	# 			title: "Registrační formulář"
+	# 			type: "url"
+	# 			required: false

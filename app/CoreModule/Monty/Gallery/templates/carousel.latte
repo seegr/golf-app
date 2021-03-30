@@ -1,0 +1,57 @@
+<div id="{$id}">
+	<div n:if="count($images)" n:snippet="gallery">
+		{* {dump $images} *}
+		<div n:if=$title class="gallery-title">{$title}</div>
+		<div class="gallery-control layout-thumb" id="{$id}">		
+			<div id="{$id}-carousel" class="carousel slide {$id}" data-ride="carousel" data-interval="{$interval}">
+			  <div class="carousel-inner">
+			    {foreach $images as $image}
+			      <div n:class="carousel-item, $currentImage->id == $image->id ? active">
+			        <img class="img-fluid gallery-image-thumb gallery-image-zoom" src="{$image->getSrc('thumb')}" href="{$image->getSrc()}" style="display: block; margin: 0 auto; max-height: 200px; cursor: zoom-in">
+			      </div>
+			    {/foreach}
+			  </div>
+			  <a class="carousel-control-prev" href="#{$id}-carousel" role="button" data-slide="prev">
+			    <span class="btn btn-sm btn-dark" aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+			    <span class="sr-only">Previous</span>
+			  </a>
+			  <a class="carousel-control-next" href="#{$id}-carousel" role="button" data-slide="next">
+			    <span class="btn btn-sm btn-dark" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+			    <span class="sr-only">Next</span>
+			  </a>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$(function() {
+			var id = {$id};
+			/*$("#" + id).carousel({
+				"touch": true,
+				"ride": true
+			})*/			
+
+		    $("#" + {$id} + " .gallery-image-thumb").magnificPopup({
+		      type: "image",
+		        image: {
+		          titleSrc: "alt"
+		        },
+		        closeBtnInside: false,
+		        gallery: {
+		          enabled: true
+		        },
+		      mainClass: 'gallery-image-full',
+		      /*zoom: {
+		        enabled: true,
+		        duration: 300,
+		        easing: 'ease-in-out'
+		      }*/
+		    });  
+		});
+	</script>
+</div>
+
+
+
+{* {if $interval}
+{/if} *}

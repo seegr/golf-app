@@ -1,0 +1,138 @@
+{block styles}
+{include parent}
+<style>
+	.file-data {
+		overflow: hidden;
+	}
+	.name {
+		white-space: nowrap;
+	}
+	.file-selector:hover .file-wrap {
+		border-color: var(--primary) !important;
+		cursor: pointer;
+	}
+	.file-selector.selected .file-wrap {
+		border-color: var(--warning) !important;
+		/*background-color: #fcffe0;*/
+	}
+</style>
+{/block}
+
+{block body}
+	<fieldset class="file-upload m-3">
+		<legend>Nahrát soubor/y</legend>
+		<form n:name="fileUploadForm">
+			<div class="form-group">
+				<input n:name="files">
+			</div>
+			<input n:name="submit" class="btn btn-sm btn-success ajax">
+		</form>
+	</fieldset>
+
+	<div class="filter m-3">
+		{control filter}
+	</div>
+
+	{snippetArea files-wrap-area}
+		<div class="files-list p-3" n:snippet="files-wrap">
+			{include pagi}
+
+			<div class="h4 mt-3">Souborů: {$count}</div>
+			<div class="row files" n:snippet="files">
+				<div n:foreach="$files as $file"
+					n:class="$type == images ? col-3 : col-12, pb-3, file-col, file-selector"
+					data-id="{$file->id}"
+					data-src="{$file->url}"
+					data-name="{$file->name}">
+					<div class="file-wrap border p-3" title="{$file->name}">
+						<div class="file-data">
+							<div n:class="name, $type == images ? mb-2">
+								<div class="name">{$file->name}</div>
+								<div>
+									<small>{$file->inserted|date, "j.n.Y H:i"}</small>
+									<span> | </span>
+									{var $usr = $file->ref(user)}
+									<span>{$usr->firstname} {$usr->lastname}</span>
+								</div>
+							</div>
+							<div n:if="$type == images">{include fileThumb, $file, true}</div>
+						</div>
+						<div class="buttons mt-3">
+							<span n:if="$picker" class="mr-1 btn btn-sm btn-success select-btn">Vložit</span>
+							<a n:href="downloadFile!, $file->key" class="btn btn-sm btn-outline-blue mr-1" target="_blank" data-tooltip="Stáhnout" data-placement="left">
+								<i class="fad fa-download"></i> Stáhnout
+							</a>
+							<a n:href="deleteFile!, $file->id" class="btn btn-sm btn-outline-danger ajax" target="_blank" data-tooltip="Smazat" data-placement="left">
+								<i class="fad fa-trash"></i> Smazat
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{include pagi}
+		</div>
+	{/snippetArea}
+{/block}
+
+{block scripts}
+{include parent}
+<script>
+	$(function() {
+		// console.log("tralala");
+		$(document).off("click", ".files-list .select-btn").on("click", ".files-list .select-btn", function() {
+			console.log("click");
+
+			let file = $(this).parents(".file-selector");
+			console.log("file", file);
+
+			window.parent.postMessage({
+				mceAction: "insertUrl",
+				data: {
+					url: file.data("src"),
+					name: file.data("name")
+				}
+			});
+			
+			// window.parent.postMessage({
+			//     mceAction: 'block',
+			//     message: 'Blocking from iframe'
+			// }, origin);
+
+			// setTimeout(() => {
+			//     // send the "unblock" mceAction
+			//     window.parent.postMessage({
+			//         mceAction: 'unblock'
+			//     }, origin);
+			// }, 2000);		
+
+			// window.parent.postMessage({
+			//   mceAction: 'insertContent',
+			//   content: 'Some content'
+			// }, '*');			
+
+			// $(this).parents(".files-list").find(".file-selector").not(this).removeClass("selected");
+			// $(this).toggleClass("selected");
+
+		});
+	});
+</script>
+{/block}
+
+{define pagi}
+	<div class="pagination">
+		<a href="{!$pagi->isFirst() ? $control->link(this, [page => 1]) : '#'}" class="ajax">První</a>
+		&nbsp;|&nbsp;
+		<a href="{!$pagi->isFirst() ? $control->link(this, [page => $pagi->page-1]) : '#'}" class="ajax">Předchozí</a>
+		&nbsp;|&nbsp;
+
+		Stránka {$pagi->page} z {$pagi->pageCount}
+
+		{if !$pagi->isLast()}
+			&nbsp;|&nbsp;
+			<a n:href="this, page => $pagi->page+1" class="ajax">Další</a>
+			&nbsp;|&nbsp;
+			<a n:href="this, page => $pagi->pageCount" class="ajax">Poslední</a>
+		{/if}
+	</div>
+{/define}

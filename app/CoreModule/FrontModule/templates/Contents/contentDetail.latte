@@ -1,0 +1,30 @@
+{import $_contentBlocks}
+
+{include contentHeaderImage}
+
+{* {block breadcrumbs}{/block} *}
+
+{block header}
+	{include parent}
+	{include contentHeaderImage}
+	<div class="page-heading-wrap">
+		<div class="container">
+			<h1 n:block="title">{$content->title}</h1>
+		</div>
+	</div>
+{/block}
+
+{block content}
+	{include contentCustomData}
+	<i class="fad fa-clock"></i> <span>{include contentTime}</span>
+	{include contentBody}
+{/block}
+
+{block contentFooter}
+	{if $control[contentGallery]->hasImages()}
+		<h2 class="text-center">Galerie</h2>
+		<div class="d-tablex mx-autox">
+			{include contentGallery}
+		</div>
+	{/if}
+{/block}

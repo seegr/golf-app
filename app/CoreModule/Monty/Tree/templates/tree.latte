@@ -1,0 +1,160 @@
+<div id="{$id}" class="monty-tree">
+	{include tree, $data, null, $editable, $expanded}
+	<div class="item">
+		<div class="item-title">
+			<span n:if="$editable" class="actions">
+				<a href="{$control->getEditLink([])}" n:class="badge, text-success, $control->editActionAjax ? ajax"><i class="fas fa-plus"></i></a>
+			</span>
+		</div>
+	</div>
+
+	<button n:if="$control->onGetChecked" class="btn btn-sm btn-success ajax get-checked-btn">{if $control->checkedButtonLabel}{$control->checkedButtonLabel}{else}get checked{/if}</button>
+
+	<script>
+		var montyTrees = montyTrees != undefined ? montyTrees : {};
+
+		montyTrees[{$id}] = {};
+		montyTrees[{$id}]["items"] = [];
+		montyTrees[{$id}]["checked"] = [];
+
+		$(function() {
+			getChecked();
+
+			var treeId = {$id};
+			var tree = "#" + treeId;
+			var $tree = $("#" + treeId);
+			var lookupPath = {$lookupPath};
+			var sortable = {$sortable};
+
+			$(document).on("click", tree + " .check-btn", function() {
+				var item = $(this).parents(".item").first();
+				var checker = $(this).parents(".checker");
+				var childs = item.find(".item");
+				console.log(item);
+				console.log(childs);
+				item.toggleClass("checked");
+				checker.find(".check-btn").toggle();
+
+				if (item.hasClass("checked")) {
+					// item.find(".item").addClass("checked");
+					// childs.find(".check-btn.check").show();
+					// childs.find(".check-btn.uncheck").hide();
+				} else {
+					// item.find(".item").removeClass("checked");
+					// childs.find(".check-btn.check").hide();
+					// childs.find(".check-btn.uncheck").show();
+				}
+				
+				getChecked();
+				//$(this).parents(".checked").find(".item-title .check-icon").toggle();
+			});
+
+			$(document).on("click", tree + " .get-checked-btn", function() {
+				var data = {};
+				data[{$lookupPath} + "-items"] = montyTrees[{$id}]["checked"];
+
+				console.log(data);
+
+				$.nette.ajax({
+					url: {link getChecked!},
+					data: data
+				});
+			});
+
+			if (sortable) {
+				$tree.find(".tree-level").sortable({
+					handle: ".sorter",
+					update: function(event, ui) {
+						console.log(event);
+						console.log(ui);
+						console.log(ui.item);
+
+						var item = ui.item;
+						var $item = $(item);
+						var $nextItem = $item.next().length ? $item.next() : null;
+						var $prevItem = $item.prev().length ? $item.prev() : null;
+
+						var itemId = $item.data("item");
+						var prevItemId = $prevItem ? $prevItem.data("item") : null;
+						var nextItemId = $nextItem ? $nextItem.data("item") : null;
+						var parentId = $item.data("parent") ? $item.data("parent") : null;
+
+						data = {};
+						data[lookupPath + "-itemId"] = itemId;
+						if (nextItemId) {
+							data[lookupPath + "-nextItemId"] = nextItemId;
+						}
+						if (prevItemId) {
+							data[lookupPath + "-prevItemId"] = prevItemId;
+						}
+						if (parentId) {
+							data[lookupPath + "-parentId"] = parentId;
+						}
+						console.log("tree data: ", data);
+
+						$.nette.ajax({
+							url: {link orderChange!},
+							data: data
+						});
+					}
+				});
+			}
+
+			function getChecked() {
+				var checkedItems = $(".item.checked");
+				console.log(checkedItems);
+
+				montyTrees[{$id}]["checked"] = [];
+				$.each(checkedItems, function() {
+					var itemId = $(this).data("item");
+					montyTrees[{$id}]["checked"].push(itemId);
+				});
+				console.log(montyTrees[{$id}]["checked"]);				
+			}
+		});
+	</script>
+</div>
+
+{define tree, $items, $parent, $editable, $expanded}
+	<div class="tree-level">
+		{foreach $items as $item}
+			{var $class = []}
+			{if isset($item->active)}
+				{var $class[] = $item->active ? "active" : "unactive"}
+			{else}
+				{var $class[] = "active"}
+			{/if}
+			
+
+			{dump $class}
+			{var $title = "<span class='" . implode(" ", $class) . "'>" . $item->title . "</span>"}
+
+			<div n:class="item, $parent ? 'child', implode(' ', $class), in_array($item->id, $checked) ? checked" n:attr="data-item => $item->id, data-parent => $parent">
+				<span n:if="$item->childs" class="badge text-primary cursor-pointer" data-toggle="collapse" data-target="#childs-{$item->id}">
+					<i class="fas fa-chevron-square-down"></i>
+				</span>
+				<span n:class="item-title, !$item->childs ? pl-4" data-item="{$item->id}">
+					{* <span n:ifset="$item->order">{$item->order}</span> *}
+					<span n:if="$checkable" class="checker">
+						<span n:class="check-btn, uncheck, (isset($item->active) && $item->active) || in_array($item->id, $checked) ? collapse"><i class="far fa-square check-icon"></i></span>
+						<span n:class="check-btn, check, (!isset($item->active) || !$item->active) && !in_array($item->id, $checked) ? collapse"><i class="fas fa-check-square check-icon"></i></span>
+					</span>
+					{if $editable}
+						{* <a n:href="$editAction, itemId => $item->id, parentId => $parent" class="ajax">{$item->title}</a> *}
+						<a href="{$control->getEditLink([itemId => $item->id])}" n:class="$control->editActionAjax ? ajax">{$item->title}</a>
+					{else}
+						<span>{$item->title}</span>
+					{/if}
+					<span n:if="$sortable" class="badge badge-light sorter"><i class="fas fa-sort"></i></span>
+					<span class="actions" style="visibility: hidden">
+						<a n:if="$control->isEditable()" href="{$control->getEditLink([itemId => null, parentId => $item->id])}" class="badge text-success ajax"><i class="fas fa-plus"></i></a>
+						<a n:if="$control->isDeletable()" href="{$control->getDeleteLink($item->id)}" class="badge text-danger ajax" data-confirm="Opravdu?"><i class="fas fa-trash"></i></a>
+					</span>
+				</span>
+				<div n:if="$item->childs" n:class="childs, pl-3, collapse, $expanded ? show" id="childs-{$item->id}">
+					{include tree, $item->childs, $item->id, $editable, $expanded}
+				</div>
+			</div>
+		{/foreach}
+	</div>
+{/define}

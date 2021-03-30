@@ -1,0 +1,63 @@
+{block content}
+	{form navigationItemForm}
+		<div class="form-group">
+			<label>Text</label>
+			<input n:name="title" class="form-control">
+		</div>
+		<div class="form-group">
+			<div class="custom-control custom-checkbox">
+				<input n:name="active" class="custom-control-input">
+				<label n:name="active" class="custom-control-label">Aktivní</label>
+			</div>
+		</div>
+		<div class="form-group">
+			<label>Slug</label>
+			<input n:name="short" class="form-control">
+		</div>
+		<div class="form-group">
+			{label content}
+			<select n:name="content" class="form-control"></select>
+		</div>
+		<div class="form-group">
+			{label contentsList}
+			<select n:name="contentsList" class="form-control"></select>
+		</div>
+		<div class="form-group">
+			<label>Alias</label>
+			<select n:name="item_alias" class="form-control"></select>
+		</div>
+		<div class="form-group">
+			<label>Routa</label>
+			<input n:name="route" class="form-control">
+		</div>
+		<div class="form-group">
+			<label>URL</label>
+			<input n:name="url" class="form-control">
+		</div>
+		<div class="form-group">
+			<label>Template</label>
+			<input n:name="template" class="form-control">
+		</div>
+		<div class="form-group">
+			<label>Parametry</label>
+			<input n:name="params" class="form-control">
+		</div>
+		<div class="form-group">
+			<label>CSS třída</label>
+			<input n:name="class" class="form-control">
+		</div>
+
+		<button n:name="save" class="btn btn-success ajax" data-naja-force-redirect>Uložit</button>
+	{/form}
+
+	{dump $item}
+	<fieldset n:snippet="headerImageCropper" class="mt-4">
+		<legend>Obrázek v hlavičce</legend>
+		{include imageThumbDeleter, $item->header_image ? $item->ref(header_image) : null}
+		<div class="header-image-cropper">
+			<div class="mt-3">
+				{control headerImageCropper}
+			</div>
+		</div>
+	</fieldset>
+{/block}

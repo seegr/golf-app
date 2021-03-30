@@ -1,0 +1,74 @@
+{import $_contentBlocks}
+
+{block breadcrumbs}{/block}
+
+{block styles}
+	{include parent}
+	<style>
+		{sass}
+			.header-image {
+				height: 400px;
+			    background-size: cover;
+			    background-position: center;
+			}
+			h1 {
+			    margin-bottom: 1em;
+			    padding: .2em 0;
+			    color: #7f7f7f;
+			    font-size: 3em;
+			    font-weight: 100;
+			    text-align: center;
+			    background-color: #f9f9f9;
+			}
+
+			body.gallery {
+				#main-container {
+					max-width: 90%;
+				}
+			}
+			body:not(.gallery) {
+				#main-container {
+					max-width: 680px;
+				}
+			}
+			.event-date {
+			    font-size: 1.2em;
+			    .date {
+				    color: #e799d5;
+			    }
+			    .time {
+					color: #a9a9a9;
+			    }
+			}
+			.custom-data .label {
+			    font-weight: 400;
+			}
+			.contet-created {
+			    font-size: 1.2em;
+			    .time {
+			    	opacity: .6;
+			    }
+			}			
+		{/sass}
+	</style>	
+{/block}
+
+{block header}
+	{include parent}
+	<h1 n:block="title">{$content->title}</h1>
+{/block}
+
+{block content}
+	{include contentCustomData}
+	<i class="fad fa-clock"></i> <span>{include contentTime}</span>
+	{include contentBody}
+{/block}
+
+{block contentFooter}
+	{if $control[contentGallery]->hasImages()}
+		<h2 class="text-center">Galerie</h2>
+		<div class="d-tablex mx-autox">
+			{include contentGallery}
+		</div>
+	{/if}
+{/block}

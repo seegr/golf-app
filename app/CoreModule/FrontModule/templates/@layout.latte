@@ -1,0 +1,56 @@
+{extends "../../templates/@layout.latte"}
+
+{block head}
+	{include parent}
+	<link rel="stylesheet" href="{$basePath}/dist/css/front.style.css?{time()}">
+{/block}
+
+{block scripts}
+	{include parent}
+	<script src="{$basePath}/dist/js/front.bundle.js?{time()}"></script>
+{/block}
+
+{block meta}
+	{ifset title}
+		{capture $metaTitle}
+			{include #title}
+		{/capture}
+	{/ifset}
+	<meta property="og:title"			content="{$appName}{if (!empty($metaTitle))} | {$metaTitle}{/if}">
+	<meta property="og:type"			content="website">
+	<meta property="og:image"			content="{$baseUrl}/{$ogImage}">
+	<meta property="og:image:type"		content="image/jpg">
+	<meta property="og:image:width"		content="500">
+	<meta property="og:image:height"	content="500">
+	<meta property="og:description"		content="{$metaDesc|stripHtml|truncate:200}">
+	<meta property="og:site_name"		content="{$appName}">
+	<meta name="description"			content="{$metaDesc}">
+	<meta name="keywords"				content="{$metaKeys}">
+	<meta property="og:locale"			content="{$lang->locale}">
+{/block}
+
+{block topPage}
+	{* {control mainNav} *}
+{/block}
+
+{block siteLangs}
+	{include langsSelector}
+{/block}
+
+{block breadcrumbs}
+	<div n:if="!$control->isInHomepage()" id="breadcrumbs" class="mb-3">
+		<div class="container">{control mainNav:breadcrumbs}</div>
+	</div>
+{/block}
+
+{block bottomPage}
+	{if $control->action != "loginForm"}
+		{control loginFormModal}	
+	{/if}
+{/block}
+
+{block editButton}
+	{if isset($content) && $control->iamContentEditor($content->id)}
+		<a n:href=":Core:Admin:Contents:contentForm, $content->id" id="fixed-content-edit-button" class="btn btn-warning"><i class="fad fa-pencil"></i></a>
+	{/if}
+{/block}

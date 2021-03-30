@@ -1,0 +1,96 @@
+{form eventDateForm}
+	<div class="row">
+		<div class="col-4 pt-3 mb-3">
+			{foreach $form["type"]->items as $key => $label}
+				<div class="custom-control custom-radio">
+					<input n:name="type:$key" class="custom-control-input" data-target="{$key}"><label n:name="type:$key" class="custom-control-label">{$label}</label>
+				</div> 
+			{/foreach}
+		</div>
+		<div class="col-8">
+			<fieldset class="child-select dates show">
+				<legend>Vyber termíny</legend>
+				<div class="form-group">
+					<input n:name="dates" class="form-control multidatepicker" autocomplete="off">
+				</div>
+			</fieldset>
+			<fieldset class="child-select days collapse">
+				<div class="row">
+					{foreach $form["days"]->items as $key => $label}
+						<div class="col-6">
+							<div class="custom-control custom-checkbox custom-control-inline">
+								<input n:name="days:$key" class="custom-control-input day"><label n:name="days:$key" class="custom-control-label">{$label}</label>
+							</div>
+						</div>
+					{/foreach}
+				</div>
+				<legend>Vyber dny</legend>
+			</fieldset>
+		</div>
+	</div>
+	<div class="row interval collapse">
+		<div class="col-6">
+			<div class="form-group">
+				<label>Opakovat od</label>
+				<input n:name="start" class="form-control datepicker period-start" autocomplete="off">
+			</div>
+		</div>
+		<div class="col-6">
+			<div class="form-group">
+				<label>Opakovat do</label>
+				<input n:name="end" class="form-control datepicker period-end" autocomplete="off">
+			</div>
+		</div>
+	</div>
+
+	<input n:name="save" class="btn btn-sm btn-success ajax">
+
+	<div n:if="$form->getErrors()" class="errors mt-3">
+		{foreach $form->getErrors() as $error}
+			<div class="alert-danger p-2">{$error}</div>
+		{/foreach}
+	</div>
+{/form}
+
+<script>
+	$.nette.ext({
+		start: function() {
+			console.log("test");
+			var form = $("#frm-eventRepeatForm");
+			form.find("[name=dates]").val("");
+			form.find("[name='days[]']").prop("checked", false);
+		}
+	});
+
+	$(document).on("change", "[type=radio]", function(e) {
+		e.preventDefault();
+		var target = $(this).data("target");
+		console.log(target);
+		var $target = $("." + target);
+		var act;
+		var req;
+
+		if ($(this).prop("checked")) {
+			$target.show(200);
+			$(".child-select").not($target).hide(200);
+		} else {
+			$target.hide(200);
+		}
+		if (target == "dates") {
+			$(".row.interval").collapse("hide");
+			act = "hide";
+			req = false;
+		} else {
+			// $(".row.interval").collapse("hide");
+			act = "show";
+			req = true;
+		}
+		$(".row.interval").collapse(act);
+		$(".period-start, .period-end").prop("required", req);
+	});
+
+	/*$(".datetimeperiod").datetimepicker({
+		timepicker: false,
+		format: "j.n.Y"
+	});*/
+</script>
