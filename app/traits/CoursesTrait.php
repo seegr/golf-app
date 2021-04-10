@@ -58,24 +58,19 @@ trait CoursesTrait
         $events = [];
         $len = count($times);
         $coursesParents = [];
-        for ($day = 1; $day <= 7; $day++) {
-            $events[$day] = [];
-            for ($i = 0; $i <= $len - 1; $i++) {
-                $time = $times[$i]->format("H:i");
-                $next = !empty($times[$i+1]) ? $times[$i+1]->format("H:i") : null;
-                $events[$day][$time] = [];
-                // bdump($time, "time start");
-                // bdump($next, "time end");
+        for ($i = 0; $i <= $len - 1; $i++) {
+            $time = $times[$i]->format("H:i");
+            bdump($time);
+            $next = !empty($times[$i+1]) ? $times[$i+1]->format("H:i") : null;
+            $events[$time] = [];
+            for ($day = 1; $day <= 7; $day++) {
+                $events[$time][$day] = [];
                 
                 foreach ($fEvents as $ev) {
-                    // bdump($ev, "ev");
                     if ($ev->start->format("N") == $day && $ev->start->format("H:i") >= $time && $ev->start->format("H:i") < $next) {
                         if (!in_array($ev->content, $coursesParents)) {
-                            // bdump($ev->start->format("N"), "ev start day");
-                            // bdump($ev->start->format("H:i"), "ev start time");
-                            // bdump($time, "time");
-                            // bdump($next, "next");
-                            $events[$day][$time][] = $ev;
+                            $evData = $ev->toArray();
+                            $events[$time][$day][] = $evData;
                             $coursesParents[] = $ev->content;
                         }
                     }
@@ -83,7 +78,7 @@ trait CoursesTrait
             }
         }
 
-        bdump($events);
+        // bdump($events);
 
         return $events;
     }
