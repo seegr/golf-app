@@ -10,6 +10,7 @@ use Monty\Gallery;
 use Monty\DataGrid;
 use Monty\Dropzone;
 use Monty\Modal;
+use Nette\Database\Table\Selection;
 use Ublaboo\DataGrid\Column\Action\Confirmation\StringConfirmation;
 
 

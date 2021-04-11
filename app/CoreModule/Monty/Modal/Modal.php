@@ -18,7 +18,7 @@ class Modal extends BaseControl {
 	public $content;
 	public $latteContent = false;
 	public $show = false;
-
+  
 
 	public function render()
 	{
@@ -38,10 +38,7 @@ class Modal extends BaseControl {
 		}
 		$template->buttonCloseTitle = $this->buttonCloseTitle;
 
-		if ($this->show) {
-			$template->show = $this->show;
-			$this->redrawControl();
-		}
+		$template->show = $this->show;
 
 		$template->render();
 	}

@@ -3,15 +3,8 @@
 namespace App\CoreModule\AdminModule\Presenters;
 
 use App;
-use Nette;
-use Nette\Application\UI\Form;
-use Nette\Utils\Html;
-use Monty\Image;
-use Monty\FileBrowser;
-use App\CoreModule\Model\FilesManager;
-use Monty\DataGrid;
-use Monty\Gallery;
 use App\CoreModule\AdminModule\Traits\ContentsTrait;
+use Monty\DataGrid;
 
 
 class ContentsPresenter extends AdminPresenter {
@@ -30,6 +23,9 @@ class ContentsPresenter extends AdminPresenter {
 
     /** @var \App\CoreModule\Model\FilesManager @inject */
     public $FilesManager;
+
+    /** @var \App\CoreModule\Model\PersonsManager @inject */
+    public $PersonsManager;
 
     protected $type;
     protected $id;
@@ -120,6 +116,9 @@ class ContentsPresenter extends AdminPresenter {
 		$form["cancel"]->onClick[] = function() {
 			$this->redirect("contentsList", $this->type->short);
 		};
-	}
 
+    $dates = $this->ContentsManager->getEventDates($id);
+    $template->hasDates = count($dates);
+	}
+  
 }

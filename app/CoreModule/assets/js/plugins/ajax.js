@@ -16,7 +16,7 @@ $(function() {
 $.nette = {};
 
 $.nette.ajax = function(settings) {
-	console.log("ajax settings: ", settings);
+	// console.log("ajax settings: ", settings);
 	let method = settings.method != settings.method ? settings.method : "GET";
 
 	let options = {};
@@ -24,8 +24,8 @@ $.nette.ajax = function(settings) {
 	// options.start = settings.beforeSend;
 	// options.complete = settings.success;
 
-	console.log("naja options: ", options);
-	console.log("naja data: ", settings.data);
+	// console.log("naja options: ", options);
+	// console.log("naja data: ", settings.data);
 	// naja.makeRequest(method, settings.url, settings.data, options);
 	naja.makeRequest(method, settings.url, settings.data, options);
 
@@ -35,7 +35,7 @@ $.nette.ajax = function(settings) {
 }
 
 naja.uiHandler.addEventListener("interaction", function(e) {
-	console.log("ajax interaction: ", e);
+	// console.log("ajax interaction: ", e);
 	let el = e.detail.element;
 	let target = el.dataset.loader;
 	// console.log("loader target: ", target);
@@ -45,7 +45,7 @@ naja.uiHandler.addEventListener("interaction", function(e) {
 });
 
 naja.addEventListener("before", function(e) {
-	console.log("ajax before: ", e);
+	// console.log("ajax before: ", e);
 
 	// console.log("e.detail.options.unique", e.detail.options.unique);
 	if (e.detail.options.unique === "default") {
@@ -69,7 +69,7 @@ naja.addEventListener("before", function(e) {
 });
 
 naja.addEventListener("success", function(e) {
-	console.log("success: ", e);
+	// console.log("success: ", e);
 	const detail = e.detail;
 	const options = detail.options;
 	const payload = detail.payload;
@@ -92,7 +92,7 @@ naja.addEventListener("success", function(e) {
 		}
 	}
 
-	console.log("isHardRedirect: ", e.detail.isHardRedirect);
+	// console.log("isHardRedirect: ", e.detail.isHardRedirect);
 	if (e.detail.isHardRedirect) {
 		// delete $("body");
 		$("body").remove();
@@ -100,7 +100,7 @@ naja.addEventListener("success", function(e) {
 });
 
 naja.addEventListener('complete', function(e) {
-	console.log("ajax complete: ", e);
+	// console.log("ajax complete: ", e);
 
 	if (e.detail.options.loader) {
 		loaders.loaderOff(e.detail.options.loader);

@@ -10,7 +10,7 @@ use Nette\Utils\DateTime;
 use Nette\Utils\Json;
 
 use Monty\Helper;
-
+use Nette\Database\Table\Selection;
 
 class ContentsManager extends BaseManager {
 
@@ -26,7 +26,8 @@ class ContentsManager extends BaseManager {
 		TABLE_CONTENT_TYPES = "content_types",
 		TABLE_CONTENTS_TYPES_CATEGORIES = "contents_types_categories",
 		TABLE_CONTENTS_TYPES_TAGS = "contents_types_tags",
-		TABLE_CONTENT_EVENTS_DATES = "contents_events_dates";
+		TABLE_CONTENT_EVENTS_DATES = "contents_events_dates",
+    TABLE_CONTENT_EVENTS_DATES_PERSONS = "contents_events_dates_persons";
 
 
 	protected $contentCustomFields = [];
@@ -1027,5 +1028,15 @@ class ContentsManager extends BaseManager {
 	{
 		return !empty($this->contentExcludeFields[$type]) ? $this->contentExcludeFields[$type] : [];
 	}
+
+  public function getEventsDatesPersons(): Selection
+  {
+    return $this->db->table(self::TABLE_CONTENT_EVENTS_DATES_PERSONS);
+  }
+
+  public function getEventDatePersons($id): Selection
+  {
+    return $this->getEventsDatesPersons()->where("date", $id)->select("person.*");
+  }
 
 }

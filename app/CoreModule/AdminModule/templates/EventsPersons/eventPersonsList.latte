@@ -1,0 +1,10 @@
+{block title}Účastníci{/block}
+
+{block content}
+  {form dateSelectForm}
+    <div class="form-group">
+      {input date, class => "no-selectize", onchange => "this.form.submit()"}
+    </div>
+  {/form}
+  {control eventPersonsList}
+{/block}

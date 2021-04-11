@@ -9,21 +9,12 @@
 		<li class="nav-item">
 			<a class="nav-link active" id="form-basic-tab" data-toggle="tab" href="#form-basic" role="tab" aria-controls="form-basic" aria-selected="true">Základní nastavení</a>
 		</li>
-		{* <li class="nav-item">
-			<a class="nav-link" id="form-texts-tab" data-toggle="tab" href="#form-texts" role="tab" aria-controls="form-texts">Texty</a>
-		</li> *}
-		{* <li class="nav-item">
-			<a class="nav-link" id="form-files-tab" data-toggle="tab" href="#form-files" role="tab" aria-controls="form-files">Soubory</a>
-		</li> *}
 		<li n:if="$type->short == event" class="nav-item">
 			<a class="nav-link" id="form-dates-tab" data-toggle="tab" href="#form-dates" role="tab" aria-controls="form-dates">Termíny</a>
 		</li>
-		{* <li class="nav-item">
-			<a class="nav-link" id="form-meta-tab" data-toggle="tab" href="#form-meta" role="tab" aria-controls="form-meta">Meta</a>
-		</li> *}
-		{* <a n:ifset="$content" class="nav-item nav-link bg-primary text-white float-right" n:href=":Core:Front:Contents:contentDetail, $content->id" target="_blank">
-			<i class="fad fa-external-link-alt"></i> Náhled stránky
-		</a> *}
+		<li n:if="$hasDates && $type->short == event" class="nav-item">
+			<a class="nav-link" id="form-persons-tab" n:href=":Core:Admin:EventsPersons:eventPersonsList, id => $content->id">Účastníci</a>
+		</li>
 	</ul>
 	<div class="tab-content p-3 border" id="formTabs" style="Xborder-top: none !important">
 		<div class="tab-pane fade show active" id="form-basic" role="tabpanel" aria-labelledby="form-basic-tab">
@@ -107,17 +98,6 @@
 						<fieldset>					
 							<legend>Přílohy</legend>
 							<div class="row">
-								{* <div n:if="in_array($type->short, [article])" class="col-12 mb-3" n:snippet="file">
-									<label>Soubor</label>
-									<div class="form-group-box">
-										<input n:name="file" class="mb-2">
-										<div n:if="isset($content) && $content->file">
-											{var $file = $content->ref("file")}
-											<a href="{$file->url}" target="_blank">{$file->name}</a>
-											<a n:href="deleteFile!, $file->id" class="btn btn-sm btn-danger ajax" data-confirm="Smazat?"><i class="fas fa-trash"></i></a>
-										</div>
-									</div>
-								</div> *}
 								<div class="col-12" n:snippet="attachments">
 									<div class="form-group-box">
 										<input n:name="attachments">
@@ -185,11 +165,7 @@
 				</div> 	
 			</form>
 		</div>
-		{* <div class="tab-pane fade" id="form-texts" role="tabpanel" aria-labelledby="form-texts-tab">
-			<div class="row">
-			</div>
-		</div> *}
-		<div class="tab-pane fade" id="form-files" role="tabpanel" aria-labelledby="form-dates-tab">
+		<div class="tab-pane fade" id="form-files" role="tabpanel" aria-labelledby="form-files-tab">
 			<div class="row">
 			</div>
 		</div>
@@ -204,28 +180,14 @@
 					{else}
 						<div class="alert alert-warning">Nejdřív akci ulož, pak budeš moct vložit termíny <i class="fad fa-comment-smile"></i></div>
 					{/if}
-					{* <fieldset>
-						<legend>Termíny</legend>
-						<div n:multiplier="dates">
-							<div class="row">
-								<div class="col-5">
-									<input n:name="title" placeholder="Popisek..." class="form-control">
-								</div>
-								<div class="col-5">
-									<input n:name="url" placeholder="URL odkaz..." class="form-control">
-								</div>
-								<div class="col-2">
-									{btnRemove}
-								</div>
-							</div>
-						</div>
-						<div class="text-right">
-							{btnCreate sources}
-						</div>
-					</fieldset> *}
 				</div>
 			</div>
 		</div>
+		{* <div n:if="$type->short == event" class="tab-pane fade" id="form-persons" role="tabpanel" aria-labelledby="form-persons-tab">
+			<div class="row" n:snippet="event-persons">
+        persons...
+			</div>
+		</div> *}
 	</div>
 	
 {control eventDateFormModal}
@@ -235,15 +197,4 @@
 		"attTitleSave": {link changeAttTitle!},
 		"itemOrderChange": {link attOrderChange!}
 	});
-
-	// $(document).ajaxComplete(contentFormInit);
-
-	// var tinyHeight = {$type->short != "gallery" ? 500 : 200};
-
-	// function contentFormInit() {
-	// 	tinymce.remove();
-	// 	$(".content-text").tinymce($.extend(tinyAdmin, {
-	// 		height: tinyHeight
-	// 	}));
-	// }
 </script>

@@ -20,16 +20,13 @@
 		</div>
 	</div>
 
-	<script>
-		document.addEventListener("DOMContentLoaded", function() {
-			var show = {isset($show) ? true : false};
-
-			// console.log("modal show", show);
-			if (show) {
-				// console.log({$id});
-				// console.log("showing modal", $({$id}))
-				$("#"+{$id}).modal("show");
-			}
-		});
-	</script>
+  {if $show}
+    <script>
+      $(function() {
+        var selector = "#"+{$id};
+        console.log("modal selector: ", selector);
+        $(selector).modal("show");
+      });
+    </script>
+  {/if}
 {/snippet}

@@ -12,7 +12,6 @@ application:
 	errorPresenter: Error
 	mapping:
 		*: App\*Module\Presenters\*Presenter
-		# Core: Core\*Module\Presenters\*Presenter
 
 
 session:
@@ -48,6 +47,7 @@ services:
 	TagsManager: App\CoreModule\Model\TagsManager
 	AliasesManager: App\CoreModule\Model\AliasesManager
 	SettingsManager: App\CoreModule\Model\SettingsManager
+	PersonsManager: App\CoreModule\Model\PersonsManager
 	FormsFactory: App\CoreModule\Components\FormsFactory
 	
 	nette.latteFactory:
