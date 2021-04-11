@@ -1,0 +1,52 @@
+{block title}{$form->title} - {ifset $field}{$field->summary_label ? $field->summary_label : $field->label}{else}Nové políčko{/ifset}{/block}
+
+{block content}
+	{include backButton, "Formulář", "formForm, $formId"}
+	{form formFieldForm}
+		<div class="row">
+			<div class="form-group col-12">
+				{label type}
+				{input type}
+			</div>
+			<div class="form-group col-12">
+				{label label}
+				{input label}
+			</div>
+			<div class="form-group col-12">
+				<div class="custom-control custom-checkbox">
+					<input n:name="required" class="custom-control-input">
+					<label n:name="required" class="custom-control-label">{$form[required]->caption}</label>
+				</div>
+			</div>
+			<div class="form-group col-12">
+				<div class="custom-control custom-checkbox">
+					<input n:name="in_summary" class="custom-control-input">
+					<label n:name="in_summary" class="custom-control-label">{$form[in_summary]->caption}</label>
+				</div>
+			</div>
+			<div class="form-group col-12">
+				<div class="custom-control custom-checkbox">
+					<input n:name="active" class="custom-control-input">
+					<label n:name="active" class="custom-control-label">{$form[active]->caption}</label>
+				</div>
+			</div>
+			<div class="form-group col-12">
+				<div class="custom-control custom-checkbox">
+					<input n:name="admin" class="custom-control-input">
+					<label n:name="admin" class="custom-control-label">{$form[admin]->caption}</label>
+				</div>
+			</div>
+			<div class="form-group col-12">
+				{label desc}
+				{input desc}
+			</div>
+		</div>
+		{include formButtons}
+	{/form}
+
+	<fieldset n:if="isset($field) && $control->isFieldSelector($field->id)">
+		<legend>Možnosti políčka</legend>
+		<a n:href="formFieldOptionForm, fieldId => $field->id" class="btn btn-sm btn-outline-success mb-2">Nová hodnota</a>
+		{control formFieldOptionsList}
+	</fieldset>
+{/block}

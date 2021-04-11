@@ -8,6 +8,7 @@ use Nette\Utils\ArrayHash;
 use Monty\Form;
 use Monty\FormValidators;
 use Monty\Helper;
+use App\CoreModule\Model\ContentsManager;
 
 
 class FormsFactory extends BaseFormsFactory
@@ -15,8 +16,7 @@ class FormsFactory extends BaseFormsFactory
 	
 	use Nette\SmartObject;
 
-
-	private $User, $UsersManager, $ContentsManager, $NavigationsManager, $Translator;
+	private $User, $UsersManager, $ContentsManager, $NavigationsManager, $FormsManager, $Translator;
 
 	private $maxFileSize;
 	private $maxFileSizeStr;
@@ -30,6 +30,7 @@ class FormsFactory extends BaseFormsFactory
 		App\CoreModule\Model\UsersManager $UsersManager,
 		App\CoreModule\Model\ContentsManager $ContentsManager,
 		App\CoreModule\Model\NavigationsManager $NavigationsManager,
+		App\CoreModule\FormsModule\Model\FormsManager $FormsManager,
 		Nette\Localization\ITranslator $Translator
 	)
 	{
@@ -37,6 +38,7 @@ class FormsFactory extends BaseFormsFactory
 		$this->UsersManager = $UsersManager;
 		$this->ContentsManager = $ContentsManager;
 		$this->NavigationsManager = $NavigationsManager;
+		$this->FormsManager = $FormsManager;
 	}
 
 	public function contentForm($type): Form
@@ -78,6 +80,15 @@ class FormsFactory extends BaseFormsFactory
 		// $form->addText("url")->addRule(Form::URL, "Neplatný url odkaz")->setRequired(false);
 		$form->addTextArea("meta_keys", "Meta keys");
 		$form->addTextArea("meta_desc", "Meta desc");
+
+		$form->addSelect("registration", "Registrace", [null => "- Bez registrace -"] + ContentsManager::EVENT_REGISTRATION);
+		$form->addSelect("reg_form", "Formulář", [null => "- Registrační formulář -"] + $this->FormsManager->getForms()->fetchPairs("id", "title"));
+		$form->addInteger("reg_part", "Účastníků")
+			->setDefaultValue(0)
+			->addRule(Form::MIN, "Minimum je 0 (neomezeně)", 0);
+		$form->addInteger("reg_sub", "Náhradníků")
+			->setDefaultValue(0)
+			->addRule(Form::MIN, "Minimum je 0 (neomezeně)", 0);
 
 		$customFields = $this->ContentsManager->getContentCustomFields($type);
 		// \Tracy\Debugger::barDump($customFields, "customFields");

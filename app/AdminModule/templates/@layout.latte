@@ -1,8 +1,9 @@
 {extends $_coreAdminLayout}
 
 {block topPage}
-    <div class="container">
-        <a n:href=":Core:Admin:Contents:contentsList, type => event">Kurzy</a>
-        <a n:href=":Core:Admin:Users:usersList">Uživatelé</a>
+    <div class="container my-3">
+        <a n:href=":Core:Admin:Contents:contentsList, type => event" class="btn btn-outline-primary">Kurzy</a>
+        <a n:if="$user->isAllowed('Core:Admin:Users')" n:href=":Core:Admin:Users:usersList" class="btn btn-outline-primary">Uživatelé</a>
+        <a n:if="$user->isAllowed('Core:Forms:Admin:Forms')" n:href=":Core:Forms:Admin:Forms:formsList" class="btn btn-outline-primary">Formuláře</a>
     </div>
 {/block}

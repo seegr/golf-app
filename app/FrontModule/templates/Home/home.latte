@@ -34,7 +34,7 @@
 {/block}
 
 {block content}
-	<table class="table table-bordered">
+	{* <table class="table table-bordered">
         <thead class="thead-dark">
             <th>Čas</th>
             <th>Pondělí</th>
@@ -48,7 +48,6 @@
         <tbody>
             <tr n:foreach="$range as $time">
                 <td class="day-time">{$time->format("H:i")}</td>
-                {* <td n:for="$day = 1; $day <= 7; $day++">{$day}</td> *}
                 {for $day = 1; $day <= 7; $day++}
                     <td n:class="events, empty($courses[$day][$time->format('H:i')]) ? no-events">
                         <div class="event" n:foreach="$courses[$day][$time->format('H:i')] as $ev">
@@ -66,5 +65,5 @@
                 {/for}
             </tr>
         </tbody>
-    </table>
+    </table> *}
 {/block}

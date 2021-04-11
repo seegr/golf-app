@@ -1,0 +1,28 @@
+{block title}{ifset $form}{$form->title}{else}Nový formulář{/ifset}{/block}
+
+{block content}
+	{include backButton, "Výpis formulářů", "formsList"}
+
+	{form formForm}
+		<div class="row">
+			<div class="form-group col-12">
+				{label title}
+				{input title}
+			</div>
+			<div class="form-group col-12">
+				{label intro_text}
+				{input intro_text}
+			</div>
+			<div class="form-group col-12">
+				{label end_text}
+				{input end_text}
+			</div>
+		</div>
+	{/form}
+
+	<fieldset n:ifset="$frm">
+		<legend>Políčka formláře</legend>
+		<a n:href="formFieldForm, formId => $frm->id" class="btn btn-sm btn-outline-success mb-2">Nové políčko</a>
+		{control formFieldsList}
+	</fieldset>
+{/block}

@@ -13,6 +13,7 @@ use Monty\Modal;
 use Monty\Form;
 use Monty\Helper;
 use Nette\Database\Table\ActiveRow;
+use App\CoreModule\FormsModule\Components\FormsFactory as FormsFormsFactory;
 
 // use Contributte\MenuControl\UI\IMenuComponentFactory;
 // use Contributte\MenuControl\UI\MenuComponent;
@@ -39,6 +40,9 @@ class BasePresenter extends Nette\Application\UI\Presenter
 
 	/** @var App\CoreModule\Components\FormsFactory @inject */
 	public $FormsFactory;
+
+	/** @var App\CoreModule\FormsModule\Components\FormsFactory @inject */
+	public $FormsFormsFactory;
 
 	/** @var App\CoreModule\Model\FilesManager @inject */
 	public $FilesManager;
@@ -401,7 +405,7 @@ class BasePresenter extends Nette\Application\UI\Presenter
         	#throw new Nette\Application\ForbiddenRequestException;
         	$this->flashMessage($this->notAllowedMsg, "alert-warning");
 
-        	$this->redirect($this->getHomeRoute());
+        	$this->redirect(":Core:Front:Users:loginForm");
     	}
 	}
 
@@ -561,6 +565,7 @@ class BasePresenter extends Nette\Application\UI\Presenter
 		$template->_adminLayout = $this->_adminLayout;
 		$template->_frontLayout = $this->_frontLayout;
 		$template->_homeRoute = $this->homeRoute;
+		$template->_customFormTemplate = FormsFormsFactory::CUSTOM_FORM_TEMPLATE;
 	}
 
 	public function getNavigationItems(): array

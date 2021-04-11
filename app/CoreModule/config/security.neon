@@ -23,6 +23,7 @@ services:
 			- addResource("Core:Front:User")
 			- addResource("Core:Front:Custom")
 			- addResource("Core:Front:Api")
+			- addResource("Core:Forms:Admin:Forms")
 			
 
 			- allow("superadmin")

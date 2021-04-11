@@ -1,0 +1,10 @@
+{block content}
+  <h1 n:block="title">
+    {ifset $person}
+      {$person->krestni_jmeno} {$person->prijmeni}
+    {else}
+      Nový účastník
+    {/ifset}
+  </h1>
+	{include $_customFormTemplate, formComponent => $formComponent, form => $form}
+{/block}

@@ -1,0 +1,119 @@
+{* {dump $f} *}
+{var $fields = $form->related(forms_fields)}
+{var $fieldsArr = $fields->fetchAssoc('name->')}
+
+{var $f = $form}
+
+<form n:name="$formComponent">
+	<div class="row">
+		{foreach $form->getControls() as $input}
+			{* {dump $input} *}
+			{var $name = $input->name}
+			{var $label = $input->caption}
+			{var $objType = \Monty\Helper::getObjectClassName($input)}
+			{var $type = $objType == "ReCaptchaField" ? "captcha" : $input->getOptions()[type]}
+			{* {dump $objType} *}
+			{* {var $fieldId = explode("field_", $name)}
+			{var $fieldId = end($fieldId)} *}
+			{* {var $fieldHash = $name} *}
+			{* {dump $form[$name]} *}
+			
+			{if !in_array($type, ["button", "hidden", "captcha"]) && $name != "admin_note"}
+				{var $field = $fieldsArr[$name]}
+				{var $hash = $field->hash}
+				{var $fieldId = $field->id}
+				{* {dump $field} *}
+				{var $fieldRow = (clone $fields)->where("type", $field->type)->fetch()}
+				{* {dump $fieldRow} *}
+				{var $fieldType = $fieldRow->ref("type")->short}
+				
+				{* {if $field->related("forms_fields_images")->where("item", NULL)->count("*")}
+					{var $image = $field->related("events_forms_fields_images")->fetch()}
+					{if $image["label"]}
+						{var $imageLabel = $image->label}
+					{else}
+						{var $imageLabel = $label}
+					{/if}
+					<div class="input-image">
+						<img src='{$image["path"]}' alt="{$imageLabel}">
+					</div>
+				{else}
+					{var $images = $field->related("forms_fields_images")->fetchAssoc("item")}
+				{/if} *}
+
+				{var $attrs = []}
+				{* {if $field->desc}
+					{var $attrs[data-toggle] = "tooltip"}
+					{var $attrs[title] = $field->desc}
+				{/if} *}
+
+				<div class="form-group col-12" n:attr="$attrs">
+					{* {dump $type} *}
+
+					{switch $type}
+						{case "text"}
+							{if $fieldType == "tel"}
+								<label data-toggle="tooltip" title="Zadejte 12 místný formát čísla (+420 xxx xxx xxx)">{$label}</label>
+								{input $name, "class" => "form-control tel-mask"}
+							{else}
+								<label>{$label}</label>
+								{input $name}
+							{/if}
+						{case "radio"}
+							<label n:if="!empty($form[$name]->items)">{$label}</label>
+							<div class="row">
+								{foreach $form[$name]->items as $key => $child_label}
+									<div class="col-12">
+										<div class="custom-control custom-radio">
+											<input n:name="$name:$key" class="custom-control-input">
+											<label n:name="$name:$key" class="custom-control-label">{$child_label}</label>
+										</div>
+									</div>
+								{/foreach}
+							</div>
+						{case "checkbox"}
+							<div class="custom-control custom-checkbox">
+								<input n:name="$name" class="custom-control-input">
+								<label n:name="$name" class="custom-control-label">{$label}</label>
+							</div>
+						{case "textarea"}
+							<label>{$label}</label>
+							<textarea n:name="$name" class="form-control" rows="4"></textarea>
+						{case "file"}
+							<input n:name="$name" class="form-control" accept="image/x-png,image/gif,image/jpeg">
+						{case "select"}
+							{input $name}
+					{/switch}
+					{if $field->desc}
+						{include modal, $hash, $label, $field->desc}
+					{/if}
+				</div>
+			{elseif $type == "captcha"}
+				<div n:name="captcha" class="form-group col-12 g-recaptcha"></div>
+			{/if}
+		{/foreach}
+	</div>
+	<button n:name="submit" class="btn btn-success ajax" data-loader="this" data-naja-force-redirect>Odeslat</button>
+</form>
+
+{define modal, $id, $title, $content}
+	<!-- Button trigger modal -->
+	{* {dump $id} *}
+	{var $id = "_field-modal-" . $id}
+	<a data-toggle="modal" href="#{$id}">Více info</a>
+
+	<!-- Modal -->
+	<div class="modal fade" id="{$id}" tabindex="-1" role="dialog" aria-labelledby="{$id}" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <div class="modal-title h5" id="exampleModalLabel">{$title|truncate:50, "..."}</div>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">{$content|noescape}</div>
+	    </div>
+	  </div>
+	</div>
+{/define}

@@ -1,0 +1,14 @@
+{block title}Účastníci{/block}
+
+{block content}
+  {ifset $date}
+    {form dateSelectForm}
+      <div class="form-group">
+        {label date}
+        {input date, class => "no-selectize", onchange => "this.form.submit()"}
+      </div>
+    {/form}
+  {/ifset}
+  <a n:href="personForm, eventId => $event->id" class="btn btn-outline-success mb-2">Nový účastník</a>
+  {control personsList}
+{/block}

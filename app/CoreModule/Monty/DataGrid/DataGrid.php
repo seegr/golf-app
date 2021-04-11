@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Monty;
 
+use Monty\DataGrid\Action;
+
 
 class DataGrid extends \Ublaboo\DataGrid\DataGrid
 {
@@ -94,8 +96,25 @@ class DataGrid extends \Ublaboo\DataGrid\DataGrid
 		return count($this->getDataSource()->getData());
 	}
 
+	public function addAction(
+		string $key,
+		string $name,
+		?string $href = null,
+		?array $params = null
+	): Action
+	{
+		$this->addActionCheck($key);
 
-	// public function addAction($key, $name, $href = null, array $params = null)
+		$href = $href ?? $key;
+
+		if ($params === null) {
+			$params = [$this->primaryKey];
+		}
+
+		return $this->actions[$key] = new Action($this, $key, $href, $name, $params);
+	}
+
+	// public function addAction($key, $name, $href = null, array $params = null): Action
 	// {
 	// 	$this->addActionCheck($key);
 

@@ -13,7 +13,7 @@
 			<a class="nav-link" id="form-dates-tab" data-toggle="tab" href="#form-dates" role="tab" aria-controls="form-dates">Termíny</a>
 		</li>
 		<li n:if="$hasDates && $type->short == event" class="nav-item">
-			<a class="nav-link" id="form-persons-tab" n:href=":Core:Admin:EventsPersons:eventPersonsList, id => $content->id">Účastníci</a>
+			<a class="nav-link" id="form-persons-tab" n:href=":Core:Admin:EventsPersons:personsList, id => $content->id">Účastníci</a>
 		</li>
 	</ul>
 	<div class="tab-content p-3 border" id="formTabs" style="Xborder-top: none !important">
@@ -55,7 +55,24 @@
 							<label n:name="active" class="custom-control-label">{$form[active]->caption}</label>
 						</div>
 					</div>
-					{if $type->short != event}
+					{if $type->short == event}
+						<div class="form-group col-4">
+							{label registration}
+							{input registration}
+						</div>
+						<div class="form-group col-4">
+							{label reg_form}
+							{input reg_form}
+						</div>
+						<div class="form-group col-4">
+							{label reg_part}
+							{input reg_part}
+						</div>
+						<div class="form-group col-4">
+							{label reg_sub}
+							{input reg_sub}
+						</div>
+					{else}
 						<div class="form-group col-12"></div>
 						<div class="form-group col-12 col-md-4">
 							{label created}

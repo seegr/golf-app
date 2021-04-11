@@ -10,6 +10,7 @@ use Nette\Utils\DateTime;
 use Nette\Utils\Json;
 
 use Monty\Helper;
+use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\Selection;
 
 class ContentsManager extends BaseManager {
@@ -27,7 +28,11 @@ class ContentsManager extends BaseManager {
 		TABLE_CONTENTS_TYPES_CATEGORIES = "contents_types_categories",
 		TABLE_CONTENTS_TYPES_TAGS = "contents_types_tags",
 		TABLE_CONTENT_EVENTS_DATES = "contents_events_dates",
-    TABLE_CONTENT_EVENTS_DATES_PERSONS = "contents_events_dates_persons";
+    TABLE_CONTENT_EVENTS_PERSONS = "contents_events_persons",
+		EVENT_REGISTRATION = [
+			"event" => "Na všechny termíny",
+			"dates" => "Rozdělená po termínech"
+		];
 
 
 	protected $contentCustomFields = [];
@@ -102,6 +107,11 @@ class ContentsManager extends BaseManager {
 		}
 
 		return $content;
+	}
+
+	public function getEvent($id): ActiveRow
+	{
+		return $this->getContent($id);
 	}
 
 	public function getEventsByDate()
@@ -350,9 +360,13 @@ class ContentsManager extends BaseManager {
 			"active" => !empty($vals->active) ? $vals->active : true,
 			"short_text" => !empty($vals->short_text) ? $vals->short_text : null,
 			"text" => !empty($vals->text) ? $vals->text : null,
+			"registration" => !empty($vals->registration) ? $vals->registration : null,
+			"reg_part" => !empty($vals->reg_part) ? $vals->reg_part : null,
+			"reg_sub" => !empty($vals->reg_sub) ? $vals->reg_sub : null,
+			"reg_form" => !empty($vals->reg_form) ? $vals->reg_form : null,
 			"meta_keys" => !empty($vals->meta_keys) ? $vals->meta_keys : null,
 			"meta_desc" => !empty($vals->meta_desc) ? $vals->meta_desc : null,
-			"custom_fields" => !empty($vals->custom_fields) ? Json::encode($vals->custom_fields) : null
+			"custom_fields" => !empty($vals->custom_fields) ? Json::encode($vals->custom_fields) : null			
 		];
 
 		if (!empty($vals->created)) {
@@ -1029,14 +1043,24 @@ class ContentsManager extends BaseManager {
 		return !empty($this->contentExcludeFields[$type]) ? $this->contentExcludeFields[$type] : [];
 	}
 
-  public function getEventsDatesPersons(): Selection
+  public function getEventsPersons(): Selection
   {
-    return $this->db->table(self::TABLE_CONTENT_EVENTS_DATES_PERSONS);
+    return $this->db->table(self::TABLE_CONTENT_EVENTS_PERSONS);
   }
 
   public function getEventDatePersons($id): Selection
   {
-    return $this->getEventsDatesPersons()->where("date", $id)->select("person.*");
+    return $this->getEventsPersons()->where("date", $id)->select("person.*");
   }
+
+	public function getEventPersons($id): Selection
+	{
+		return $this->getEventsPersons()->where("event", $id)->select("person.*");
+	}
+
+	public function getEventPerson($id): ActiveRow
+	{
+		return $this->getEventsPersons()->get($id);
+	}
 
 }
