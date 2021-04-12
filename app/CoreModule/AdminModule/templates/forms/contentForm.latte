@@ -13,7 +13,7 @@
 			<a class="nav-link" id="form-dates-tab" data-toggle="tab" href="#form-dates" role="tab" aria-controls="form-dates">Termíny</a>
 		</li>
 		<li n:if="$hasDates && $type->short == event" class="nav-item">
-			<a class="nav-link" id="form-persons-tab" n:href=":Core:Admin:EventsPersons:personsList, id => $content->id">Účastníci</a>
+			<a class="nav-link" id="form-persons-tab" n:href=":Core:Admin:EventsPersons:eventPersonsList, id => $content->id">Účastníci</a>
 		</li>
 	</ul>
 	<div class="tab-content p-3 border" id="formTabs" style="Xborder-top: none !important">

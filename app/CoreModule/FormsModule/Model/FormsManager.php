@@ -218,35 +218,7 @@ class FormsManager extends \App\CoreModule\Model\BaseManager {
 		if ($order) $res->order($order);
 
 		if ($toArray) {
-			$fields = $this->getFormFields($id)->fetchPairs(null, "name");
-			// \Tracy\Debugger::barDump($fields, "fields arr");
-			
-			$arr = [];
-			foreach ($res as $r) {
-				// \Tracy\Debugger::barDump($r, "r");
-				$arr[$r->id] = [];
-
-				foreach ($r as $col => $val) {
-					if ($col == "data") continue;
-					$arr[$r->id][$col] = $val;
-					// \Tracy\Debugger::barDump($col, "col");
-					// \Tracy\Debugger::barDump($val, "val");
-				}
-
-				$data = Json::decode($r->data, true);
-				// \Tracy\Debugger::barDump($data, "data");
-				foreach ($data as $col => $val) {
-					if (is_array($val)) $data[$col] = $val;
-				}
-				// \Tracy\Debugger::barDump($data, "data");
-				foreach ($fields as $field) {
-					if (!isset($data[$field])) $data[$field] = null;
-				}
-				$arr[$r->id] = $arr[$r->id] + $data;
-			}
-
-			// \Tracy\Debugger::barDump($arr, "arr");
-
+			$arr = $this->fetchFormRecords($res, $id);
 			return $arr;
 		} else {
 			return $res;
@@ -423,9 +395,36 @@ class FormsManager extends \App\CoreModule\Model\BaseManager {
 		return Json::decode($record["data_real"]);
 	}
 
-	public function getFormRecordFullData($id)
-	{
+	public function fetchFormRecords($records, $formId = null) {
+		// $fields = $this->getFormFields($formId)->fetchPairs(null, "name");
+		// \Tracy\Debugger::barDump($fields, "fields arr");
 		
+		$arr = [];
+		foreach ($records as $r) {
+			// \Tracy\Debugger::barDump($r, "r");
+			$arr[$r->id] = [];
+
+			foreach ($r as $col => $val) {
+				if ($col == "data") continue;
+				$arr[$r->id][$col] = $val;
+				// \Tracy\Debugger::barDump($col, "col");
+				// \Tracy\Debugger::barDump($val, "val");
+			}
+
+			$data = Json::decode($r->data, true);
+			// \Tracy\Debugger::barDump($data, "data");
+			foreach ($data as $col => $val) {
+				if (is_array($val)) $data[$col] = $val;
+			}
+			// \Tracy\Debugger::barDump($data, "data");
+
+			// foreach ($fields as $field) {
+			// 	if (!isset($data[$field])) $data[$field] = null;
+			// }
+			$arr[$r->id] = $arr[$r->id] + $data;
+		}
+		
+		return $arr;
 	}
 
 }

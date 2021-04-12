@@ -114,10 +114,10 @@ class BasePresenter extends Nette\Application\UI\Presenter
 		// \Tracy\Debugger::barDump($this->name, "name");
 		// \Tracy\Debugger::barDump($this->getParameters(), "parameters");
 		
-		$locales = \ResourceBundle::getLocales('');
-		bdump($locales);
-		$locale = setlocale(LC_ALL, "cs_CZ", "cs_cz", "cs");
-		bdump($locale, "locale");
+		// $locales = \ResourceBundle::getLocales('');
+		// bdump($locales);
+		// $locale = setlocale(LC_ALL, "cs_CZ", "cs_cz", "cs");
+		// bdump($locale, "locale");
 		
 		$template = $this->template;
 

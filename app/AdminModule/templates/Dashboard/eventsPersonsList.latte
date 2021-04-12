@@ -1,0 +1,13 @@
+{block content}
+  <div class="mb-3">
+    {form personSearchForm}
+      <div class="input-group">
+        {input text}
+        <div class="input-group-append">
+          <button n:name="submit">Hledat</button>
+        </div>
+      </div>
+    {/form}
+  </div>
+  {control personsList}
+{/block}

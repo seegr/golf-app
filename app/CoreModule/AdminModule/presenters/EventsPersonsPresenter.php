@@ -3,17 +3,15 @@
 namespace App\CoreModule\AdminModule\Presenters;
 
 use Monty\DataGrid;
-use Nette\Application\UI\Form;
+use Monty\Form;
 use Nette\Utils\ArrayHash;
 
 class EventsPersonsPresenter extends AdminPresenter
 {
+  use \App\CoreModule\Traits\EventsTrait;
 
   /** @var \App\CoreModule\Model\EventsManager @inject */
   public $EventsManager;
-
-  /** @var \App\CoreModule\FormsModule\Model\FormsManager @inject */
-  public $FormsManager;
 
   /** @var \App\CoreModule\FormsModule\Components\FormsFactory @inject */
   public $FormsFormsFactory;
@@ -25,7 +23,7 @@ class EventsPersonsPresenter extends AdminPresenter
   public $date;
 
 
-  public function actionPersonsList($id, $date): void
+  public function actionEventPersonsList($id, $date): void
   {
     $template = $this->template;
     $list = $this["personsList"];
@@ -78,31 +76,6 @@ class EventsPersonsPresenter extends AdminPresenter
     $template->formComponent = "personForm";
   }
 
-  public function createComponentPersonsList()
-  {
-    $eventId =  $this->getParameter("id");
-    $event = $this->EventsManager->getEvent($eventId);
-
-    // $list = new DataGrid;
-
-    // $list->addColumnText("krestni_jmeno", "Jméno");
-    // $list->addColumnText("prijmeni", "Příjmení");
-    // $list->addColumnText("e_mail", "E-mail");
-    // $list->addColumnText("telefon", "Tel");
-    // $list->addColumnDateTime("time", "Registrace")->setFormat(self::DATETIME_FORMAT);
-    // $list->addAction("personForm", "", "personForm", [
-    //   "id" => "id"
-    // ])->setClass("fad fa-pen btn btn-warning");
-
-    $list = $this->FormsFormsFactory->formRecordsList($event->reg_form);
-
-    $list->addAction("personForm", "", "personForm", [
-      "id" => "id"
-    ])->setClass("fad fa-pen btn btn-warning");
-
-    return $list;
-  }
-
   public function createComponentDateSelectForm()
   {
     $f = new Form;
@@ -142,7 +115,7 @@ class EventsPersonsPresenter extends AdminPresenter
         $this->EventsManager->insertEventPerson($event->id, $recId, "part");
       }
 
-      $this->redirect("personsList", ["id" => $event->id]);
+      $this->redirect("eventPersonsList", ["id" => $event->id]);
     };
 
     return $f;

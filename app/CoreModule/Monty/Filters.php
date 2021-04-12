@@ -207,8 +207,10 @@ class Filters {
     public static function dayEl($datetime) {
     	$el = Html::el("span class='day'");
 
-    	$str = strftime("%a", $datetime->getTimestamp());
-    	$el->setText("(" . $str . ")");
+    	// $str = strftime("%a", $datetime->getTimestamp());
+			$day = $datetime->format("N");
+			$day = Helper::getDay($day)["short"];
+    	$el->setText("(" . $day . ")");
 
     	return $el;
     }

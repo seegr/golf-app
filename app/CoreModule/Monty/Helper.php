@@ -98,6 +98,10 @@ class Helper extends \Monty\Utils {
 		return $arr;
 	}
 
+	public static function getDay($num) {
+		return self::DAYS[$num];
+	}
+
 	public static function getWeek() {
 		$time = new \DateTime;
 

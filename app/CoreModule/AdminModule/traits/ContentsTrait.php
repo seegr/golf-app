@@ -295,7 +295,7 @@ trait ContentsTrait
 				if ($i->registration == "event") {
 					$persons = count($this->EventsManager->getEventPersons($i->id));
 					$el = Html::el("a");
-					$el->href = $this->link(":Core:Admin:EventsPersons:personsList", $i->id);
+					$el->href = $this->link(":Core:Admin:EventsPersons:eventPersonsList", $i->id);
 					$el->class[] = "badge";
 					$el->class[] = $persons != $i->reg_part ? "badge-success" : "badge-danger";
 					$el->addHtml($persons . " / " . $i->reg_part);
