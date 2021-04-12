@@ -462,7 +462,7 @@ trait ContentsTrait
 		$f["save"]->onClick[] = function($f, $v) {
 			\Tracy\Debugger::barDump($v, "EventDateForm vals");
 
-			$this->ContentsManager->saveEventDate($v);
+			$this->EventsManager->saveEventDate($v);
 
 			// $this->redrawControl("event-dates");
 			$this["eventDatesList"]->reload();
@@ -527,7 +527,7 @@ trait ContentsTrait
 
 		$l->addGroupAction("Zveřejnit")->onSelect[] = function($ids) use ($l) {
 			// \Tracy\Debugger::barDump($ids, "ids");
-			$this->ContentsManager->getEventsDates()->where("id", $ids)->update(["active" => true]);
+			$this->EventsManager->getEventsDates()->where("id", $ids)->update(["active" => true]);
 			$this->flashMessage("Termíny zveřejněny");
 			// $l->reload();
 			// $this->redrawControl();
@@ -535,7 +535,7 @@ trait ContentsTrait
 
 		$l->addGroupAction("Skrýt")->onSelect[] = function($ids) use ($l) {
 			// \Tracy\Debugger::barDump($ids, "ids");
-			$this->ContentsManager->getEventsDates()->where("id", $ids)->update(["active" => false]);
+			$this->EventsManager->getEventsDates()->where("id", $ids)->update(["active" => false]);
 			$this->flashMessage("Termíny skryté", "alert-warning");
 			// $this->redrawControl("content");
 			// $this->redrawControl("flashes");
@@ -544,7 +544,7 @@ trait ContentsTrait
 		$l->addGroupAction("Smazat")->onSelect[] = function($ids) use ($l) {
 			\Tracy\Debugger::barDump($ids, "ids");
 
-			$this->ContentsManager->getEventsDates()->where("id", $ids)->delete();
+			$this->EventsManager->getEventsDates()->where("id", $ids)->delete();
 			
 			// $this->redrawControl();
 		};
@@ -559,13 +559,13 @@ trait ContentsTrait
 	}
 
 	public function handleEventDateDelete($date_id) {
-		$this->ContentsManager->getEventDate($date_id)->delete();
+		$this->EventsManager->getEventDate($date_id)->delete();
 		$this->flashMessage("Událost odstraněna", "alert-danger");
 		$this->redrawControl("content");
 	}
 
 	public function handleEventPublishedToggle($event_id) {
-		$event = $this->ContentsManager->getEvent($event_id);
+		$event = $this->EventsManager->getEvent($event_id);
 
 		if ($event->active) {
 			$state = false;
@@ -582,7 +582,7 @@ trait ContentsTrait
 	}
 
 	public function handleEventActiveToggle($event_id) {
-		$event = $this->ContentsManager->getEvent($event_id);
+		$event = $this->EventsManager->getEvent($event_id);
 
 		if ($event->active) {
 			$state = false;
@@ -599,7 +599,7 @@ trait ContentsTrait
 	}
 
 	public function handleEventDateActiveToggle($date_id) {
-		$date = $this->ContentsManager->getEventDate($date_id);
+		$date = $this->EventsManager->getEventDate($date_id);
 
 		if ($date->active) {
 			$state = false;
