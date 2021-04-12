@@ -117,75 +117,73 @@ class Filters {
 		return $replaced;
 	}
 
-    public static function dateTimeInterval($start, $end = null, $time = true, $showYear = true, $showDayStr = false) {
-    	if (!$start) return;
+	public static function dateTimeInterval($start, $end = null, $time = true, $showYear = true, $showDayStr = false) {
+		if (!$start) return;
 
-    	\Tracy\Debugger::barDump($time, "time");
-    	\Tracy\Debugger::barDump($showYear, "showYear");
+		\Tracy\Debugger::barDump($time, "time");
+		\Tracy\Debugger::barDump($showYear, "showYear");
 
-    	if ($end) {
-    		$endEl = Html::el("span");
-    		#$endEl->setHtml($end->format("j.n.Y H:i"));
-    	}
+		if ($end) {
+			$endEl = Html::el("span");
+			#$endEl->setHtml($end->format("j.n.Y H:i"));
+		}
 
-    	$interval = Html::el("span class='time-interval'");
+		$interval = Html::el("span class='time-interval'");
 
-	    $startEl = Html::el("span class='datetime-start'");
-    	$startDateEl = self::dateEl($start, $showYear);
-    	$startTimeEl = self::timeEl($start);
+		$startEl = Html::el("span class='datetime-start'");
+		$startDateEl = self::dateEl($start, $showYear);
+		$startTimeEl = self::timeEl($start);
 
-    	if (!$end) {
-	    	$startEl->addHtml($startDateEl);
-	    	$startEl->addHtml("&nbsp;");
-	    	if ($time) {
-	    		$startEl->addHtml($startTimeEl);
-	    	}
-	    	$interval->addHtml($startEl);
-    	} else {
-	    	$startEl->addHtml($startDateEl);
-	    	$startEl->addHtml("&nbsp;");
-	    	if ($time) {
-	    		$startEl->addHtml($startTimeEl);
-	    	}
-	    	$startEl->addHtml("&nbsp;");
-	    	$interval->addHtml($startEl);
-	    	$endEl = Html::el("span class='datetime-end'");
-	    	if ($start->format("j.n.Y") != $end->format("j.n.Y")) {
-	    		$endEl->setHtml("<span>&ndash;</span>");
-	    		$endEl->addHtml("&nbsp;");
-	    	}
+		if (!$end) {
+			$startEl->addHtml($startDateEl);
+			$startEl->addHtml("&nbsp;");
+			if ($time) {
+				$startEl->addHtml($startTimeEl);
+			}
+			$interval->addHtml($startEl);
+		} else {
+			$startEl->addHtml($startDateEl);
+			$startEl->addHtml("&nbsp;");
+			if ($time) {
+				$startEl->addHtml($startTimeEl);
+			}
+			$startEl->addHtml("&nbsp;");
+			$interval->addHtml($startEl);
+			$endEl = Html::el("span class='datetime-end'");
+			if ($start->format("j.n.Y") != $end->format("j.n.Y")) {
+				$endEl->setHtml("<span>&ndash;</span>");
+				$endEl->addHtml("&nbsp;");
+			}
 
-	    	$endDateEl = self::dateEl($end, $showYear);
-	    	$endTimeEl = self::timeEl($end);
-	    	// \Tracy\Debugger::barDump($start->format("j.n.Y"));
-	    	// \Tracy\Debugger::barDump($end->format("j.n.Y"));
-	    	if ($start->format("j.n.Y") != $end->format("j.n.Y")) {
-	    		$endEl->addHtml($endDateEl);
-	    	} else {
-	    		if ($time) {
-	    			$interval->addHtml("<span class='mx-0'>&ndash;</span>");
-	    		}
-	    	}
-	    	$endEl->addHtml("&nbsp;");
-	    	if ($time) {
-	    		$endEl->addHtml($endTimeEl);
-	    	}
-	    	$interval->addHtml($endEl);
-    	}
+			$endDateEl = self::dateEl($end, $showYear);
+			$endTimeEl = self::timeEl($end);
+			// \Tracy\Debugger::barDump($start->format("j.n.Y"));
+			// \Tracy\Debugger::barDump($end->format("j.n.Y"));
+			if ($start->format("j.n.Y") != $end->format("j.n.Y")) {
+				$endEl->addHtml($endDateEl);
+			} else {
+				if ($time) {
+					$interval->addHtml("<span class='mx-0'>&ndash;</span>");
+				}
+			}
+			$endEl->addHtml("&nbsp;");
+			if ($time) {
+				$endEl->addHtml($endTimeEl);
+			}
+			$interval->addHtml($endEl);
+		}
 
-    	if ($showDayStr) {
-    		if ($start->format("j.n.Y") != $end->format("j.n.Y")) {
-	    		$startEl->addHtml(self::dayEl($start) . "&nbsp;");
-    			$endEl->addHtml("&nbsp;" . self::dayEl($end));
-    		} else {
-    			$interval->addHtml("&nbsp;" . self::dayEl($start));
-    		}
-    	}
+		if ($showDayStr) {
+			if ($start->format("j.n.Y") != $end->format("j.n.Y")) {
+				$startEl->addHtml(self::dayEl($start) . "&nbsp;");
+				$endEl->addHtml("&nbsp;" . self::dayEl($end));
+			} else {
+				$interval->addHtml("&nbsp;" . self::dayEl($start));
+			}
+		}
 
-    	return $interval;
-    }
-
-
+		return $interval;
+	}
 
 	public static function dateEl($datetime, $showYear = true) {
 		if (!$datetime) return;

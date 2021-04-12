@@ -270,22 +270,40 @@ trait ContentsTrait
 		if ($type == "event") {
 			// $list->addColumnDateTime("start", "Začátek")->setFormat("j.n.Y H:i")->setSortable();
 			// $list->addColumnDateTime("end", "Konec")->setFormat("j.n.Y H:i")->setSortable();
-			$list->addColumnText("dates", "Termínů")->setRenderer(function($i) {
+			$list->addColumnText("interval", "Konání")->setRenderer(function($i) {
 				$dates = count($this->EventsManager->getEventDates($i));
 
-				return $dates ? $dates : null;
-			})->setAlign("center");
-			$list->addColumnText("interval", "Interval")->setRenderer(function($i) {
-				$dates = $this->EventsManager->getEventDatesInterval($i->id);
+				if (!$dates) return;
 
-				$int = \Monty\Filters::dateTimeInterval($dates[0], $dates[1], true, true, true);
-				
-				return $int;
-			});
-			$list->addColumnDateTime("created", "Vytvořeno")->setFormat("j.n.Y H:i")->setSortable();
-		} else {
-			$list->addColumnDateTime("created", "Vytvořeno")->setFormat("j.n.Y H:i")->setSortable();
+				$el = Html::el("div");
+				$range = $this->EventsManager->getEventDatesInterval($i->id);
+				$int = \Monty\Filters::dateTimeInterval($range[0], $range[1], true, true, true);
+
+				$el->addHtml($int);
+				$el->addHtml(" ($dates)");
+
+				return $el;
+			})->setSortable()->setSortableCallback(function($data, $sort) {
+				\Tracy\Debugger::barDump($data, "data");
+				\Tracy\Debugger::barDump($sort, "sort");
+				$sort = reset($sort);
+				bdump($sort, "reset sort");
+
+				return $data->order(":contents_events_dates.start $sort");
+		});
+			$list->addColumnText("persons", "Účastníků")->setRenderer(function($i) {
+				if ($i->registration == "event") {
+					$persons = count($this->EventsManager->getEventPersons($i->id));
+					$el = Html::el("a");
+					$el->href = $this->link(":Core:Admin:EventsPersons:personsList", $i->id);
+					$el->class[] = "badge";
+					$el->class[] = $persons != $i->reg_part ? "badge-success" : "badge-danger";
+					$el->addHtml($persons . " / " . $i->reg_part);
+					return $el;
+				}
+			})->setAlign("center");
 		}
+		$list->addColumnDateTime("created", "Vytvořeno")->setFormat("j.n.Y H:i")->setSortable();
 		// $list->addAction("edit", "", "contentForm")->setClass("fas fa-pencil btn btn-warning");
 		$list->addAction("delete", "", "deleteContent!")->setClass("fas fa-trash btn btn-danger")
 			->setConfirmation(new StringConfirmation("Opravdu chceš smazat %s?", "title"));
@@ -301,7 +319,7 @@ trait ContentsTrait
 		};
 
 
-		$list->setDefaultSort($type == "eventxxx" ? ["id" => "DESC"] : ["created" => "DESC"]);
+		$list->setDefaultSort($type == "event" ? ["interval" => "ASC"] : ["created" => "DESC"]);
 
 		$list->setStrictSessionFilterValues(false);
 		$list->setRememberState(false);

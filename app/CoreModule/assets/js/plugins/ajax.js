@@ -1,5 +1,5 @@
 import generateUUId from 'unique-identifier';
-
+import { init } from '../functions';
 
 $(function() {
 	console.log("naja init")
@@ -107,6 +107,7 @@ naja.addEventListener('complete', function(e) {
 	}
 
 	$(".ajax").removeClass("inactive");
+	init();
 });
 
 naja.snippetHandler.addEventListener('afterUpdate', (event) => {
