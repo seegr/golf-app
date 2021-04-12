@@ -3,7 +3,6 @@ vendor/
 node_modules/
 www/node_modules/
 www/files/
-www/dist/
 .htaccess
 www/.htaccess
 temp/
