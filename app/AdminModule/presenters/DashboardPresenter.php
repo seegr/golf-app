@@ -60,7 +60,7 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
     
     $list->setDataSource($persons);
     $list->addColumnLink("course", "Kurz", ":Core:Admin:Contents:contentForm");
-    $list->addColumnText("krestni_jmeno", "Jméno");
+    $list->addColumnText("jmeno", "Jméno");
     $list->addColumnText("prijmeni", "Přijmení");
     $list->addColumnText("e_mail", "E-mail");
     $list->addColumnText("telefon", "Telefon");
