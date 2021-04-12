@@ -16,6 +16,9 @@ class EventsPersonsPresenter extends AdminPresenter
   /** @var \App\CoreModule\FormsModule\Components\FormsFactory @inject */
   public $FormsFormsFactory;
 
+  /** @var \App\CoreModule\FormsModule\Model\FormsManager @inject */
+  public $FormsManager;
+
   /** @persistent */
   public $id;
 
@@ -23,7 +26,7 @@ class EventsPersonsPresenter extends AdminPresenter
   public $date;
 
 
-  public function actionEventPersonsList($id, $date): void
+  public function renderEventPersonsList($id, $date): void
   {
     $template = $this->template;
     $list = $this["personsList"];

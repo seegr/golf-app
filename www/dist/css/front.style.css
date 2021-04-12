@@ -18416,6 +18416,11 @@ body.rents.ordersList .datagrid, body.evp.events-list .datagrid {
   padding-bottom: 3em;
 }
 
+.datagrid-personsList tr.unactive td:not(.col-action) {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
 body.mfp-zoom-out-cur {
   overflow: scroll;
 }

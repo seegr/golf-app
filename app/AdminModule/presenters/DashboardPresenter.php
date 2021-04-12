@@ -26,11 +26,11 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
       // $template->times = self::getTimes(); 
   }
 
-  public function actionEventsPersonsList()
+  public function renderEventsPersonsList()
   {
     $persons = $this->FormsManager->getFormsRecords()
     ->where(":contents_events_persons.event IS NOT NULL")
-    ->select("*, :contents_events_persons.event.title AS course");
+    ->select("forms_records.*, :contents_events_persons.event.title AS course");
 
     $search = $this->getParameter("text");
     if ($search) {
@@ -41,7 +41,7 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
 
     $list = $this["personsList"];
     $list->setDataSource($persons);
-    $list->addColumnText("course", "Kurz");
+    $list->addColumnLink("course", "Kurz", ":Core:Admin:Contents:contentForm");
     $list->addColumnText("krestni_jmeno", "Jméno");
     $list->addColumnText("prijmeni", "Přijmení");
     $list->addColumnText("e_mail", "E-mail");
