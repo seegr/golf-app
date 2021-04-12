@@ -277,11 +277,12 @@ class EventsManager extends ContentsManager
     return $this->getEventsPersons()->get($id);
   }
 
-  public function insertEventPerson(int $event, int $record, int $date = null): int
+  public function insertEventPerson(int $event, int $record, string $role, int $date = null): int
   {
     $this->getEventsPersons()->insert([
       "event" => $event,
       "record" => $record,
+      "role" => $role,
       "date" => $date ? $date : null
     ]);
 
@@ -319,7 +320,7 @@ class EventsManager extends ContentsManager
 		}
 
 		$data = ArrayHash::from([
-      "partLimit" => $partLimit,
+      "partLimit" => (int) $partLimit,
       "subLimit" => $subLimit,
       "spots" => $spots,
       "all" => $all,

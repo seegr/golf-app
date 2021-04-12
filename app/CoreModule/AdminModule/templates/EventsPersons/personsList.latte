@@ -9,5 +9,9 @@
     {/form}
   {/ifset}
   <a n:href="personForm, eventId => $event->id" class="btn btn-outline-success mb-2">Nový účastník</a>
+
+  {dump $regSummary}
+  <div>Obsazenost: {$regSummary->partCount} / {$regSummary->partLimit}</div>
+
   {control personsList}
 {/block}

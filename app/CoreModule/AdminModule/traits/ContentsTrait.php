@@ -318,7 +318,6 @@ trait ContentsTrait
 			// $this->redrawControl();
 		};
 
-
 		$list->setDefaultSort($type == "event" ? ["interval" => "ASC"] : ["created" => "DESC"]);
 
 		$list->setStrictSessionFilterValues(false);

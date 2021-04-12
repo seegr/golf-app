@@ -139,7 +139,7 @@ class EventsPersonsPresenter extends AdminPresenter
       $recId = $this->FormsManager->saveRecord($form->id, $v);
 
       if (empty($v->id)) {
-        $this->EventsManager->insertEventPerson($event->id, $recId);
+        $this->EventsManager->insertEventPerson($event->id, $recId, "part");
       }
 
       $this->redirect("personsList", ["id" => $event->id]);
