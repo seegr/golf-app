@@ -9,6 +9,7 @@ use Monty\Form;
 use Monty\FormValidators;
 use Monty\Helper;
 use App\CoreModule\Model\ContentsManager;
+use App\CoreModule\Model\EventsManager;
 
 
 class FormsFactory extends BaseFormsFactory
@@ -81,14 +82,14 @@ class FormsFactory extends BaseFormsFactory
 		$form->addTextArea("meta_keys", "Meta keys");
 		$form->addTextArea("meta_desc", "Meta desc");
 
-		$form->addSelect("registration", "Registrace", [null => "- Bez registrace -"] + ContentsManager::EVENT_REGISTRATION);
+		$form->addSelect("registration", "Registrace", [null => "- Bez registrace -"] + EventsManager::EVENT_REGISTRATION);
 		$form->addSelect("reg_form", "Formulář", [null => "- Registrační formulář -"] + $this->FormsManager->getForms()->fetchPairs("id", "title"));
 		$form->addInteger("reg_part", "Účastníků")
 			->setDefaultValue(0)
 			->addRule(Form::MIN, "Minimum je 0 (neomezeně)", 0);
-		$form->addInteger("reg_sub", "Náhradníků")
-			->setDefaultValue(0)
-			->addRule(Form::MIN, "Minimum je 0 (neomezeně)", 0);
+		// $form->addInteger("reg_sub", "Náhradníků")
+		// 	->setDefaultValue(0)
+		// 	->addRule(Form::MIN, "Minimum je 0 (neomezeně)", 0);
 
 		$customFields = $this->ContentsManager->getContentCustomFields($type);
 		// \Tracy\Debugger::barDump($customFields, "customFields");

@@ -15,6 +15,9 @@ class ContentsPresenter extends AdminPresenter {
     /** @var \App\CoreModule\Model\ContentsManager @inject */
     public $ContentsManager;
 
+    /** @var \App\CoreModule\Model\EventsManager @inject */
+    public $EventsManager;
+
     /** @var \App\CoreModule\Model\CategoriesManager @inject */
     public $CategoriesManager;
 
@@ -72,7 +75,7 @@ class ContentsPresenter extends AdminPresenter {
     	$type = $this->type->short;
 
     	if ($type == "event") {
-	    	$events = $this->ContentsManager->getFutureEvents(true);
+	    	$events = $this->EventsManager->getFutureEvents(true);
 	    	$list->setDataSource($events);
     	} else {
 			$list->setDataSource($this->ContentsManager->getContents($type));
@@ -117,7 +120,7 @@ class ContentsPresenter extends AdminPresenter {
 			$this->redirect("contentsList", $this->type->short);
 		};
 
-    $dates = $this->ContentsManager->getEventDates($id);
+    $dates = $this->EventsManager->getEventDates($id);
     $template->hasDates = count($dates);
 	}
   

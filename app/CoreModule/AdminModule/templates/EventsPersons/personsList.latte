@@ -1,6 +1,5 @@
-{block title}Účastníci{/block}
-
 {block content}
+  <h1 n:block="title">Účastníci <span class="text-grey">| {$event->title}</span></h1>
   {ifset $date}
     {form dateSelectForm}
       <div class="form-group">

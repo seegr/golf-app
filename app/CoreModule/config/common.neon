@@ -41,7 +41,10 @@ services:
 		class: App\CoreModule\Model\UsersManager
 		autowired: self
 	NavigationsManager: App\CoreModule\Model\NavigationsManager
-	ContentsManager: App\CoreModule\Model\ContentsManager
+	ContentsManager:
+		class: App\CoreModule\Model\ContentsManager
+		autowired: self		
+	EventsManager: App\CoreModule\Model\EventsManager
 	FilesManager: App\CoreModule\Model\FilesManager
 	CategoriesManager: App\CoreModule\Model\CategoriesManager
 	TagsManager: App\CoreModule\Model\TagsManager

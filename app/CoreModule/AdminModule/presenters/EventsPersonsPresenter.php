@@ -9,6 +9,9 @@ use Nette\Utils\ArrayHash;
 class EventsPersonsPresenter extends AdminPresenter
 {
 
+  /** @var \App\CoreModule\Model\EventsManager @inject */
+  public $EventsManager;
+
   /** @var \App\CoreModule\FormsModule\Model\FormsManager @inject */
   public $FormsManager;
 
@@ -26,16 +29,16 @@ class EventsPersonsPresenter extends AdminPresenter
   {
     $template = $this->template;
     $list = $this["personsList"];
-    $event = $this->ContentsManager->getEvent($id);
+    $event = $this->EventsManager->getEvent($id);
     $template->event = $event;
 
     if ($event->registration == "dates") {
       if (!$date) {
-        $lastDate = $this->ContentsManager->getEventDates($id)->order("start DESC")->fetch();
+        $lastDate = $this->EventsManager->getEventDates($id)->order("start DESC")->fetch();
         $date = $lastDate->id;
       }
       
-      $date = $this->ContentsManager->getEventDate($date);
+      $date = $this->EventsManager->getEventDate($date);
       bdump($date, "date");
       $template->date = $date;
       // $persons = $this->ContentsManager->getEventDatePersons($date->id);
@@ -50,6 +53,8 @@ class EventsPersonsPresenter extends AdminPresenter
       ]);
     }
 
+    $template->regSummary = $this->EventsManager->getEventRegSummary($id);
+
     $list->setDataSource($persons);
   }
 
@@ -59,32 +64,41 @@ class EventsPersonsPresenter extends AdminPresenter
     $form = $this["personForm"];
 
     if ($eventId) {
-      $event = $this->ContentsManager->getEvent($eventId);
+      $event = $this->EventsManager->getEvent($eventId);
       $template->form = $event->ref("reg_form");
     } else {
-      $person = $this->ContentsManager->getEventPerson($id);
+      $person = $this->EventsManager->getEventPerson($id);
+      $event = $person->ref("event");
       $personData = $template->person = ArrayHash::from($this->FormsManager->getRecord($id, true));
       $template->form = $person->ref("record")->ref("form");
       $form->setDefaults($personData);
     }
 
+    $template->event = $event;
     $template->formComponent = "personForm";
   }
 
   public function createComponentPersonsList()
   {
-    $list = new DataGrid;
-
     $eventId =  $this->getParameter("id");
+    $event = $this->EventsManager->getEvent($eventId);
 
-    $list->addColumnText("krestni_jmeno", "Jméno");
-    $list->addColumnText("prijmeni", "Příjmení");
-    $list->addColumnText("e_mail", "E-mail");
-    $list->addColumnText("telefon", "Tel");
-    $list->addColumnDateTime("time", "Registrace")->setFormat(self::DATETIME_FORMAT);
+    // $list = new DataGrid;
+
+    // $list->addColumnText("krestni_jmeno", "Jméno");
+    // $list->addColumnText("prijmeni", "Příjmení");
+    // $list->addColumnText("e_mail", "E-mail");
+    // $list->addColumnText("telefon", "Tel");
+    // $list->addColumnDateTime("time", "Registrace")->setFormat(self::DATETIME_FORMAT);
+    // $list->addAction("personForm", "", "personForm", [
+    //   "id" => "id"
+    // ])->setClass("fad fa-pen btn btn-warning");
+
+    $list = $this->FormsFormsFactory->formRecordsList($event->reg_form);
+
     $list->addAction("personForm", "", "personForm", [
       "id" => "id"
-    ])->setClass("fad fa-pencil text-warning");
+    ])->setClass("fad fa-pen btn btn-warning");
 
     return $list;
   }
@@ -95,7 +109,7 @@ class EventsPersonsPresenter extends AdminPresenter
 
     $id = $this->getParameter("id");
     $dateFormat = "%d.%m.%Y";
-    $dates = $this->ContentsManager->getEventDates($id)->select('*, DATE_FORMAT(start, ?) AS start_date', $dateFormat)->fetchPairs("id", "start_date");
+    $dates = $this->EventsManager->getEventDates($id)->select('*, DATE_FORMAT(start, ?) AS start_date', $dateFormat)->fetchPairs("id", "start_date");
 
     $f->setMethod("get");
     $f->addSelect("date", "Termín", $dates)
@@ -110,9 +124,9 @@ class EventsPersonsPresenter extends AdminPresenter
     $id = $this->getParameter("id");
 
     if ($eventId) {
-      $event = $this->ContentsManager->getEvent($eventId);
+      $event = $this->EventsManager->getEvent($eventId);
     } else {
-      $person = $this->ContentsManager->getEventPerson($id);
+      $person = $this->EventsManager->getEventPerson($id);
       $event = $person->ref("event");
     }
 
@@ -124,12 +138,11 @@ class EventsPersonsPresenter extends AdminPresenter
       bdump($v);
       $recId = $this->FormsManager->saveRecord($form->id, $v);
 
-      $this->ContentsManager->getEventsPersons()->insert([
-        "event" => $event->id,
-        "record" => $recId
-      ]);
+      if (empty($v->id)) {
+        $this->EventsManager->insertEventPerson($event->id, $recId);
+      }
 
-      $this->redirect("personsList");
+      $this->redirect("personsList", ["id" => $event->id]);
     };
 
     return $f;

@@ -281,10 +281,12 @@ class FormsManager extends \App\CoreModule\Model\BaseManager {
 
 			$this->getFormRecord($id)->update($dataArr);
 		} else {
-			$id = $this->getFormsRecords()->insert($dataArr + [
+			$rec = $this->getFormsRecords()->insert($dataArr + [
 				"form" => $formId,
 				"hash" => $this->generateUniqueHash(self::TABLE_FORMS_RECORDS, "hash", $length = 30)
 			]);
+
+			$id = $rec->id;
 		}
 
 		return $id;

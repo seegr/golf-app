@@ -128,7 +128,7 @@ class FormsFactory extends \App\CoreModule\Components\BaseFormsFactory {
 
 				case "tel":
 					$control->addRule(FormValidators::PHONE_FORMAT, "Nesprávný formát telefonního čísla", $form[$field->name]);
-					$control->getControlPrototype()->addAttributes(["placeholder" => "+420#########"]);
+					$control->getControlPrototype()->addAttributes(["placeholder" => "+420 ---------"]);
 					break;
 			}
 		}
@@ -185,7 +185,7 @@ class FormsFactory extends \App\CoreModule\Components\BaseFormsFactory {
 				break;
 
 				case "textarea":
-					$list->addColumnText($name, $label)->setEllipsis();
+					$list->addColumnText($name, $label);
 				break;
 
 				default:

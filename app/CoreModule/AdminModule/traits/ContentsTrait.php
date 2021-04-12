@@ -93,7 +93,7 @@ trait ContentsTrait
 
 			$gal->setSortable();
 
-			$this["eventDatesList"]->setDataSource($this->ContentsManager->getEventDates($id));
+			$this["eventDatesList"]->setDataSource($this->EventsManager->getEventDates($id));
 		} else {
 			$images = $this->FilesManager->getTempFiles($this->tempId);
 		}
@@ -271,12 +271,12 @@ trait ContentsTrait
 			// $list->addColumnDateTime("start", "Začátek")->setFormat("j.n.Y H:i")->setSortable();
 			// $list->addColumnDateTime("end", "Konec")->setFormat("j.n.Y H:i")->setSortable();
 			$list->addColumnText("dates", "Termínů")->setRenderer(function($i) {
-				$dates = count($this->ContentsManager->getEventDates($i));
+				$dates = count($this->EventsManager->getEventDates($i));
 
 				return $dates ? $dates : null;
 			})->setAlign("center");
 			$list->addColumnText("interval", "Interval")->setRenderer(function($i) {
-				$dates = $this->ContentsManager->getEventDatesInterval($i->id);
+				$dates = $this->EventsManager->getEventDatesInterval($i->id);
 
 				$int = \Monty\Filters::dateTimeInterval($dates[0], $dates[1], true, true, true);
 				
@@ -444,7 +444,7 @@ trait ContentsTrait
 		$content = $this->ContentsManager->getContent($this->id);
 
 		$pars = $this->getParameters();
-		$date = isset($pars["date_id"]) ? $this->ContentsManager->getEventDate($pars["date_id"]) : null;
+		$date = isset($pars["date_id"]) ? $this->EventsManager->getEventDate($pars["date_id"]) : null;
 
 		\Tracy\Debugger::barDump($date, "date");
 		if ($content) {
