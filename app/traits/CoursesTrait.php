@@ -13,7 +13,7 @@ trait CoursesTrait
 
     public function getCoursesSelection()
     {
-        $dates = $this->ContentsManager->getEventsDates()->order("start DESC");
+        $dates = $this->EventsManager->getEventsDates()->order("start DESC");
 
         bdump($dates->fetchAll(), "dates");
     }
@@ -47,7 +47,7 @@ trait CoursesTrait
 
     public function getFutureCoursesBegins()
     {
-        $fEvents = $this->ContentsManager->getEventsDates()
+        $fEvents = $this->EventsManager->getEventsDates()
             ->where("start >= ?", new DateTime)
             ->order("start ASC");
         // bdump($fEvents->fetchAll());

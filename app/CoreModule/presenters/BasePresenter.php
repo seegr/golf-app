@@ -35,6 +35,9 @@ class BasePresenter extends Nette\Application\UI\Presenter
 	/** @var App\CoreModule\Model\ContentsManager @inject */
 	public $ContentsManager;
 
+	/** @var App\CoreModule\Model\EventsManager @inject */
+	public $EventsManager;
+
     /** @var \App\CoreModule\Model\CategoriesManager @inject */
     public $CategoriesManager;
 
