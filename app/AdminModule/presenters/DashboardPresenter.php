@@ -73,7 +73,7 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
     ])->setClass(function($i) {return $i["active"] ? "fad fa-check btn btn-success ajax" : "fad fa-check btn btn-grey ajax";});
 
     bdump(mb_list_encodings(), "encoding");
-    $list->addExportCsv("Export účastníků (CSV)", "ucastnici.csv", "windows-1250")
+    $list->addExportCsv("Export účastníků (CSV)", "ucastnici.csv", "ISO-8859-2")
       ->setClass("btn btn-primary");
 
     return $list;
