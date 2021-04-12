@@ -7,5 +7,6 @@
     {/ifset}
     <span class="text-grey">| {$event->title}</span>
   </h1>
+  {include backButton, "Zpět na výpis účastníků", "eventPersonsList", ["id" => $event->id]}
 	{include $_customFormTemplate, formComponent => $formComponent, form => $form}
 {/block}

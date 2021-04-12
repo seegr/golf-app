@@ -1,5 +1,8 @@
 {block content}
   <h1 n:block="title">Účastníci <span class="text-grey">| {$event->title}</span></h1>
+  <div>
+    {include backButton, "Zpět na kurz", ":Core:Admin:Contents:contentForm", ["id" => $event->id]}
+  </div>
   {ifset $date}
     {form dateSelectForm}
       <div class="form-group">

@@ -3,6 +3,7 @@
 {block topPage}
     <div class="bg-light">
         <div class="container py-3">
+            <a n:href=":Admin:Dashboard:dashboard" class="btn btn-outline-primary"><i class="fad fa-home"></i></a>
             <a n:href=":Core:Admin:Contents:contentsList, type => event" class="btn btn-outline-primary">Kurzy</a>
             <a n:href=":Admin:Dashboard:eventsPersonsList" class="btn btn-outline-primary">Účastníci</a>
             <a n:if="$user->isInRole('superadmin')" n:href=":Core:Admin:Users:usersList" class="btn btn-outline-primary">Uživatelé</a>

@@ -78,6 +78,33 @@ class EventsPersonsPresenter extends AdminPresenter
     $template->event = $event;
     $template->formComponent = "personForm";
   }
+  
+
+  public function createComponentPersonsList()
+  {
+    $eventId =  $this->getParameter("id");
+    $event = $this->EventsManager->getEvent($eventId);
+
+    $list = $this->FormsFormsFactory->formRecordsList($event->reg_form);
+
+    $list->setRowCallback(function($i, $tr) {
+      if (!$i["active"]) {
+        $tr->addClass("unactive");
+      }
+    });
+
+    $list->addAction("personForm", "", ":Core:Admin:EventsPersons:personForm", [
+      "id" => "id"
+    ])->setClass("fad fa-pen btn btn-warning");
+    $list->addAction("personToggle", "", "personToggle!", [
+      "personId" => "id"
+    ])->setClass(function($i) {return $i["active"] ? "fad fa-check btn btn-success ajax" : "fad fa-check btn btn-grey ajax";});
+
+    // $list->addExportCsv("Export účastníků (CSV)", "ucastnici.csv", "windows-1250")
+    // ->setClass("btn btn-primary");
+
+    return $list;
+  }
 
   public function createComponentDateSelectForm()
   {
