@@ -28,7 +28,8 @@
 		"google/apiclient": "^2.8",
 		"facebook/graph-sdk": "^5.7",
 		"scssphp/scssphp": "^1.4",
-		"league/csv": "^9.7"
+		"league/csv": "^9.7",
+		"phpoffice/phpspreadsheet": "^1.17"
 	},
 	"require-dev": {
 		"nette/tester": "^2.0",

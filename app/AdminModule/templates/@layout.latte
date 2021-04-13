@@ -8,6 +8,7 @@
             <a n:href=":Admin:Dashboard:eventsPersonsList" class="btn btn-outline-primary">Účastníci</a>
             <a n:if="$user->isInRole('superadmin')" n:href=":Core:Admin:Users:usersList" class="btn btn-outline-primary">Uživatelé</a>
             <a n:if="$user->isAllowed('Core:Forms:Admin:Forms')" n:href=":Core:Forms:Admin:Forms:formsList" class="btn btn-outline-primary">Formuláře</a>
+            <a n:href=":Admin:Dashboard:importCourses" class="btn btn-outline-primary">Import kurzů</a>
         </div>
     </div>
 {/block}

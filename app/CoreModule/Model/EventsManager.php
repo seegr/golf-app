@@ -59,6 +59,7 @@ class EventsManager extends ContentsManager
 
   public function saveEventDate($v)
   {
+    $v = is_array($v) ? ArrayHash::from($v) : $v;
     $content = $this->getContent($v->content);
 
     $data = [

@@ -18,6 +18,10 @@ class ApiPresenter extends Nette\Application\UI\Presenter
   /** @var \App\CoreModule\Model\ContentsManager @inject */
   public $ContentsManager;
 
+  /** @var \App\CoreModule\Model\EventsManager @inject */
+  public $EventsManager;
+
+
   public function startup(): void
   {
     parent::startup();

@@ -5,6 +5,8 @@ namespace App\AdminModule\Presenters;
 use Monty\Form;
 use Monty\DataGrid;
 use League\Csv\Writer;
+use Monty\Helper;
+use Nette\Utils\ArrayHash;
 
 
 class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPresenter
@@ -104,5 +106,56 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
     // $csv->output("persons.csv");
     // die;
   }
+
+  public function actionImportCourses()
+  {
+  }
+
+	public function createComponentImportEventsForm() {
+		$f = $this->FormsFactory->newForm();
+
+    $mime = ["xls", "xlsx"];
+		$f->addUpload("file", "Vyber soubor (Excel)")
+      // ->addRule(Form::MIME_TYPE, "Nepodporovaný formát souboru." , $mime)
+      ->getControlPrototype()->addAttributes(["accept" => Helper::getMimeString($mime)])
+      ->setRequired();
+
+		$f->onSuccess[] = function($f, $v) {
+			$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+			\Tracy\Debugger::barDump($v->file, "file");
+			$file = $v->file;
+			$excel = $reader->load($file->getTemporaryFile());
+			$sheet = $excel->getSheet(0)->toArray();
+			\Tracy\Debugger::barDump($sheet, "sheet");
+
+			foreach ($sheet as $row) {
+				$data = ArrayHash::from([
+					"title" => $row[0],
+					"start" => $row[1],
+					"end" => $row[2]
+				]);
+
+        bdump($data);
+        // continue;
+
+        $id = $this->ContentsManager->saveContent([
+          "title" => $data->title,
+          "user" => $this->getUser()->id,
+          "type" => "event"
+        ]);
+
+        $this->EventsManager->saveEventDate([
+          "content" => $id,
+          "start" => $data->start,
+          "end" => $data->end
+        ]);
+			}
+
+			// $this->flashMessage("Importováno!");
+			$this->redirect(":Core:Admin:Contents:contentsList", ["type" => "event"]);
+		};
+
+		return $f;
+	}
 
 }

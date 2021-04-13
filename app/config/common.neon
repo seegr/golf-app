@@ -6,7 +6,7 @@ parameters:
 	appName: "GolfApp"
 	
 router:
-	homeRoute: "Front:Home:home"
+	homeRoute: "Admin:Dashboard:dashboard"
 	routers:
 		- App\Router\RouterFactory
 

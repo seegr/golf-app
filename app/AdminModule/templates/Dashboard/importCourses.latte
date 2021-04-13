@@ -1,0 +1,17 @@
+{block title}Import kurzů (excel){/block}
+
+{block content}
+    {form importEventsForm}
+        <div class="form-group">
+          {label file}
+          {input file, class => "form-control"}
+        </div>
+        <button n:name="save">Importovat</button>
+    {/form}
+    <fieldset class="mt-4"> 
+      <legend>Ukázka excelu</legend>
+      <div class="img-fluid">
+        <img src="{$basePath}/src/import-example.jpg" alt="přiklad import excel">
+      </div>
+    </fieldset>
+{/block}

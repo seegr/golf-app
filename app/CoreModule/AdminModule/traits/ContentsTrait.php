@@ -308,15 +308,36 @@ trait ContentsTrait
 		$list->addAction("delete", "", "deleteContent!")->setClass("fas fa-trash btn btn-danger")
 			->setConfirmation(new StringConfirmation("Opravdu chceš smazat %s?", "title"));
 
-		$list->addGroupAction("Smazat")->onSelect[] = function($ids) use ($list) {
-			\Tracy\Debugger::barDump($ids, "ids");
+		// $list->addGroupAction("Smazat")->onSelect[] = function($ids) use ($list) {
+		// 	\Tracy\Debugger::barDump($ids, "ids");
 
+		// 	$this->ContentsManager->getContents()->where("id", $ids)->delete();
+		// 	$list->reload();
+		// 	// $this->ContentsManager->getEventsDates()->where("id", $ids)->delete();
+			
+		// 	// $this->redrawControl();
+		// };
+		// $list->addGroupAction("Delete examples")->onSelect[] = function($ids) {
+		// 	$this->ContentsManager->getContents()->where("id", $ids)->delete();
+		// 	$list->reload();
+		// };
+		
+		$list->addGroupButtonAction("Smazat")->onClick[] = function($ids) use ($list) {
 			$this->ContentsManager->getContents()->where("id", $ids)->delete();
 			$list->reload();
-			// $this->ContentsManager->getEventsDates()->where("id", $ids)->delete();
-			
-			// $this->redrawControl();
 		};
+		$groupCollection = $list->getGroupActionCollection();
+		bdump($groupCollection, "groupCollection");
+		$delBtn = $groupCollection->getGroupAction("Smazat");
+		bdump($delBtn, "delBtn");
+		$delBtn->setAttribute("data-datagrid-confirm", "Opravdu smazat?");
+		$delBtn->setClass("btn btn-sm btn-success ajax");
+		// foreach ($groupButton->get as $gBtn) {
+		// 	bdump($gBtn, "gBtn");
+		// 	$gBtn->addAttributes([
+		// 		"data-confirm" => "Jo?"
+		// 	]);
+		// }
 
 		$list->setDefaultSort($type == "event" ? ["interval" => "ASC"] : ["created" => "DESC"]);
 
