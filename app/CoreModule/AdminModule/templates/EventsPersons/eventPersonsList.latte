@@ -16,7 +16,7 @@
   <div class="mb-2">
     <a n:href="personForm, eventId => $event->id" class="btn btn-outline-success">Nový účastník</a>
     <div class="d-inline-block">Obsazenost: <span class="badge badge-{$regSummary->spotsColor}">{$regSummary->partCount} / {$regSummary->partLimit}</span></div>
-    <div n:if="$regSummary->personsPercent >= 100" class="alert alert-warning mt-2">
+    <div n:if="$regSummary->personsPercent > 100" class="alert alert-warning mt-2">
       <span class="badge badge-warning" style="font-size: 100%"><i class="fad fa-lightbulb-exclamation"></i></span>
       <span>Pozor, srovnej si počty :)</span>
     </div>
