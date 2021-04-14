@@ -284,7 +284,8 @@ class EventsManager extends ContentsManager
       "event" => $event,
       "record" => $record,
       "role" => $role,
-      "date" => $date ? $date : null
+      "date" => $date ? $date : null,
+      "state" => $this->getState("unconfirmed")->id
     ]);
 
     return $record;
