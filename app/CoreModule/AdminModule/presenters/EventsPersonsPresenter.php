@@ -5,6 +5,8 @@ namespace App\CoreModule\AdminModule\Presenters;
 use Monty\DataGrid;
 use Monty\Form;
 use Nette\Utils\ArrayHash;
+use Monty\Html;
+
 
 class EventsPersonsPresenter extends AdminPresenter
 {
@@ -96,9 +98,35 @@ class EventsPersonsPresenter extends AdminPresenter
     $list->addAction("personForm", "", ":Core:Admin:EventsPersons:personForm", [
       "id" => "id"
     ])->setClass("fad fa-pen btn btn-warning");
-    $list->addAction("personToggle", "", "personToggle!", [
-      "personId" => "id"
-    ])->setClass(function($i) {return $i["active"] ? "fad fa-check btn btn-success ajax" : "fad fa-check btn btn-grey ajax";});
+    $list->addAction("confirm", "")->setRenderer(function($i) {
+      $person = $this->EventsManager->getEventPerson($i["id"]);
+      $confirmed = $person->ref("state")->short == "confirmed" ? true : false;
+      $a = Html::el("a");
+      $a->class[] = "ajax btn btn-sm fad fa-check";
+      $a->class[] = $confirmed ? "btn-success" : "btn-grey";
+      if ($person->ref("record")->active) {
+        $a->href = $this->link("changePersonState!", [
+          "personId" => $person->record,
+          "state" => $confirmed ? "unconfirmed" : "confirmed"
+        ]);
+      } else {
+        $a->class[] = "disabled";
+      }
+      return $a;
+    });
+    $list->addAction("archive", "")->setRenderer(function($i) {
+      $record = $this->FormsManager->getFormRecord($i["id"]);
+      $a = Html::el("a");
+      $a->class[] = "ajax btn btn-sm fad";
+      $a->class[] = $record->active ? "btn-danger fa-trash" : "btn-primary fa-upload";
+      $a->href = $this->link("personToggle!", [
+        "personId" => $record->id
+      ]);
+      return $a;
+    });
+    // $list->addAction("personToggle", "", "personToggle!", [
+    //   "personId" => "id"
+    // ])->setClass(function($i) {return $i["active"] ? "fad fa-trash btn btn-danger ajax" : "fad fa-trash btn btn-grey ajax";});
 
     // $list->addExportCsv("Export účastníků (CSV)", "ucastnici.csv", "windows-1250")
     // ->setClass("btn btn-primary");
@@ -149,6 +177,23 @@ class EventsPersonsPresenter extends AdminPresenter
     };
 
     return $f;
+  }
+
+  public function handlePersonToggle($personId)
+  {
+    $record = $this->FormsManager->getFormRecord($personId);
+    $record->update(["active" => !$record->active]);
+
+    $this->handleChangePersonState($personId, $record->active ? "unconfirmed" : "archived");
+    // $this["personsList"]->reload();
+    $this->redrawControl();
+  }
+
+  public function handleChangePersonState($personId, $state)
+  {
+    $state = $this->EventsManager->getState($state);
+    $this->EventsManager->getEventPerson($personId)->update(["state" => $state->id]);
+    $this["personsList"]->reload();
   }
 
 }

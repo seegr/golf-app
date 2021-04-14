@@ -61,18 +61,20 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
     });
     
     $list->setDataSource($persons);
-    $list->addColumnLink("course", "Kurz", ":Core:Admin:Contents:contentForm");
-    $list->addColumnText("jmeno", "Jméno");
-    $list->addColumnText("prijmeni", "Přijmení");
-    $list->addColumnText("e_mail", "E-mail");
-    $list->addColumnText("telefon", "Telefon");
+    $list->addColumnLink("course", "Kurz", ":Core:Admin:Contents:contentForm")->setSortable();
+    $list->addColumnText("jmeno", "Jméno")->setSortable();
+    $list->addColumnText("prijmeni", "Přijmení")->setSortable();
+    $list->addColumnText("e_mail", "E-mail")->setSortable();
+    $list->addColumnText("telefon", "Telefon")->setSortable();
+    $list->addColumnText("email_odeslan", "E-mail odeslán")->setSortable();
+    $list->addColumnText("cislo_clenstvi", "Číslo členství")->setSortable();
 
     $list->addAction("personForm", "", ":Core:Admin:EventsPersons:personForm", [
       "id" => "id"
     ])->setClass("fad fa-pen btn btn-warning");
-    $list->addAction("personToggle", "", "personToggle!", [
-      "personId" => "id"
-    ])->setClass(function($i) {return $i["active"] ? "fad fa-check btn btn-success ajax" : "fad fa-check btn btn-grey ajax";});
+    // $list->addAction("personToggle", "", "personToggle!", [
+    //   "personId" => "id"
+    // ])->setClass(function($i) {return $i["active"] ? "fad fa-check btn btn-success ajax" : "fad fa-check btn btn-grey ajax";});
 
     bdump(mb_list_encodings(), "encoding");
     $list->addExportCsv("Export účastníků (CSV)", "ucastnici.csv", "ISO-8859-2")

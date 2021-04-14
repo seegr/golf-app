@@ -231,8 +231,8 @@ class FormsManager extends \App\CoreModule\Model\BaseManager {
 
 	public function saveFormRecord($formId, $vals) {
 		$data = is_object($vals) || is_array($vals) ? Json::encode($vals) : $vals;
-		\Tracy\Debugger::barDump($formId, "formId");
-		\Tracy\Debugger::barDump($data, "data");
+		// \Tracy\Debugger::barDump($formId, "formId");
+		// \Tracy\Debugger::barDump($data, "data");
 
 		$dataReal = [];
 		$fields = $this->getFormFields($formId)->fetchPairs("name", "label");
@@ -250,6 +250,8 @@ class FormsManager extends \App\CoreModule\Model\BaseManager {
 
 		if (!empty($vals->id) || !(empty($vals->hash))) {
 			$id = !empty($vals->id) ? $vals->id : $vals->hash;
+
+			$dataArr["edited"] = new \DateTime;
 
 			$this->getFormRecord($id)->update($dataArr);
 		} else {

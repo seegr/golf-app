@@ -293,13 +293,13 @@ trait ContentsTrait
 				return $data->order(":contents_events_dates.start $sort");
 		});
 			$list->addColumnText("persons", "Účastníků")->setRenderer(function($i) {
-				if ($i->registration == "event") {
-					$persons = count($this->EventsManager->getEventPersons($i->id));
+				if ($i->registration == "event" && $i->reg_part) {
 					$el = Html::el("a");
 					$el->href = $this->link(":Core:Admin:EventsPersons:eventPersonsList", $i->id);
-					$el->class[] = "badge";
-					$el->class[] = $persons != $i->reg_part ? "badge-success" : "badge-danger";
-					$el->addHtml($persons . " / " . $i->reg_part);
+					$summary = $this->EventsManager->getEventRegSummary($i->id);
+
+					$el->class[] = "badge badge-$summary->spotsColor";
+					$el->addHtml($summary->allCount . " / " . $summary->spots);
 					return $el;
 				}
 			})->setAlign("center");

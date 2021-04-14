@@ -193,6 +193,7 @@ class FormsFactory extends \App\CoreModule\Components\BaseFormsFactory {
 				break;
 			}
 		}
+		$list->addColumnDateTime("edited", "Upraveno")->setFormat("j.n.Y H:i:s")->setFitContent()->setSortable();
 		$list->addColumnDateTime("time", "Vloženo")->setFormat("j.n.Y H:i:s")->setFitContent()->setSortable();
 
 		// $list->addAction("edit", "", ":Forms:Admin:Forms:formRecord");

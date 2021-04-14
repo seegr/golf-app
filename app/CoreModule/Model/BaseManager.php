@@ -426,4 +426,19 @@ class BaseManager
 		return $this->getLangs()->where("default", true)->fetch();
 	}
 
+	public function getStates()
+	{
+		return $this->db->table(self::TABLE_STATES);
+	}
+
+	public function getState($id)
+	{
+		$sel = $this->getStates()->whereOr([
+			"id" => $id,
+			"short" => $id
+		])->fetch();
+
+		return $sel;
+	}
+
 }

@@ -320,7 +320,7 @@ class EventsManager extends ContentsManager
 			}
 		}
 
-		$data = ArrayHash::from([
+		$data = [
       "partLimit" => (int) $partLimit,
       "subLimit" => $subLimit,
       "spots" => $spots,
@@ -332,6 +332,7 @@ class EventsManager extends ContentsManager
       "subCount" => $subCount,
       "partPercent" => $spots ? ($partCount / $spots) * 100 : null,
       "subPercent" => $spots ? ($subCount / $spots) * 100 : null,
+      "personsPercent" => $spots ? ($allCount / $spots) * 100 : null,
       "partLeft" => $event->reg_part - $partCount,
       "subLeft" => $event->reg_sub - $subCount,
       "isFull" => $isFull,
@@ -339,9 +340,20 @@ class EventsManager extends ContentsManager
       "free" => !$isFull,
       "partSpace" => $event->reg_part ? ($event->reg_part - $partCount > 0 ? true : false) : true,
       "subSpace" => $event->reg_sub ? ($event->reg_sub - $subCount > 0 ? true : false) : true
-		]);
+    ];
 
-		return $data;
+    bdump($data["personsPercent"], "perspercent");
+		if ($data["personsPercent"] <= 50) {
+			$color = "success";
+		} else if ($data["personsPercent"] < 100) {
+			$color = "warning";
+		} else {
+			$color = "danger";
+		}
+
+    $data["spotsColor"] = $color;
+
+		return ArrayHash::from($data);
 	}
 
 }
