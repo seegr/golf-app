@@ -342,7 +342,7 @@ trait ContentsTrait
 		$list->setDefaultSort($type == "event" ? ["interval" => "ASC"] : ["created" => "DESC"]);
 
 		$list->setStrictSessionFilterValues(false);
-		$list->setRememberState(false);
+		$list->setRememberState(true);
 
 		return $list;
 	}
