@@ -270,17 +270,18 @@ trait ContentsTrait
 		if ($type == "event") {
 			// $list->addColumnDateTime("start", "Začátek")->setFormat("j.n.Y H:i")->setSortable();
 			// $list->addColumnDateTime("end", "Konec")->setFormat("j.n.Y H:i")->setSortable();
-			$list->addColumnText("interval", "Konání")->setRenderer(function($i) {
+			$list->addColumnText("interval", "Konání [počet termínů]")->setRenderer(function($i) {
 				$dates = count($this->EventsManager->getEventDates($i));
 
 				if (!$dates) return;
 
 				$el = Html::el("div");
 				$range = $this->EventsManager->getEventDatesInterval($i->id);
+				bdump($range, "dates range");
 				$int = \Monty\Filters::dateTimeInterval($range[0], $range[1], true, true, true);
 
 				$el->addHtml($int);
-				$el->addHtml(" ($dates)");
+				$el->addHtml(" <span style='font-weight: 700; color: #464646'>[$dates]</span>");
 
 				return $el;
 			})->setSortable()->setSortableCallback(function($data, $sort) {

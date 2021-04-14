@@ -175,8 +175,8 @@ class Filters {
 
 		if ($showDayStr) {
 			if ($start->format("j.n.Y") != $end->format("j.n.Y")) {
-				$startEl->addHtml(self::dayEl($start) . "&nbsp;");
 				$endEl->addHtml("&nbsp;" . self::dayEl($end));
+				$startEl->addHtml(self::dayEl($start) . "&nbsp;");
 			} else {
 				$interval->addHtml("&nbsp;" . self::dayEl($start));
 			}

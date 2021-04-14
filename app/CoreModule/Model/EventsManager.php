@@ -84,7 +84,7 @@ class EventsManager extends ContentsManager
   }
 
   public function getEventMaxDate($id) {
-    return $this->getEventDates($id)->min("end");
+    return $this->getEventDates($id)->max("end");
   }
 
   public function getEventDatesInterval($id) {
