@@ -1,8 +1,19 @@
 {extends $_coreAdminLayout}
 
+{block styles}
+    {include parent}
+    <style>
+        .app-name {
+            font-size: 1.2em;
+            margin-right: 2em;
+        }
+    </style>
+{/block}
+
 {block topPage}
     <div class="bg-light">
         <div class="container py-3">
+            <span class="app-name"><i class="fad fa-golf-ball"></i> Kurzy</span>
             <a n:href=":Admin:Dashboard:dashboard" class="btn btn-outline-primary"><i class="fad fa-home"></i></a>
             <a n:href=":Core:Admin:Contents:contentsList, type => event" class="btn btn-outline-primary">Kurzy</a>
             <a n:href=":Admin:Dashboard:eventsPersonsList" class="btn btn-outline-primary">Účastníci</a>
