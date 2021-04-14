@@ -141,7 +141,10 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
         $id = $this->ContentsManager->saveContent([
           "title" => $data->title,
           "user" => $this->getUser()->id,
-          "type" => "event"
+          "type" => "event",
+          "registration" => "event",
+          "reg_form" => 1,
+          "reg_part" => 4
         ]);
 
         $this->EventsManager->saveEventDate([
