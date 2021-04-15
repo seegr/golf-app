@@ -11,36 +11,36 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.js");
-/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(bootstrap__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _nette_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./nette.js */ "./app/CoreModule/assets/js/nette.js");
-/* harmony import */ var _nette_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_nette_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var jquery_ui_dist_jquery_ui_min_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jquery-ui-dist/jquery-ui.min.js */ "./node_modules/jquery-ui-dist/jquery-ui.min.js");
-/* harmony import */ var jquery_ui_dist_jquery_ui_min_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jquery_ui_dist_jquery_ui_min_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var ublaboo_datagrid_assets_datagrid_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ublaboo-datagrid/assets/datagrid.js */ "./node_modules/ublaboo-datagrid/assets/datagrid.js");
-/* harmony import */ var ublaboo_datagrid_assets_datagrid_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(ublaboo_datagrid_assets_datagrid_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var ublaboo_datagrid_assets_datagrid_spinners_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ublaboo-datagrid/assets/datagrid-spinners.js */ "./node_modules/ublaboo-datagrid/assets/datagrid-spinners.js");
-/* harmony import */ var ublaboo_datagrid_assets_datagrid_spinners_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(ublaboo_datagrid_assets_datagrid_spinners_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var ublaboo_datagrid_assets_datagrid_instant_url_refresh_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ublaboo-datagrid/assets/datagrid-instant-url-refresh.js */ "./node_modules/ublaboo-datagrid/assets/datagrid-instant-url-refresh.js");
-/* harmony import */ var ublaboo_datagrid_assets_datagrid_instant_url_refresh_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(ublaboo_datagrid_assets_datagrid_instant_url_refresh_js__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var selectize_dist_js_standalone_selectize_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! selectize/dist/js/standalone/selectize.js */ "./node_modules/selectize/dist/js/standalone/selectize.js");
-/* harmony import */ var selectize_dist_js_standalone_selectize_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(selectize_dist_js_standalone_selectize_js__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var pc_bootstrap4_datetimepicker_build_js_bootstrap_datetimepicker_min_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! pc-bootstrap4-datetimepicker/build/js/bootstrap-datetimepicker.min.js */ "./node_modules/pc-bootstrap4-datetimepicker/build/js/bootstrap-datetimepicker.min.js");
-/* harmony import */ var pc_bootstrap4_datetimepicker_build_js_bootstrap_datetimepicker_min_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(pc_bootstrap4_datetimepicker_build_js_bootstrap_datetimepicker_min_js__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var masonry_layout_dist_masonry_pkgd_min_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! masonry-layout/dist/masonry.pkgd.min.js */ "./node_modules/masonry-layout/dist/masonry.pkgd.min.js");
-/* harmony import */ var masonry_layout_dist_masonry_pkgd_min_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(masonry_layout_dist_masonry_pkgd_min_js__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var justifiedGallery_dist_js_jquery_justifiedGallery_min_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! justifiedGallery/dist/js/jquery.justifiedGallery.min.js */ "./node_modules/justifiedGallery/dist/js/jquery.justifiedGallery.min.js");
-/* harmony import */ var justifiedGallery_dist_js_jquery_justifiedGallery_min_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(justifiedGallery_dist_js_jquery_justifiedGallery_min_js__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var magnific_popup_dist_jquery_magnific_popup_min_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! magnific-popup/dist/jquery.magnific-popup.min.js */ "./node_modules/magnific-popup/dist/jquery.magnific-popup.min.js");
-/* harmony import */ var magnific_popup_dist_jquery_magnific_popup_min_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(magnific_popup_dist_jquery_magnific_popup_min_js__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var bootstrap_datepicker_dist_js_bootstrap_datepicker_min_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js */ "./node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js");
-/* harmony import */ var bootstrap_datepicker_dist_js_bootstrap_datepicker_min_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(bootstrap_datepicker_dist_js_bootstrap_datepicker_min_js__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var bootstrap_datepicker_js_locales_bootstrap_datepicker_cs_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! bootstrap-datepicker/js/locales/bootstrap-datepicker.cs.js */ "./node_modules/bootstrap-datepicker/js/locales/bootstrap-datepicker.cs.js");
-/* harmony import */ var bootstrap_datepicker_js_locales_bootstrap_datepicker_cs_js__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(bootstrap_datepicker_js_locales_bootstrap_datepicker_cs_js__WEBPACK_IMPORTED_MODULE_13__);
-/* harmony import */ var dropzone_dist_dropzone_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! dropzone/dist/dropzone.js */ "./node_modules/dropzone/dist/dropzone.js");
-/* harmony import */ var dropzone_dist_dropzone_js__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(dropzone_dist_dropzone_js__WEBPACK_IMPORTED_MODULE_14__);
-/* harmony import */ var jquery_mask_plugin_dist_jquery_mask_min_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! jquery-mask-plugin/dist/jquery.mask.min.js */ "./node_modules/jquery-mask-plugin/dist/jquery.mask.min.js");
-/* harmony import */ var jquery_mask_plugin_dist_jquery_mask_min_js__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(jquery_mask_plugin_dist_jquery_mask_min_js__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var _nette_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./nette.js */ "./app/CoreModule/assets/js/nette.js");
+/* harmony import */ var _nette_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_nette_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var jquery_ui_dist_jquery_ui_min_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jquery-ui-dist/jquery-ui.min.js */ "./node_modules/jquery-ui-dist/jquery-ui.min.js");
+/* harmony import */ var jquery_ui_dist_jquery_ui_min_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jquery_ui_dist_jquery_ui_min_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var ublaboo_datagrid_assets_datagrid_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ublaboo-datagrid/assets/datagrid.js */ "./node_modules/ublaboo-datagrid/assets/datagrid.js");
+/* harmony import */ var ublaboo_datagrid_assets_datagrid_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(ublaboo_datagrid_assets_datagrid_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var ublaboo_datagrid_assets_datagrid_spinners_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ublaboo-datagrid/assets/datagrid-spinners.js */ "./node_modules/ublaboo-datagrid/assets/datagrid-spinners.js");
+/* harmony import */ var ublaboo_datagrid_assets_datagrid_spinners_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(ublaboo_datagrid_assets_datagrid_spinners_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var ublaboo_datagrid_assets_datagrid_instant_url_refresh_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ublaboo-datagrid/assets/datagrid-instant-url-refresh.js */ "./node_modules/ublaboo-datagrid/assets/datagrid-instant-url-refresh.js");
+/* harmony import */ var ublaboo_datagrid_assets_datagrid_instant_url_refresh_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(ublaboo_datagrid_assets_datagrid_instant_url_refresh_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var selectize_dist_js_standalone_selectize_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! selectize/dist/js/standalone/selectize.js */ "./node_modules/selectize/dist/js/standalone/selectize.js");
+/* harmony import */ var selectize_dist_js_standalone_selectize_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(selectize_dist_js_standalone_selectize_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var pc_bootstrap4_datetimepicker_build_js_bootstrap_datetimepicker_min_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! pc-bootstrap4-datetimepicker/build/js/bootstrap-datetimepicker.min.js */ "./node_modules/pc-bootstrap4-datetimepicker/build/js/bootstrap-datetimepicker.min.js");
+/* harmony import */ var pc_bootstrap4_datetimepicker_build_js_bootstrap_datetimepicker_min_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(pc_bootstrap4_datetimepicker_build_js_bootstrap_datetimepicker_min_js__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var masonry_layout_dist_masonry_pkgd_min_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! masonry-layout/dist/masonry.pkgd.min.js */ "./node_modules/masonry-layout/dist/masonry.pkgd.min.js");
+/* harmony import */ var masonry_layout_dist_masonry_pkgd_min_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(masonry_layout_dist_masonry_pkgd_min_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var justifiedGallery_dist_js_jquery_justifiedGallery_min_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! justifiedGallery/dist/js/jquery.justifiedGallery.min.js */ "./node_modules/justifiedGallery/dist/js/jquery.justifiedGallery.min.js");
+/* harmony import */ var justifiedGallery_dist_js_jquery_justifiedGallery_min_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(justifiedGallery_dist_js_jquery_justifiedGallery_min_js__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var magnific_popup_dist_jquery_magnific_popup_min_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! magnific-popup/dist/jquery.magnific-popup.min.js */ "./node_modules/magnific-popup/dist/jquery.magnific-popup.min.js");
+/* harmony import */ var magnific_popup_dist_jquery_magnific_popup_min_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(magnific_popup_dist_jquery_magnific_popup_min_js__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var bootstrap_datepicker_dist_js_bootstrap_datepicker_min_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js */ "./node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js");
+/* harmony import */ var bootstrap_datepicker_dist_js_bootstrap_datepicker_min_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(bootstrap_datepicker_dist_js_bootstrap_datepicker_min_js__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var bootstrap_datepicker_js_locales_bootstrap_datepicker_cs_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! bootstrap-datepicker/js/locales/bootstrap-datepicker.cs.js */ "./node_modules/bootstrap-datepicker/js/locales/bootstrap-datepicker.cs.js");
+/* harmony import */ var bootstrap_datepicker_js_locales_bootstrap_datepicker_cs_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(bootstrap_datepicker_js_locales_bootstrap_datepicker_cs_js__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var dropzone_dist_dropzone_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! dropzone/dist/dropzone.js */ "./node_modules/dropzone/dist/dropzone.js");
+/* harmony import */ var dropzone_dist_dropzone_js__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(dropzone_dist_dropzone_js__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var jquery_mask_plugin_dist_jquery_mask_min_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! jquery-mask-plugin/dist/jquery.mask.min.js */ "./node_modules/jquery-mask-plugin/dist/jquery.mask.min.js");
+/* harmony import */ var jquery_mask_plugin_dist_jquery_mask_min_js__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(jquery_mask_plugin_dist_jquery_mask_min_js__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.js");
+/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(bootstrap__WEBPACK_IMPORTED_MODULE_15__);
 /* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./functions */ "./app/CoreModule/assets/js/functions.js");
 /* harmony import */ var CorePlugins_ajax_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! CorePlugins/ajax.js */ "./app/CoreModule/assets/js/plugins/ajax.js");
 /* harmony import */ var CorePlugins_Monty_navigation_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! CorePlugins/Monty/navigation.js */ "./app/CoreModule/assets/js/plugins/Monty/navigation.js");
@@ -55,7 +55,6 @@ __webpack_require__.r(__webpack_exports__);
 /* provided dependency */ var naja = __webpack_require__(/*! naja */ "./node_modules/naja/dist/Naja.esm.js")["default"];
 /* provided dependency */ var loaders = __webpack_require__(/*! ./app/CoreModule/assets/js/plugins/Monty/loaders.js */ "./app/CoreModule/assets/js/plugins/Monty/loaders.js");
 // import $ from "jquery";
-
 
 
 
@@ -206,11 +205,11 @@ const init = () => {
   console.log("init...");
   
   // $(".tooltip").remove();
-  $("[data-tooltip]").tooltip({
-      title: function() {
-        return $(this).data("tooltip");
-      }
-  });
+  // $("[data-tooltip]").tooltip({
+  //     title: function() {
+  //       return $(this).data("tooltip");
+  //     }
+  // });
   
   $("select:not([multiple]):visible").not(".buttons-select").not(".not-selectize").not(".no-selectize").not(".datagrid select").selectize({
     plugins: ['remove_button']
@@ -297,9 +296,17 @@ const init = () => {
   });
 
   //** bs tooltips
-  $(".bs-tooltip-top").remove();
+  // $(".bs-tooltip-top").remove();
+  $("[data-toggle='popover']").popover({
+    html: true,
+    // trigger: "hover"
+  });
+  // $(".bs-tooltip-top").remove();
   $("[data-toggle='tooltip']").tooltip({
-    html: true
+    html: true,
+    // placement: "top",
+    // trigger: "click"
+    // trigger: "hover"
   });
 
 $(document).on("keydown", "form.prevent-enter :input", function(e) {

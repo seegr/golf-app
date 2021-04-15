@@ -2,11 +2,11 @@ export const init = () => {
   console.log("init...");
   
   // $(".tooltip").remove();
-  $("[data-tooltip]").tooltip({
-      title: function() {
-        return $(this).data("tooltip");
-      }
-  });
+  // $("[data-tooltip]").tooltip({
+  //     title: function() {
+  //       return $(this).data("tooltip");
+  //     }
+  // });
   
   $("select:not([multiple]):visible").not(".buttons-select").not(".not-selectize").not(".no-selectize").not(".datagrid select").selectize({
     plugins: ['remove_button']
@@ -93,9 +93,17 @@ export const init = () => {
   });
 
   //** bs tooltips
-  $(".bs-tooltip-top").remove();
+  // $(".bs-tooltip-top").remove();
+  $("[data-toggle='popover']").popover({
+    html: true,
+    // trigger: "hover"
+  });
+  // $(".bs-tooltip-top").remove();
   $("[data-toggle='tooltip']").tooltip({
-    html: true
+    html: true,
+    // placement: "top",
+    // trigger: "click"
+    // trigger: "hover"
   });
 
 $(document).on("keydown", "form.prevent-enter :input", function(e) {

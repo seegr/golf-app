@@ -406,7 +406,7 @@ class BasePresenter extends Nette\Application\UI\Presenter
 	public function checkPermissions() {
 		$user = $this->getUser();
 
-		if ($this->name != "Core:Front:Users" && !in_array($this->action, ["login", "relogin", "logout"])) {
+		if ($this->name != "Core:Front:Users" && !in_array($this->action, ["login", "loginForm", "relogin", "logout"])) {
 			// \Tracy\Debugger::barDump("storing backlink");
 			$this->storeBacklinkRequest();
 		}

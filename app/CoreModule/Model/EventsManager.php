@@ -268,9 +268,13 @@ class EventsManager extends ContentsManager
     return $this->getEventsPersons()->where("date", $id)->select("record.*");
   }
 
-  public function getEventPersons($id): Selection
+  public function getEventPersons($id, $date = null): Selection
   {
-    return $this->getEventsPersons()->where("event", $id)->select("record.*");
+    $sel = $this->getEventsPersons()->where("event", $id)->select("record.*");
+
+    if ($date) $sel->where("date", $date);
+
+    return $sel;
   }
 
   public function getEventPerson($id): ActiveRow
@@ -291,12 +295,12 @@ class EventsManager extends ContentsManager
     return $record;
   }
 
-	public function getEventRegSummary($id, $forPublic = false): ArrayHash
+	public function getEventRegSummary($id, $date = null, $forPublic = false): ArrayHash
   {
     $event = $this->getEvent($id);
 		\Tracy\Debugger::barDump($id, "id");
 
-		$all = $this->getEventPersons($id)->where("record.active", true);
+		$all = $this->getEventPersons($id, $date)->where("record.active", true);
 		// \Tracy\Debugger::barDump($all, "submitters");
 
 		$part = (clone $all)->where("role", "part");

@@ -1,7 +1,5 @@
 // import $ from "jquery";
 import moment from "moment";
-import "bootstrap";
-
 import "./nette.js";
 import "jquery-ui-dist/jquery-ui.min.js";
 import "ublaboo-datagrid/assets/datagrid.js";
@@ -16,6 +14,7 @@ import "bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js";
 import "bootstrap-datepicker/js/locales/bootstrap-datepicker.cs.js";
 import "dropzone/dist/dropzone.js";
 import "jquery-mask-plugin/dist/jquery.mask.min.js";
+import "bootstrap";
 import { init } from "./functions";
 import "CorePlugins/ajax.js";
 import "CorePlugins/Monty/navigation.js";

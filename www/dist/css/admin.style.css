@@ -21475,18 +21475,6 @@ table .fit-content {
   text-transform: uppercase;
 }
 
-.tooltip.show {
-  opacity: 1;
-}
-
-.tooltip-inner {
-  color: #333;
-  background-color: rgba(255, 255, 255, 0.95);
-  border: 1px solid #C3E06C;
-  text-align: left;
-  box-shadow: 0px 3px 10px -4px rgba(0, 0, 0, 0.35);
-}
-
 .table td.fit, .table th.fit {
   white-space: nowrap;
   width: 1%;
@@ -21658,10 +21646,6 @@ a.disabled {
 
 label {
   margin-bottom: 0.2em;
-}
-
-label[data-toggle=tooltip]:hover {
-  color: var(--primary);
 }
 
 .interval-picker[readonly] {
@@ -22085,16 +22069,6 @@ legend {
 .monty-navigation.navigation-vertical .item-wrap.active > .item-link:before {
   color: black;
 }
-label[data-toggle=tooltip]:after, .tip[data-toggle=tooltip]:after, fieldset[data-toggle=tooltip]:after, legend[data-toggle=tooltip]:after {
-  content: "";
-  font-family: "Font Awesome 5 Pro";
-  font-style: normal;
-  font-weight: 900;
-  text-decoration: inherit;
-  color: var(--primary);
-  padding-left: 4px;
-}
-
 .noselect {
   -webkit-touch-callout: none;
   /* iOS Safari */
@@ -22318,6 +22292,10 @@ body.rents.ordersList .datagrid, body.evp.events-list .datagrid {
 }
 .datagrid-personsList tr.unactive td:not(.col-action) {
   text-decoration: line-through;
+}
+
+.popover-header {
+  color: black;
 }
 
 body.mfp-zoom-out-cur {

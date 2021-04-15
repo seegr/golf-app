@@ -21,7 +21,7 @@ class EventsPersonsPresenter extends AdminPresenter
   /** @var \App\CoreModule\FormsModule\Model\FormsManager @inject */
   public $FormsManager;
 
-  /** @persistent */
+  /** @persistentx */
   public $id;
 
   /** @persistent */
@@ -45,23 +45,26 @@ class EventsPersonsPresenter extends AdminPresenter
       bdump($date, "date");
       $template->date = $date;
       // $persons = $this->ContentsManager->getEventDatePersons($date->id);
-      $persons = $this->FormsManager->getFormRecords($event->reg_form, true, [
+
+      $related = [
         ":contents_events_persons.event" => $id,
         ":contents_events_persons.date" => $date
-      ]);
+      ];
     } else {
       // $persons = $this->ContentsManager->getEventPersons($id);
-      $persons = $this->FormsManager->getFormRecords($event->reg_form, true, [
+      $related = [
         ":contents_events_persons.event" => $id
-      ]);
+      ];
     }
 
-    $template->regSummary = $this->EventsManager->getEventRegSummary($id);
+    $persons = $this->FormsManager->getFormRecords($event->reg_form, true, $related, "active DESC, time ASC");
+
+    $template->regSummary = $this->EventsManager->getEventRegSummary($id, $date);
 
     $list->setDataSource($persons);
   }
 
-  public function actionPersonForm(int $eventId = null, int $id): void
+  public function actionPersonForm(int $eventId = null, int $id = null, $date = null): void
   {
     $template = $this->template;
     $form = $this["personForm"];
@@ -78,6 +81,7 @@ class EventsPersonsPresenter extends AdminPresenter
     }
 
     $template->event = $event;
+    $template->date = $date;
     $template->formComponent = "personForm";
   }
   
@@ -131,6 +135,8 @@ class EventsPersonsPresenter extends AdminPresenter
     // $list->addExportCsv("Export účastníků (CSV)", "ucastnici.csv", "windows-1250")
     // ->setClass("btn btn-primary");
 
+    $list->setRefreshUrl(false);
+
     return $list;
   }
 
@@ -167,10 +173,12 @@ class EventsPersonsPresenter extends AdminPresenter
 
     $f->onSuccess[] = function($f, $v) use ($form, $event) {
       bdump($v);
+      bdump($this->getParameters(), "pars");
       $recId = $this->FormsManager->saveRecord($form->id, $v);
 
       if (empty($v->id)) {
-        $this->EventsManager->insertEventPerson($event->id, $recId, "part");
+        $date = $this->getParameter("date");
+        $this->EventsManager->insertEventPerson($event->id, $recId, "part", $date);
       }
 
       $this->redirect("eventPersonsList", ["id" => $event->id]);

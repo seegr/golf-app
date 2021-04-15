@@ -53,6 +53,16 @@ class Html extends \Nette\Utils\Html {
 		return $this;
 	}
 
+	public function setPopover($title = null, $content) {
+		$this->addAttributes([
+			"data-toggle" => "popover",
+			"data-content" => $content,
+			"title" => $title
+		]);
+
+		return $this;
+	}
+
 	public function setDisabled($state = true) {
 		$this->class[] = "disabled";
 

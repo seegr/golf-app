@@ -29,10 +29,12 @@ class Form extends Nette\Application\UI\Form
 
 		Container::extensionMethod('addTel', function (Container $form, string $name, string $label = null) {
 			$input = $form->addText($name, $label)
-					->addRule(FormValidators::PHONE_FORMAT, "Nesprávný formát telefonního čísla", $form[$name])
-					->setDefaultValue("+420");
+					->addRule(FormValidators::PHONE_FORMAT, "Nesprávný formát telefonního čísla", $form[$name]);
+					// ->setDefaultValue("+420");
 			$control = $input->getControl();
-			$input->getControlPrototype()->addClass("tel-mask");
+			$input->getControlPrototype()
+				->addClass("tel-mask")
+				->addAttributes(["placeholder" => "+420 ### ### ###"]);
 			return $input;
 		});
 		Container::extensionMethod('addUrl', function (Container $form, string $name, string $label = null) {
@@ -40,7 +42,6 @@ class Form extends Nette\Application\UI\Form
 				->addRule(FormValidators::IS_URL_VALID, "Nesprávný formát URL odkazu", $form[$name])
 				->addRule(Form::URL) //** adds http/https before
 				->setHtmlType("url");
-				// ->addRule(Form::URL, "Nesprávný formát url", $form[$name]);
 			return $input;
 		});
 		Container::extensionMethod('addDate', function (Container $form, string $name, string $label = null) {
@@ -68,15 +69,12 @@ class Form extends Nette\Application\UI\Form
 	public function beforeRender()
 	{
 		parent::beforeRender();
-		// \Tracy\Debugger::barDump("tralal");
 		$this->renderAutocomplete();
 		$this->setGroupsInput();
 
-		if ($this->ajax) {
-			$formEl = $this->getElementPrototype();
-			// $formEl->class[] = "ajax";
-			// $formEl->setAttribute("data-naja-force-redirect", true);
-		}
+		// if ($this->ajax) {
+		// 	$formEl = $this->getElementPrototype();
+		// }
 	}
 
 
@@ -180,51 +178,11 @@ class Form extends Nette\Application\UI\Form
 		return $this[$name] = new UploadControl($label, true);
 	}
 
-	// public function validateMaxPostSize(): void
+	// public function setControlsDefaults(): void
 	// {
-	// 	\Tracy\Debugger::barDump("validateMaxPostSize...");
-	// 	if (!$this->isSubmitted() || !$this->isMethod('post') || empty($_SERVER['CONTENT_LENGTH'])) {
-	// 		return;
+	// 	foreach ($this->getTextInputs() as $control) {
+	// 		\Tracy\Debugger::barDump($control, "control");
 	// 	}
-	// 	$maxSize = Nette\Forms\Helpers::iniGetSize('post_max_size');
-	// 	if ($maxSize > 0 && $maxSize < $_SERVER['CONTENT_LENGTH']) {
-	// 		$this->addError(sprintf(Nette\Forms\Validator::$messages[self::MAX_FILE_SIZE], $maxSize));
-	// 	}
-	// }
-
-	// public function setValues($data, bool $erase = false)
-	// {
-	// 	\Tracy\Debugger::barDump($data, "form data");
-
-	// 	if ($data instanceof \Traversable) {
-	// 		$values = iterator_to_array($data);
-
-	// 	} elseif (is_object($data) || is_array($data) || $data === null) {
-	// 		$values = (array) $data;
-
-	// 	} else {
-	// 		throw new Nette\InvalidArgumentException(sprintf('First parameter must be an array or object, %s given.', gettype($data)));
-	// 	}
-
-	// 	foreach ($this->getComponents() as $name => $control) {
-	// 		if ($control instanceof IControl) {
-	// 			if (array_key_exists($name, $values)) {
-	// 				$control->setValue($values[$name]);
-
-	// 			} elseif ($erase) {
-	// 				$control->setValue(null);
-	// 			}
-
-	// 		} elseif ($control instanceof self) {
-	// 			if (array_key_exists($name, $values)) {
-	// 				$control->setValues($values[$name], $erase);
-
-	// 			} elseif ($erase) {
-	// 				$control->setValues([], $erase);
-	// 			}
-	// 		}
-	// 	}
-	// 	return $this;
 	// }
 
 }

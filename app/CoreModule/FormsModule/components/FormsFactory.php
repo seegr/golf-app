@@ -122,13 +122,10 @@ class FormsFactory extends \App\CoreModule\Components\BaseFormsFactory {
 
 			// \Tracy\Debugger::barDump($type, "type");
 			switch ($type->short) {
-				case "date":
-					$control->getControlPrototype()->addClass("datepicker");
-					break;
-
 				case "tel":
-					$control->addRule(FormValidators::PHONE_FORMAT, "Nesprávný formát telefonního čísla", $form[$field->name]);
-					$control->getControlPrototype()->addAttributes(["placeholder" => "+420 ---------"]);
+						if ($control->isRequired()) {
+							$control->setDefaultValue("+420");
+						}
 					break;
 			}
 		}
@@ -193,8 +190,8 @@ class FormsFactory extends \App\CoreModule\Components\BaseFormsFactory {
 				break;
 			}
 		}
-		$list->addColumnDateTime("edited", "Upraveno")->setFormat("j.n.Y H:i:s")->setFitContent()->setSortable();
-		$list->addColumnDateTime("time", "Vloženo")->setFormat("j.n.Y H:i:s")->setFitContent()->setSortable();
+		$list->addColumnDateTime("edited", "Upraveno")->setFormat("j.n.Y H:i:s")->setFitContent();
+		$list->addColumnDateTime("time", "Vloženo")->setFormat("j.n.Y H:i:s")->setFitContent();
 
 		// $list->addAction("edit", "", ":Forms:Admin:Forms:formRecord");
 
