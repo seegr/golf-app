@@ -5,9 +5,14 @@ namespace App\CoreModule\AdminModule\Presenters;
 use Nette\Utils\Json;
 use Nette\Utils\ArrayHash;
 use Nette\Utils\Strings;
+use App\CoreModule\FormsModule\Model\FormsManager;
 
 
 class MaintenancePresenter extends AdminPresenter {
+
+  /** @inject */
+  public FormsManager $FormsManager;
+
 
 	public function beforeRender(): void
 	{
@@ -90,5 +95,16 @@ class MaintenancePresenter extends AdminPresenter {
 
 		exit();
 	}
+
+  public function redefineFormRecordsCols(): void {
+    foreach ($this->FormsManager->getFormsRecords() as $rec) {
+      $data = $rec->data;
+      $data = str_replace('"jmeno":', '"firstname":', $data);
+      $data = str_replace('"prijmeni":', '"lastname":', $data);
+      bdump($data, "data replaced");
+      $rec->update(['data' => $data]);
+    }
+    exit();
+  }
 
 }

@@ -62,8 +62,8 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
     
     $list->setDataSource($persons);
     $list->addColumnLink("course", "Kurz", ":Core:Admin:Contents:contentForm")->setSortable();
-    $list->addColumnText("jmeno", "Jméno")->setSortable();
-    $list->addColumnText("prijmeni", "Přijmení")->setSortable();
+    $list->addColumnText("firstname", "Jméno")->setSortable();
+    $list->addColumnText("lastname", "Přijmení")->setSortable();
     $list->addColumnText("e_mail", "E-mail")->setSortable();
     $list->addColumnText("telefon", "Telefon")->setSortable();
     $list->addColumnText("email_odeslan", "E-mail odeslán")->setSortable();

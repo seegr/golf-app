@@ -18,8 +18,8 @@ class Bootstrap
 		$tempDir = __DIR__ . "/../temp";
 		$cacheDir = __DIR__ . "/../temp/cache";
 		
-		if (!file_exists($sessionDir)) mkdir($sessionDir);
-		if (!file_exists($logDir)) mkdir($logDir);
+		// if (!file_exists($sessionDir)) mkdir($sessionDir);
+		// if (!file_exists($logDir)) mkdir($logDir);
 
 		// $configurator->setDebugMode(true); // enable for your remote IP
 		$configurator->enableTracy(__DIR__ . '/../log');

@@ -92,6 +92,7 @@ class EventsPersonsPresenter extends AdminPresenter
     $event = $this->EventsManager->getEvent($eventId);
 
     $list = $this->FormsFormsFactory->formRecordsList($event->reg_form);
+    $list->moveColumnStart("lastname");
 
     $list->setRowCallback(function($i, $tr) {
       if (!$i["active"]) {

@@ -1,7 +1,7 @@
 {block content}
   <h1 n:block="title">
     {ifset $person}
-      {$person->jmeno} {$person->prijmeni}
+      {$person->firstname} {$person->lastname}
     {else}
       Nový účastník
     {/ifset}

@@ -346,7 +346,7 @@ class FormsManager extends \App\CoreModule\Model\BaseManager {
 	public function getFormNameFields($id) {
 		$fields = [];
 		foreach ($this->getFormFields($id)->order("order") as $field) {
-			if (in_array($field->name, ["jmeno", "krestni_jmeno", "prijmeni"])) {
+			if (in_array($field->name, ["firstname", "lastname"])) {
 				$fields[] = $field->name;
 			}
 		}
