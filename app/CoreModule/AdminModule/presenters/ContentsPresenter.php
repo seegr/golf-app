@@ -8,6 +8,7 @@ use Monty\DataGrid;
 use Ublaboo\DataGrid\Column\Action\Confirmation\StringConfirmation;
 use Monty\Html;
 use Monty\Modal;
+use Nette\Utils\Strings;
 
 
 class ContentsPresenter extends AdminPresenter {
@@ -424,25 +425,45 @@ class ContentsPresenter extends AdminPresenter {
 		// 	$list->reload();
 		// };
 		
+		$list->addGroupButtonAction("Export CSV")->onClick[] = function($ids) use ($list) {
+			// $this->ContentsManager->getContents()->where("id", $ids)->delete();
+			$contents = $this->ContentsManager->getContents()->where("id", $ids);
+
+			$spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+			$i = 0;
+			foreach ($contents as $cont) {
+				if ($i) {
+					$spreadsheet->createSheet();
+					$spreadsheet->setActiveSheetIndex($i);
+				}
+
+				$spreadsheet->getActiveSheet()->setTitle(Strings::webalize($cont->title));
+
+				$i++;
+			}
+
+			$writer = new \PhpOffice\PhpSpreadsheet\Writer\Csv($spreadsheet);
+			// $writer->setUseBOM(false);
+			// $writer->setOutputEncoding('utf-8');
+			$this->getHttpResponse()->setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+			$this->getHttpResponse()->setHeader("Content-Disposition", "attachment; filename=contents.csv");
+			$writer->save('php://output');
+			// $writer->save("contents.csv");
+
+
+			// $this->redrawControl();
+		};
+
 		$list->addGroupButtonAction("Smazat")->onClick[] = function($ids) use ($list) {
 			$this->ContentsManager->getContents()->where("id", $ids)->delete();
 			$list->reload();
 		};
 		$groupCollection = $list->getGroupActionCollection();
-		bdump($groupCollection, "groupCollection");
 		$delBtn = $groupCollection->getGroupAction("Smazat");
-		bdump($delBtn, "delBtn");
 		$delBtn->setAttribute("data-datagrid-confirm", "Opravdu smazat?");
-		$delBtn->setClass("btn btn-sm btn-success ajax");
-		// foreach ($groupButton->get as $gBtn) {
-		// 	bdump($gBtn, "gBtn");
-		// 	$gBtn->addAttributes([
-		// 		"data-confirm" => "Jo?"
-		// 	]);
-		// }
+		$delBtn->setClass("btn btn-sm btn-danger ajax");
 
 		$list->setDefaultSort($type == "event" ? ["interval" => "ASC"] : ["created" => "DESC"]);
-
 		$list->setStrictSessionFilterValues(false);
 		$list->setRememberState(true);
 
