@@ -2,11 +2,12 @@
 
 namespace App\AdminModule\Presenters;
 
-use Monty\Form;
 use Monty\DataGrid;
 use League\Csv\Writer;
 use Monty\Helper;
+use Monty\Form;
 use Nette\Utils\ArrayHash;
+use Nette\Utils\Strings;
 
 
 class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPresenter
@@ -94,23 +95,43 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
     return $f;
   }
 
-  public function handleExportPersons()
+  public function createComponentExportEventsForm()
   {
-    $csv = Writer::createFromFileObject(new \SplTempFileObject());
-    
-    $records = $this->FormsManager->getFormsRecords();
-    $records = $this->FormsManager->fetchFormRecords($records);
+    $f = new Form;
 
-    bdump($records);
+    $f->addMultiSelect('courses', 'Kurzy', $this->EventsManager->getEvents()->fetchPairs('id', 'title'))->setRequired();
+    $f->addSubmit('export');
 
-    $csv->insertAll($records);
+    $f->onSuccess[] = function($f, $v) {
+      $contents = $this->ContentsManager->getContents()->where("id", $v->courses);
+      $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+      $i = 0;
+      foreach ($contents as $cont) {
+        if ($i) {
+          $spreadsheet->createSheet();
+          $spreadsheet->setActiveSheetIndex($i);
+        }
+  
+        $title = Strings::webalize($cont->title);
+        bdump($title, 'title');
+        $spreadsheet->getActiveSheet()->setTitle($title);
+  
+        $i++;
+      }
 
-    // $csv->output("persons.csv");
-    // die;
-  }
+      bdump($spreadsheet, 'spreadsheet');
+  
+      $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+      bdump($writer, 'writer');
+      // $writer->setOutputEncoding('utf-8');
+      $this->getHttpResponse()->setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+      $this->getHttpResponse()->setHeader("Content-Disposition", "attachment; filename=kurzy.xlsx");
+      $writer->save('php://output');
+      // $writer->save("contents.csv");
+      exit();
+    };
 
-  public function actionImportCourses()
-  {
+    return $f;
   }
 
 	public function createComponentImportEventsForm() {

@@ -448,39 +448,17 @@ class ContentsPresenter extends AdminPresenter {
 		return $list;
 	}
 
-  public function actionExportContents()
-  {
-    $contSess = $this->getSession('contents');
-    $ids = $contSess->export;
-    bdump($ids);
-    $contents = $this->ContentsManager->getContents()->where("id", $ids);
+  // public function actionExportContents()
+  // {
+  //   $contSess = $this->getSession('contents');
+  //   $ids = $contSess->export;
+  //   bdump($ids);
 
-    $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
-    $i = 0;
-    foreach ($contents as $cont) {
-      if ($i) {
-        $spreadsheet->createSheet();
-        $spreadsheet->setActiveSheetIndex($i);
-      }
+  //   // $this->sendResponse();
 
-      $spreadsheet->getActiveSheet()->setTitle(Strings::webalize($cont->title));
-
-      $i++;
-    }
-
-    $writer = new \PhpOffice\PhpSpreadsheet\Writer\Csv($spreadsheet);
-    // $writer->setUseBOM(false);
-    // $writer->setOutputEncoding('utf-8');
-    $this->getHttpResponse()->setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-    $this->getHttpResponse()->setHeader("Content-Disposition", "attachment; filename=contents.csv");
-    $writer->save('php://output');
-    // $writer->save("contents.csv");
-
-    // $this->sendResponse();
-
-    // $this->redrawControl();
-    exit();
-  }
+  //   // $this->redrawControl();
+  //   exit();
+  // }
 
 	public function createComponentEventDateFormModal()
 	{

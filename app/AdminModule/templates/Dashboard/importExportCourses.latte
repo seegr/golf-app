@@ -1,6 +1,18 @@
 {block title}Import kurzů (excel){/block}
 
 {block content}
+  <fieldset class='mb-3'>
+    <legend><h2>Export</h2></legend>
+    {form exportEventsForm}
+      <div class="form-group">
+        {label courses}
+        {input courses}
+      </div>
+      <button n:name='export' class='btn btn-success'>Exportovat</button>
+    {/form}
+  </fieldset>
+  <fieldset>
+    <legend><h2>Import</h2></legend>
     {form importEventsForm}
         <div class="form-group">
           {label file}
@@ -14,4 +26,6 @@
         <img src="{$basePath}/src/import-example.jpg" alt="přiklad import excel">
       </div>
     </fieldset>
+  </fieldset>
+
 {/block}
