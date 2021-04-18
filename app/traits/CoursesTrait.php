@@ -70,6 +70,7 @@ trait CoursesTrait
                     if ($ev->start->format("N") == $day && $ev->start->format("H:i") >= $time && $ev->start->format("H:i") < $next) {
                         if (!in_array($ev->content, $coursesParents)) {
                             $evData = $ev->toArray();
+                            $evData["summary"] = $this->EventsManager->getEventRegSummary($ev->content);
                             $events[$time][$day][] = $evData;
                             $coursesParents[] = $ev->content;
                         }

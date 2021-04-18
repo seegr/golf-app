@@ -333,6 +333,7 @@ class EventsManager extends ContentsManager
       "part" => $part,
       "sub" => $sub,
       "allCount" => $allCount,
+      "personsCount" => $allCount,
       "partCount" => $partCount,
       "subCount" => $subCount,
       "partPercent" => $spots ? ($partCount / $spots) * 100 : null,
