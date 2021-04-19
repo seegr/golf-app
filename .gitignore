@@ -1,4 +1,4 @@
-app/config/config.local.neon
+app/config/local.neon
 vendor/
 node_modules/
 www/node_modules/
