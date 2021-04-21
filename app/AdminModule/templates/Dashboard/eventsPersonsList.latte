@@ -3,7 +3,14 @@
   <div class="mb-3">
     {form personSearchForm}
       <div class="input-group">
-        {input text}
+        <div class="row">
+          <div class="col-6">
+            {input text, placeholder => "Prohledat účastník..."}
+          </div>
+          <div class="col-6">
+            {input lektor, placeholder => "Lektor..."}
+          </div>
+        </div>
         <div class="input-group-append">
           <button n:name="submit" class='btn btn-success'>Hledat</button>
         </div>

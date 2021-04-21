@@ -18,6 +18,12 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
   /** @var \App\CoreModule\FormsModule\Model\FormsManager @inject */
   public $FormsManager;
 
+  /** @persistent */
+  public $search;
+
+  /** @persistent */
+  public $lektor;
+
 
   public function startup(): void
   {
@@ -40,13 +46,20 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
   {
     $persons = $this->FormsManager->getFormsRecords()
       ->where(":contents_events_persons.event IS NOT NULL")
-      ->select("forms_records.*, :contents_events_persons.event.title AS course");
+      ->select("forms_records.*, :contents_events_persons.event.title AS course, :contents_events_persons.event AS event, :contents_events_persons.event.custom_fields AS custom_fields");
 
     $search = $this->getParameter("text");
+    $lektor = $this->getParameter('lektor');
+
     if ($search) {
       $persons->whereOr([
         "data LIKE ?" => "%$search%",
-        ":contents_events_persons.event.title LIKE ?" => "%$search%",
+        ":contents_events_persons.event.title LIKE ?" => "%$search%"
+      ]);
+    }
+    if ($lektor) {
+      $persons->whereOr([
+        "LOWER(:contents_events_persons.event.custom_fields) LIKE ?" => "%".strtolower($lektor)."%"
       ]);
     }
     $persons = $this->FormsManager->fetchFormRecords($persons);
@@ -60,9 +73,16 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
         $tr->addClass("unactive");
       }
     });
+    $list->setStrictSessionFilterValues(false);
+    $list->setRememberState(false);
     
     $list->setDataSource($persons);
-    $list->addColumnLink("course", "Kurz", ":Core:Admin:Contents:contentForm")->setSortable();
+    $list->addColumnLink("course", "Kurz", ":Core:Admin:Contents:contentForm", null, ['id' => 'event'])->setSortable();
+    $list->addColumnText("lector", "Lektor")->setRenderer(function($i) {
+      $fields = json_decode($i['custom_fields']);
+      bdump($fields);
+      return !empty($fields->lektor) ? $fields->lektor : null;
+    });
     $list->addColumnText("firstname", "Jméno")->setSortable();
     $list->addColumnText("lastname", "Přijmení")->setSortable();
     $list->addColumnText("e_mail", "E-mail")->setSortable();
@@ -89,6 +109,7 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
     $f = $this->FormsFactory->newForm();
 
     $f->addText("text");
+    $f->addText("lektor");
     $f->addSubmit("submit");
     $f->setMethod("get");
 
@@ -178,7 +199,7 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
 			}
 
 			// $this->flashMessage("Importováno!");
-			$this->redirect(":Core:Admin:Contents:contentsList", ["type" => "event"]);
+			$this->redirect(":Core:Admin:ContentsList:contentsList", ["type" => "event"]);
 		};
 
 		return $f;

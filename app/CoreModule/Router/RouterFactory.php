@@ -40,7 +40,7 @@ class RouterFactory implements App\CoreModule\Router\IRouterFactory
 		$router->addRoute("admin", "Core:Admin:Dashboard:default");
 		$router->withModule("Core:Admin")->withPath('admin')
 			->addRoute("test", "Custom:test")
-			->addRoute("obsah-vypis/<type>", "Contents:contentsList")
+			->addRoute("obsah-vypis/<type>", "ContentsList:contentsList")
 			->addRoute("obsah/<id>", "Contents:contentForm")
 			->addRoute("uzivatele", "Users:usersList")
 			->addRoute("uzivatel[/<id>]", "Users:userForm")
