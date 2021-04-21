@@ -66,6 +66,10 @@ class ContentsListPresenter extends AdminPresenter {
         } else {
           $events = $this->EventsManager->getEvents();
         }
+        // $events->alias("contents", "c");
+        $events->select("contents.*");
+        $events->select("(SELECT COUNT(*) FROM contents_events_persons WHERE event = contents.id) AS persons");
+        // bdump($events->fetchAll());
 	    	$list->setDataSource($events);
     	} else {
 			$list->setDataSource($this->ContentsManager->getContents($type));
@@ -113,7 +117,7 @@ class ContentsListPresenter extends AdminPresenter {
           bdump($sort, "reset sort");
   
           return $data->order(":contents_events_dates.start $sort");
-      });
+        });
         $list->addColumnText("persons", "Účastníků")->setRenderer(function($i) {
           if (!$i->registration) return;
   
@@ -165,7 +169,14 @@ class ContentsListPresenter extends AdminPresenter {
             return $el;
           }
   
-        })->setAlign("center");
+        })->setAlign("center")->setSortable()->setSortableCallback(function($data, $sort) {
+          \Tracy\Debugger::barDump($data, "data");
+          \Tracy\Debugger::barDump($sort, "sort");
+          $sort = reset($sort);
+          // bdump($sort, "reset sort");
+          
+          return $data->order("persons $sort");
+      });;
       }
       $list->addColumnDateTime("created", "Vytvořeno")->setFormat("j.n.Y H:i")->setSortable();
       // $list->addAction("edit", "", "contentForm")->setClass("fas fa-pencil btn btn-warning");
