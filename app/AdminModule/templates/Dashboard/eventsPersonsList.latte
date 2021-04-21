@@ -2,16 +2,14 @@
   {* <a n:href="exportPersons!" class="btn btn-primary">Exportovat účastníky</a> *}
   <div class="mb-3">
     {form personSearchForm}
-      <div class="input-group">
-        <div class="row">
-          <div class="col-6">
-            {input text, placeholder => "Prohledat účastník..."}
-          </div>
-          <div class="col-6">
-            {input lektor, placeholder => "Lektor..."}
-          </div>
+      <div class="row">
+        <div class="col-4">
+          {input text, placeholder => "Prohledat účastníky..."}
         </div>
-        <div class="input-group-append">
+        <div class="col-4">
+          {input lektor, placeholder => "Lektor..."}
+        </div>
+        <div class="col-4">
           <button n:name="submit" class='btn btn-success'>Hledat</button>
         </div>
       </div>
