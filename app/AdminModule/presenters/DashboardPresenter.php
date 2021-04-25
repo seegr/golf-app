@@ -45,8 +45,12 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
   public function createComponentAllPersonsList()
   {
     $persons = $this->FormsManager->getFormsRecords()
+      ->alias(":contents_events_persons.event", "e")
       ->where(":contents_events_persons.event IS NOT NULL")
+      ->where(":contents_events_persons.event.archived IS NULL OR :contents_events_persons.event.archived != ?", 1)
+      ->where(':contents_events_persons.state.short != ?', 'archived')
       ->select("forms_records.*, :contents_events_persons.event.title AS course, :contents_events_persons.event AS event, :contents_events_persons.event.custom_fields AS custom_fields");
+      // ->select("(SELECT MIN(start) FROM contents_events_dates WHERE event = e.id) AS begin");
 
     $search = $this->getParameter("text");
     $lektor = $this->getParameter('lektor');
@@ -63,7 +67,7 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
       ]);
     }
     $persons = $this->FormsManager->fetchFormRecords($persons);
-    bdump($persons, "persons");
+    // bdump($persons, "persons");
 
     $list = new DataGrid;
 
@@ -78,6 +82,23 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
     
     $list->setDataSource($persons);
     $list->addColumnLink("course", "Kurz", ":Core:Admin:Contents:contentForm", null, ['id' => 'event'])->setSortable();
+    $list->addColumnDateTime("start", "Začátek")->setRenderer(function($i) {
+      $date = $this->EventsManager->getEventDates($i)->order("start ASC")->fetch();
+      if (!$date) return;
+
+      return $date->start->format(self::DATETIME_FORMAT);
+    })
+    ->setFitContent();
+    // ->setSortable();
+    // ->setSortableCallback(function($data, $sort) {
+    //   \Tracy\Debugger::barDump($data, "data");
+    //   \Tracy\Debugger::barDump($sort, "sort");
+    //   $sort = reset($sort);
+    //   bdump($sort, "reset sort");
+
+    //   $data = Helper::sortAssocArray($data, "start", "asc");
+    //   return $data;
+    // });
     $list->addColumnText("lector", "Lektor")->setRenderer(function($i) {
       $fields = json_decode($i['custom_fields']);
       bdump($fields);
@@ -97,8 +118,7 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
     //   "personId" => "id"
     // ])->setClass(function($i) {return $i["active"] ? "fad fa-check btn btn-success ajax" : "fad fa-check btn btn-grey ajax";});
 
-    bdump(mb_list_encodings(), "encoding");
-    $list->addExportCsv("Export účastníků (CSV)", "ucastnici.csv", "ISO-8859-2")
+    $list->addExportCsv("Export účastníků (CSV)", "ucastnici.csv", "windows-1250")
       ->setClass("btn btn-primary");
 
     return $list;
