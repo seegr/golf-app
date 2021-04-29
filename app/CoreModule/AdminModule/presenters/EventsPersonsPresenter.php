@@ -44,20 +44,9 @@ class EventsPersonsPresenter extends AdminPresenter
       $date = $this->EventsManager->getEventDate($date);
       bdump($date, "date");
       $template->date = $date;
-      // $persons = $this->ContentsManager->getEventDatePersons($date->id);
-
-      $related = [
-        ":contents_events_persons.event" => $id,
-        ":contents_events_persons.date" => $date
-      ];
-    } else {
-      // $persons = $this->ContentsManager->getEventPersons($id);
-      $related = [
-        ":contents_events_persons.event" => $id
-      ];
     }
 
-    $persons = $this->FormsManager->getFormRecords($event->reg_form, true, $related, "active DESC, time ASC");
+    $persons = $this->getEventPersons($id, $date);
 
     $template->regSummary = $this->EventsManager->getEventRegSummary($id, $date);
 

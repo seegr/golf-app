@@ -398,7 +398,7 @@ class FormsManager extends \App\CoreModule\Model\BaseManager {
 	}
 
 	public function fetchFormRecords($records, $formId = null) {
-		// $fields = $this->getFormFields($formId)->fetchPairs(null, "name");
+		$fields = $this->getFormFields($formId)->fetchPairs(null, "name");
 		// \Tracy\Debugger::barDump($fields, "fields arr");
 		
 		$arr = [];
@@ -420,9 +420,9 @@ class FormsManager extends \App\CoreModule\Model\BaseManager {
 			}
 			// \Tracy\Debugger::barDump($data, "data");
 
-			// foreach ($fields as $field) {
-			// 	if (!isset($data[$field])) $data[$field] = null;
-			// }
+			foreach ($fields as $field) {
+				if (!isset($data[$field])) $data[$field] = null;
+			}
 			$arr[$r->id] = $arr[$r->id] + $data;
 		}
 		

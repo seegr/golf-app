@@ -117,9 +117,13 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
         $spreadsheet->getActiveSheet()->setTitle($title);
   
         $i++;
+
+        $persons = $this->getEventPersons($cont->id);
+        bdump($persons, "persons");
       }
 
       bdump($spreadsheet, 'spreadsheet');
+      exit();
   
       $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
       bdump($writer, 'writer');

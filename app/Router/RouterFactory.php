@@ -17,8 +17,6 @@ class RouterFactory implements App\CoreModule\Router\IRouterFactory
 
 		$router->addRoute("", "Admin:Dashboard:dashboard");
 		
-		// $router->addRoute("", "Front:Home:home");
-
 		$router->addRoute("api/front-init", "Front:Api:frontInit");
 
 		return $router;
