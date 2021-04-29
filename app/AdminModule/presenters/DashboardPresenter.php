@@ -199,7 +199,7 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
         $rows[] = [];
         if (!empty($eCustomData->lektor)) {
           $rows[] = ['Lektor', $eCustomData->lektor];
-          $title .= ' (' . Strings::webalize($eCustomData->lektor) . ')';
+          // $title .= ' (' . Strings::webalize($eCustomData->lektor) . ')';
         }
         $rows[] = ['Zaplaceno', $counter];
 
