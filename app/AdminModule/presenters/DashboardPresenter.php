@@ -110,6 +110,7 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
     $list->addColumnText("telefon", "Telefon")->setSortable();
     $list->addColumnText("email_odeslan", "E-mail odeslán")->setSortable();
     $list->addColumnText("cislo_clenstvi", "Číslo členství")->setSortable();
+    // $list->addColumnText("zaplaceno", "Zaplaceno (Kč)")->setSortable();
 
     $list->addAction("personForm", "", ":Core:Admin:EventsPersons:personForm", [
       "id" => "id"
@@ -140,13 +141,25 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
   {
     $f = new Form;
 
-    $f->addMultiSelect('courses', 'Kurzy', $this->EventsManager->getEvents()->fetchPairs('id', 'title'))->setRequired();
+    $f->addMultiSelect('courses', 'Kurzy', $this->EventsManager->getEvents()->fetchPairs('id', 'title'));
+    $f->addCheckBox('all', 'Všechny kurzy');
     $f->addSubmit('export');
 
     $f->onSuccess[] = function($f, $v) {
-      $contents = $this->ContentsManager->getContents()->where("id", $v->courses);
+      if ($v->all) {
+        $contents = $this->EventsManager->getEvents()->where('contents.active', true);
+      } else if ($v->courses) {
+        $contents = $this->EventsManager->getEvents()->where("id", $v->courses);
+      } else {
+        return;
+      }
       $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+      
       $i = 0;
+      $allCounter = [
+        'persons' => 0,
+        'money' => 0
+      ];
       foreach ($contents as $e) {
         $eCustomData = json_decode($e->custom_fields);
         if ($i) {
@@ -157,7 +170,6 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
         $title = Strings::webalize($e->title);
         bdump($title, 'title');
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setTitle($title);
         $fields = $this->FormsManager->getFormFields($e->reg_form);
         $fieldsKeys = $fields->fetchPairs(null, 'name');
         bdump($fieldsKeys, 'fields keys');
@@ -180,14 +192,30 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
           bdump($pData, 'pData');
           $rows[] = $pData;
           $counter = $counter + $per['zaplaceno'];
+          $allCounter['persons'] = $allCounter['persons'] + 1;
+          $allCounter['money'] = $allCounter['money'] + $per['zaplaceno'];
         }
 
         $rows[] = [];
-        $rows[] = ['Lektor', $eCustomData->lektor];
+        if (!empty($eCustomData->lektor)) {
+          $rows[] = ['Lektor', $eCustomData->lektor];
+          $title .= ' (' . Strings::webalize($eCustomData->lektor) . ')';
+        }
         $rows[] = ['Zaplaceno', $counter];
+
+        $sheet->setTitle($title);
 
         $sheet->fromArray($rows);
       }
+
+      $spreadsheet->createSheet();
+      $spreadsheet->setActiveSheetIndex($i);
+      $sheet = $spreadsheet->getActiveSheet();
+      $sheet->setTitle('Přehled');
+      $sheet->fromArray([
+        ['Celkem členů', $allCounter['persons']],
+        ['Celkem zaplaceno', $allCounter['money']]
+      ]);
 
       bdump($spreadsheet, 'spreadsheet');
       // exit();
