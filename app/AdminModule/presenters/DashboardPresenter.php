@@ -147,24 +147,50 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
       $contents = $this->ContentsManager->getContents()->where("id", $v->courses);
       $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
       $i = 0;
-      foreach ($contents as $cont) {
+      foreach ($contents as $e) {
+        $eCustomData = json_decode($e->custom_fields);
         if ($i) {
           $spreadsheet->createSheet();
           $spreadsheet->setActiveSheetIndex($i);
         }
   
-        $title = Strings::webalize($cont->title);
+        $title = Strings::webalize($e->title);
         bdump($title, 'title');
-        $spreadsheet->getActiveSheet()->setTitle($title);
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle($title);
+        $fields = $this->FormsManager->getFormFields($e->reg_form);
+        $fieldsKeys = $fields->fetchPairs(null, 'name');
+        bdump($fieldsKeys, 'fields keys');
   
         $i++;
+        
+        $rows = [];
 
-        $persons = $this->getEventPersons($cont->id);
+        $header = [];
+        foreach ($fields as $field) {
+          $header[] = $field->label;
+        }
+        $rows[] = $header;
+
+        $persons = $this->getEventPersons($e->id, null, true);
         bdump($persons, "persons");
+        $counter = 0;
+        foreach ($persons as $per) {
+          $pData = array_intersect_key($per, array_flip($fieldsKeys));
+          bdump($pData, 'pData');
+          $rows[] = $pData;
+          $counter = $counter + $per['zaplaceno'];
+        }
+
+        $rows[] = [];
+        $rows[] = ['Lektor', $eCustomData->lektor];
+        $rows[] = ['Zaplaceno', $counter];
+
+        $sheet->fromArray($rows);
       }
 
       bdump($spreadsheet, 'spreadsheet');
-      exit();
+      // exit();
   
       $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
       bdump($writer, 'writer');
