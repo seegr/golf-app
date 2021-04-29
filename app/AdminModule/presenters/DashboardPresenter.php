@@ -170,8 +170,11 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
         // $title = Strings::webalize($e->title);
         $firstDate = $e->related('contents_events_dates')->order('start ASC')->fetch();
         if (!$firstDate) return;
-        $timestamp = $firstDate->start->getTimestamp();
-        $title = Strings::webalize(strftime('%a %H:%M', $timestamp));
+        // $timestamp = $firstDate->start->getTimestamp();
+        // $title = Strings::webalize(strftime('%a %H:%M', $timestamp));
+
+        $firstDate = $firstDate->start;
+        $title = Helper::getDay($firstDate->format("N"))['short'] . '_' . $firstDate->format("H-i");
         bdump($title, 'title');
         $sheet = $spreadsheet->getActiveSheet();
         $fields = $this->FormsManager->getFormFields($e->reg_form);
