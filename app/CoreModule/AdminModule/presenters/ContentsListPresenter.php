@@ -38,7 +38,7 @@ class ContentsListPresenter extends AdminPresenter {
   protected $id;
 
   /** @persistent */
-  public $archive;
+  public $archived;
 
   /** @persistent */
   public $expired;
@@ -62,9 +62,13 @@ class ContentsListPresenter extends AdminPresenter {
 
     	if ($type == "event") {
         if (!$this->expired) {
-          $events = $this->EventsManager->getFutureEvents(true)->where("archived IS NULL OR archived = 0");
+          $events = $this->EventsManager->getFutureEvents(true);
         } else {
           $events = $this->EventsManager->getEvents();
+        }
+
+        if (!$this->archived) {
+          $events->where("archived IS NULL OR archived = 0");
         }
         // $events->alias("contents", "c");
         $events->select("contents.*");

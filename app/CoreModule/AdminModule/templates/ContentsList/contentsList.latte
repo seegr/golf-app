@@ -11,7 +11,10 @@
 			<a n:href=":Core:Admin:Contents:contentForm, type => $type->short" class="btn btn-sm btn-success"><i class="fas fa-plus"></i> Vytvořit - {$type->title}</a>
 		{/if}
 	</div>
-	<a n:href="this, expired => $control->expired ? false : true" n:class='"btn btn-sm", $control->expired ? btn-warning :btn-outline-warning'>Proběhlé akce</a>
+  <div class="mb-2">
+    <a n:href="this, expired => $control->expired ? false : true" n:class='"btn btn-sm", $control->expired ? btn-warning :btn-outline-warning'>Proběhlé akce</a>
+    <a n:href="this, archived => $control->archived ? false : true" n:class='"btn btn-sm", $control->archived ? btn-warning :btn-outline-warning'>Smazané akce</a>
+  </div>
 
 	{control contentsList}
 {/block}
