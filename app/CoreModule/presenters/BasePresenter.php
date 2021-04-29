@@ -177,7 +177,7 @@ class BasePresenter extends Nette\Application\UI\Presenter
 		$content = $nav->addItem("Obsah", "");
 			foreach ($this->ContentsManager->getContentTypes() as $type) {
 				$title = $this->Translator->translate("global.content.types." . $type->short, 2);
-				$content->addItem($title, $this->link(":Core:Admin:Contents:contentsList", $type->short));
+				$content->addItem($title, $this->link(":Core:Admin:ContentsList:contentsList", $type->short));
 			}
 			// $content->addItem("Články", $this->link(":Core:Admin:Contents:contentsList", "article"));
 			// $content->addItem("Akce", $this->link(":Core:Admin:Contents:contentsList", "event"));

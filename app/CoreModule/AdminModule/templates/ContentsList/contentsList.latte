@@ -1,0 +1,23 @@
+{block title}Výpis obsahu{/block}
+
+{block content}
+	<div class="new-content mb-3" n:snippet="addWrap">
+		{if !$type}
+			<fieldset>
+				<legend>Nový obsah</legend>
+				<a n:foreach="$typesArr as $t => $title" n:href=":Core:Admin:Contents:contentForm, type => $t" class="btn btn-sm btn-success"><i class="fas fa-plus"></i> {$title}</a>
+			</fieldset>
+		{else}
+			<a n:href=":Core:Admin:Contents:contentForm, type => $type->short" class="btn btn-sm btn-success"><i class="fas fa-plus"></i> Vytvořit - {$type->title}</a>
+		{/if}
+	</div>
+	<a n:href="this, expired => $control->expired ? false : true" n:class='"btn btn-sm", $control->expired ? btn-warning :btn-outline-warning'>Proběhlé akce</a>
+
+	{control contentsList}
+{/block}
+
+{block scripts}
+	{include parent}
+	<script>
+	</script>
+{/block}

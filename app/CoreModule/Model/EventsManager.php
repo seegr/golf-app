@@ -31,12 +31,6 @@ class EventsManager extends ContentsManager
   }
 
   public function getEvents($byDate = false) {
-    // $datesTablePrefix = ":" . self::TABLE_CONTENT_EVENTS_DATES;
-    // $sel = $this->getContents()->where("type.short", "event")
-    // 	->select("contents.*, $datesTablePrefix.start, $datesTablePrefix.end, $datesTablePrefix.id AS date_id")->group("$datesTablePrefix.id");
-
-    // \Tracy\Debugger::barDump($sel, "sel");
-    // return $sel;
     if ($byDate) {
       return $this->db->table(self::TABLE_CONTENT_EVENTS_DATES)->where("content.type.short", "event");
     } else {

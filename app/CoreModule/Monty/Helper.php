@@ -397,6 +397,16 @@ class Helper extends \Monty\Utils {
 		return $arr;
 	}
 
+	public function sortAssocArrayByKeyVal($arr, $key, $val, $sort = "asc")
+	{
+		$price = array();
+		foreach ($inventory as $key => $row)
+		{
+				$price[$key] = $row['price'];
+		}
+		array_multisort($price, SORT_DESC, $inventory);
+	}
+
 	public static function stripHtml($html) {
 		return html_entity_decode(strip_tags($html));
 	}

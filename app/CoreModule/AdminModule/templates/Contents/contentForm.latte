@@ -3,7 +3,7 @@
 {block content}
 	<h1 n:block="title"><span class="opacity-2">{$type->title}</span>{if isset($content)} | {$content->title}{else}{/if}</h1>
 	{* <a n:href="contentsList, $type->short">Zpátky na výpis</a> *}
-	{include backButton, "Zpátky na výpis", "contentsList", $type->short}
+	{include backButton, "Zpátky na výpis", ":Core:Admin:ContentsList:contentsList", $type->short}
 
 	{snippetArea formWrap}
 	{snippet form}

@@ -2,9 +2,15 @@
   {* <a n:href="exportPersons!" class="btn btn-primary">Exportovat účastníky</a> *}
   <div class="mb-3">
     {form personSearchForm}
-      <div class="input-group">
-        {input text}
-        <div class="input-group-append">
+      <div class="row">
+        <div class="col-4">
+          {input text, placeholder => "Prohledat účastníky..."}
+        </div>
+        <div class="col-4">
+          {input lektor, placeholder => "Lektor..."}
+        </div>
+        <div class="col-4">
+          <a n:href='this, text => null, lektor => null' class='btn btn-outline-danger'><i class="fas fa-times"></i></a>
           <button n:name="submit" class='btn btn-success'>Hledat</button>
         </div>
       </div>

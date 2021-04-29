@@ -18,6 +18,31 @@ trait ContentsTrait
 	protected $id;
 
 
+	public function defineType()
+	{
+		$template = $this->template;
+
+		$type = $this->getParameter("type");
+		$id = $this->getParameter("id");
+
+		if ($type) {
+			$type = $this->ContentsManager->getContentType($type);
+		} elseif ($id) {
+			$type = $this->ContentsManager->getContent($id)->ref("type");
+		} else {
+			$type = null;
+		}
+
+		\Tracy\Debugger::barDump($id, "id");
+		\Tracy\Debugger::barDump($type, "type");
+		
+		$this->id = $id;
+		$this->type = $type;
+
+		$template->type = $type;
+		$template->types = $types = $this->ContentsManager->getContentTypes();
+		$template->typesArr = (clone $types)->fetchPairs("short", "title");
+	}
 
 	public function saveContent($vals) {
 		\Tracy\Debugger::barDump($vals, "saveContent - vals");
