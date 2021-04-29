@@ -167,7 +167,11 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
           $spreadsheet->setActiveSheetIndex($i);
         }
   
-        $title = Strings::webalize($e->title);
+        // $title = Strings::webalize($e->title);
+        $firstDate = $e->related('contents_events_dates')->order('start ASC')->fetch();
+        if (!$firstDate) return;
+        $timestamp = $firstDate->start->getTimestamp();
+        $title = Strings::webalize(strftime('%a %H:%M', $timestamp));
         bdump($title, 'title');
         $sheet = $spreadsheet->getActiveSheet();
         $fields = $this->FormsManager->getFormFields($e->reg_form);
@@ -199,10 +203,11 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
         $rows[] = [];
         if (!empty($eCustomData->lektor)) {
           $rows[] = ['Lektor', $eCustomData->lektor];
-          // $title .= ' (' . Strings::webalize($eCustomData->lektor) . ')';
+          $title .= ' (' . Strings::webalize($eCustomData->lektor) . ')';
         }
         $rows[] = ['Zaplaceno', $counter];
 
+        $title = Helper::shorten($title, 31);
         $sheet->setTitle($title);
 
         $sheet->fromArray($rows);
