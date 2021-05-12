@@ -98,8 +98,6 @@ class ContentsListPresenter extends AdminPresenter {
       // 	->setFilterSelect(["- Všechny -"] + $this->ContentsManager->getContentTypes()->fetchPairs("short", "title"), "type.short");
       $list->addColumnLink("title", "Název", ":Core:Admin:Contents:contentForm")->setFilterText("contents.title");
       if ($type == "event") {
-        // $list->addColumnDateTime("start", "Začátek")->setFormat("j.n.Y H:i")->setSortable();
-        // $list->addColumnDateTime("end", "Konec")->setFormat("j.n.Y H:i")->setSortable();
         $list->addColumnText("interval", "Konání [počet termínů]")->setRenderer(function($i) {
           $dates = count($this->EventsManager->getEventDates($i));
   
@@ -172,7 +170,6 @@ class ContentsListPresenter extends AdminPresenter {
             ]);
             return $el;
           }
-  
         })->setAlign("center")->setSortable()->setSortableCallback(function($data, $sort) {
           \Tracy\Debugger::barDump($data, "data");
           \Tracy\Debugger::barDump($sort, "sort");
@@ -180,7 +177,8 @@ class ContentsListPresenter extends AdminPresenter {
           // bdump($sort, "reset sort");
           
           return $data->order("persons $sort");
-      });;
+        });
+        $list->addColumnText('id', "#ID")->setAlign('center');
       }
       $list->addColumnDateTime("created", "Vytvořeno")->setFormat("j.n.Y H:i")->setSortable();
       // $list->addAction("edit", "", "contentForm")->setClass("fas fa-pencil btn btn-warning");

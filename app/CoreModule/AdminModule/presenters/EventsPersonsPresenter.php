@@ -187,10 +187,12 @@ class EventsPersonsPresenter extends AdminPresenter
 
         $id = $this->getParameter('id');
 
+        $events = $this->EventsManager->getEvents()->select("contents.*, CONCAT(contents.title, ' (#', contents.id, ')') AS titleid");
+
         $form->addHidden('id', $id);
         $form->addSelect("event", "Akce")
             ->setRequired()
-            ->setItems($this->EventsManager->getEvents()->fetchPairs('id', 'title'))
+            ->setItems($events->fetchPairs('id', 'titleid'))
             ->setDefaultValue($this->eventId);
         $form->addSubmit('submit', 'Přesunout');
 
