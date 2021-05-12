@@ -149,7 +149,7 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
       if ($v->all) {
         $contents = $this->EventsManager->getEvents()->where('contents.active', true);
       } else if ($v->courses) {
-        $contents = $this->EventsManager->getEvents()->where("id", $v->courses);
+        $contents = $this->EventsManager->getEvents()->where("contents.id", $v->courses);
       } else {
         return;
       }
