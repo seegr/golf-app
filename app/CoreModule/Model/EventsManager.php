@@ -247,7 +247,7 @@ class EventsManager extends ContentsManager
     return $events;
   }
 
-  public function getEvent($id): ActiveRow
+  public function getEvent($id): ?ActiveRow
   {
     return $this->getContent($id);
   }
@@ -321,7 +321,7 @@ class EventsManager extends ContentsManager
 
 		$data = [
       "partLimit" => (int) $partLimit,
-      "subLimit" => $subLimit,
+      "subLimit" => (int) $subLimit,
       "spots" => $spots,
       "all" => $all,
       "part" => $part,

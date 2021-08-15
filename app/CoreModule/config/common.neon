@@ -52,8 +52,13 @@ services:
 	SettingsManager: App\CoreModule\Model\SettingsManager
 	PersonsManager: App\CoreModule\Model\PersonsManager
 	FormsFactory: App\CoreModule\Components\FormsFactory
-	FormsFormsManager: App\CoreModule\FormsModule\Model\FormsManager
+	FormsFormsManager:
+	    factory: App\CoreModule\FormsModule\Model\FormsManager
+	    inject: true
 	FormsFormsFactory: App\CoreModule\FormsModule\Components\FormsFactory
+	ClientUniqueId:
+	    factory: App\CoreModule\Model\ClientUniqueId
+	    inject: true
 	
 	nette.latteFactory:
 		setup:

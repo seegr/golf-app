@@ -87,9 +87,9 @@ class FormsFactory extends BaseFormsFactory
 		$form->addInteger("reg_part", "Účastníků")
 			->setDefaultValue(0)
 			->addRule(Form::MIN, "Minimum je 0 (neomezeně)", 0);
-		// $form->addInteger("reg_sub", "Náhradníků")
-		// 	->setDefaultValue(0)
-		// 	->addRule(Form::MIN, "Minimum je 0 (neomezeně)", 0);
+        $form->addInteger("reg_sub", "Náhradníků")
+            ->setDefaultValue(0)
+            ->addRule(Form::MIN, "Minimum je 0 (neomezeně)", 0);
 
 		$customFields = $this->ContentsManager->getContentCustomFields($type);
 		// \Tracy\Debugger::barDump($customFields, "customFields");

@@ -14,6 +14,8 @@ use Monty\Form;
 use Monty\Helper;
 use Nette\Database\Table\ActiveRow;
 use App\CoreModule\FormsModule\Components\FormsFactory as FormsFormsFactory;
+use App\CoreModule\Model\ClientUniqueId;
+use Tracy\Debugger;
 
 // use Contributte\MenuControl\UI\IMenuComponentFactory;
 // use Contributte\MenuControl\UI\MenuComponent;
@@ -61,6 +63,9 @@ class BasePresenter extends Nette\Application\UI\Presenter
     
     /** @var App\CoreModule\Model\SettingsManager @inject */
     public $SettingsManager;
+
+    /** @var ClientUniqueId @inject */
+    public ClientUniqueId $clientUniqueId;
 
 	// * @var IMenuComponentFactory @inject 
 	// public $MenuFactory;
@@ -122,6 +127,9 @@ class BasePresenter extends Nette\Application\UI\Presenter
 		$template = $this->template;
 
 		$this->Forms = $this->FormsFactory;
+        $this->clientUniqueId->set();
+        bdump($this->clientUniqueId->get());
+        Debugger::log($this->clientUniqueId->get());
 		$this->defineVariables();
 		$this->checkPermissions();
 		$this->loginStartup();

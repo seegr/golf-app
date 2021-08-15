@@ -29,7 +29,8 @@
 		"facebook/graph-sdk": "^5.7",
 		"scssphp/scssphp": "^1.4",
 		"league/csv": "^9.7",
-		"phpoffice/phpspreadsheet": "^1.17"
+		"phpoffice/phpspreadsheet": "^1.17",
+		"ramsey/uuid": "^4.2"
 	},
 	"require-dev": {
 		"nette/tester": "^2.0",

@@ -69,9 +69,14 @@ trait CoursesTrait
                 foreach ($fEvents as $ev) {
                     if ($ev->start->format("N") == $day && $ev->start->format("H:i") >= $time && $ev->start->format("H:i") < $next) {
                         if (!in_array($ev->content, $coursesParents)) {
-                            $evData = $ev->toArray();
-                            $evData["summary"] = $this->EventsManager->getEventRegSummary($ev->content);
-                            $events[$time][$day][] = $evData;
+                            $data = [
+                                'id' => $ev->id,
+                                'content' => $ev->content,
+                                'start' => $ev->start,
+                                'end' => $ev->end,
+                                "summary" => $this->EventsManager->getEventRegSummary($ev->content, $ev->id)
+                            ];
+                            $events[$time][$day][] = $data;
                             $coursesParents[] = $ev->content;
                         }
                     }

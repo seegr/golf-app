@@ -2,8 +2,12 @@
 
 namespace App\CoreModule\FormsModule\Model;
 
+use App\CoreModule\Model\ClientUniqueId;
+use Nette;
 use Nette\Utils\Strings;
 use Nette\Utils\Json;
+use ScssPhp\ScssPhp\Formatter\Debug;
+use Tracy\Debugger;
 
 
 class FormsManager extends \App\CoreModule\Model\BaseManager {
@@ -16,7 +20,11 @@ class FormsManager extends \App\CoreModule\Model\BaseManager {
 		TABLE_FORMS_RECORDS = self::TABLE_FORMS . "_records",
 		FAST_REG_ALERT = "Využili jste rychlé registrace, prosím potvrďte přihlášení doplněním osobních údajů o účastníkovi v seznamu Vašich registrací.";
 
-	public function getForms() {
+	/** @var ClientUniqueId @inject */
+    public $clientUniqueId;
+
+
+    public function getForms() {
 		return $this->db->table(self::TABLE_FORMS);
 	}
 
@@ -230,15 +238,26 @@ class FormsManager extends \App\CoreModule\Model\BaseManager {
 	}
 
 	public function saveFormRecord($formId, $vals) {
-		$data = is_object($vals) || is_array($vals) ? Json::encode($vals) : $vals;
 		// \Tracy\Debugger::barDump($formId, "formId");
 		// \Tracy\Debugger::barDump($data, "data");
+		$formFields = $this->getFormFields($formId)->fetchPairs("name", "label");
 
-		$dataReal = [];
-		$fields = $this->getFormFields($formId)->fetchPairs("name", "label");
+//        Debugger::log($vals);
+		foreach ($formFields as $fieldId => $label) {
+		    if (!isset($vals[$fieldId])) {
+//		        Debugger::log($fieldId);
+		        $vals[$fieldId] = '';
+            }
+        }
+
+		Debugger::log($vals);
+
+        $data = is_object($vals) || is_array($vals) ? Json::encode($vals) : $vals;
+        $dataReal = [];
+
 		foreach ($vals as $fieldId => $val) {
-			if ($fieldId == "id" || !isset($fields[$fieldId])) continue;
-			$valTitle = $fields[$fieldId];
+			if ($fieldId == "id" || !isset($formFields[$fieldId])) continue;
+			$valTitle = $formFields[$fieldId];
 			$dataReal[$valTitle] = $val;
 		}
 		$dataReal = Json::encode($dataReal);
