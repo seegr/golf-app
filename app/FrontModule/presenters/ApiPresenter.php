@@ -196,7 +196,7 @@ class ApiPresenter extends Nette\Application\UI\Presenter
       $mail->setFrom('Franta <peta.lukas@volny.cz>')
           ->addTo($vals->e_mail)
           ->setSubject('Potvrzení registrace')
-          ->setBody('Děkujeme za registrace na náš golf kurz. Ozveme se Vám');
+          ->setBody('Děkujeme za registraci na náš golf kurz. Ozveme se Vám');
 
       $mailer->send($mail);
 
@@ -206,9 +206,10 @@ class ApiPresenter extends Nette\Application\UI\Presenter
       ]);
       $mail = new Nette\Mail\Message();
       $mail->setFrom('Franta <peta.lukas@volny.cz>')
-          ->addTo('info@montyit.cz') //zdenka.krizova@golfhostivar.cz
+          ->addTo('info@montyit.cz')
+          ->addTo('zdenka.krizova@golfhostivar.cz')
           ->setSubject('Nová registrace')
-          ->setHtmlBody('Nový registrovaný účastník. <a href="$link">koukni</a>');
+          ->setHtmlBody("Nový registrovaný účastník. <a href='$link'>koukni</a>");
 
       $mailer->send($mail);
   }
