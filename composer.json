@@ -30,7 +30,8 @@
 		"scssphp/scssphp": "^1.4",
 		"league/csv": "^9.7",
 		"phpoffice/phpspreadsheet": "^1.17",
-		"ramsey/uuid": "^4.2"
+		"ramsey/uuid": "^4.2",
+		"wavevision/di-service-annotation": "^4.0"
 	},
 	"require-dev": {
 		"nette/tester": "^2.0",

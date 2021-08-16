@@ -342,7 +342,6 @@ class EventsManager extends ContentsManager
       "subSpace" => $event->reg_sub ? ($event->reg_sub - $subCount > 0 ? true : false) : true
     ];
 
-    bdump($data["personsPercent"], "perspercent");
 		if ($data["personsPercent"] <= 50) {
 			$color = "success";
 		} else if ($data["personsPercent"] < 100) {

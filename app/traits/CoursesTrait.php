@@ -61,13 +61,17 @@ trait CoursesTrait
         for ($i = 0; $i <= $len - 1; $i++) {
             $time = $times[$i]->format("H:i");
             bdump($time);
+
             $next = !empty($times[$i+1]) ? $times[$i+1]->format("H:i") : null;
+
             $events[$time] = [];
             for ($day = 1; $day <= 7; $day++) {
                 $events[$time][$day] = [];
                 
                 foreach ($fEvents as $ev) {
-                    if ($ev->start->format("N") == $day && $ev->start->format("H:i") >= $time && $ev->start->format("H:i") < $next) {
+                    if ($ev->start->format("N") == $day &&
+                        $ev->start->format("H:i") >= $time &&
+                        ($ev->start->format("H:i") < $next || !$next)) {
                         if (!in_array($ev->content, $coursesParents)) {
                             $data = [
                                 'id' => $ev->id,

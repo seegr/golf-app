@@ -28,3 +28,6 @@ contents:
 	# 			title: "Registrační formulář"
 	# 			type: "url"
 	# 			required: false
+
+services:
+	GoflConfig: App\model\GolfConfig(%golf%)

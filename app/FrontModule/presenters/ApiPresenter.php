@@ -7,6 +7,7 @@ namespace App\FrontModule\Presenters;
 use App\CoreModule\FormsModule\Model\FormsManager;
 use App\CoreModule\Model\ClientUniqueId;
 use App\CoreModule\Traits\EventsTrait;
+use App\model\GolfConfig;
 use App\Traits\CoursesTrait;
 use Nette;
 use Nette\Utils\Json;
@@ -36,6 +37,12 @@ class ApiPresenter extends Nette\Application\UI\Presenter
     /** @var ClientUniqueId @inject */
     public ClientUniqueId $clientUniqueId;
 
+    /** @var SmtpMailer @inject */
+    public SmtpMailer $mailer;
+
+    /** @var GolfConfig @inject */
+    public GolfConfig $golfConfig;
+
 
   public function startup(): void
   {
@@ -43,7 +50,7 @@ class ApiPresenter extends Nette\Application\UI\Presenter
 
     $response = $this->getHttpResponse();
     $response->setHeader('Access-Control-Allow-Headers', 'Accept,Origin,Content-Type')
-        ->setHeader('Content-Type', 'application/json,charset=utf-8')
+//        ->setHeader('Content-Type', 'application/json,charset=utf-8')
         ->setHeader('Access-Control-Allow-Methods', 'GET,POST')
         ->setHeader('Access-Control-Allow-Origin', '*');
   }
@@ -93,6 +100,7 @@ class ApiPresenter extends Nette\Application\UI\Presenter
 
       $data = [
           'id' => $date->id,
+          'title' => $event->title,
           'start' => $date->start,
           'end' => $date->end,
           'lektor' => !empty($customFields->lektor) ? $customFields->lektor : null,
@@ -123,9 +131,6 @@ class ApiPresenter extends Nette\Application\UI\Presenter
       $recId = $this->FormsManager->saveRecord($event->reg_form, $vals);
 
       $this->EventsManager->insertEventPerson($event->id, $recId, "part", $date->id);
-      //todo create email service maybe
-      //todo send confirmation email & admin email
-      //todo set cookie to avoid repeated registration
 
       Debugger::log('event:' . $event->id . ' date:' . $date->id . ' role:' . $role);
 
@@ -177,26 +182,31 @@ class ApiPresenter extends Nette\Application\UI\Presenter
       }
   }
 
-  public function actionSendConfirmationEmail()
+  public function actionSendTestEmail()
   {
-      $this->sendConfirmationEmail();
+      $mailer = $this->mailer;
+      $mail = new Nette\Mail\Message();
+      $mail->setFrom('Golf Hostivař <peta.lukas@volny.cz>')
+          ->addTo($this->golfConfig->get('adminEmail'))
+          ->setSubject('Potvrzení registrace')
+          ->setBody('Děkujeme za registraci na náš golf kurz. Ozveme se Vám');
+
+      bdump($mail->getHeaders());
+      bdump($mailer);
+      $mailer->send($mail);
 
       exit();
   }
 
   public function sendConfirmationEmail($vals, $event)
   {
-      $mailer = new SmtpMailer([
-          'host' => 'smtp.volny.cz',
-          'username' => 'peta.lukas@volny.cz',
-          'password' => 'ronip852'
-      ]);
-
+      $mailer = $this->mailer;
       $mail = new Nette\Mail\Message();
-      $mail->setFrom('Franta <peta.lukas@volny.cz>')
+      $mail->setFrom($this->golfConfig->get('emailFrom'), 'Golf Hostivař')
           ->addTo($vals->e_mail)
+          ->addReplyTo($this->golfConfig->get('adminEmail'), $this->golfConfig->get('adminName'))
           ->setSubject('Potvrzení registrace')
-          ->setBody('Děkujeme za registraci na náš golf kurz. Ozveme se Vám');
+          ->setHtmlBody("Dobrý den,<br><br>potvrzujeme vaši registraci na kurz Budu golfista v termínu ($event->title). Jakmile se kurz naplní, zašleme vám podrobnější informace, včetně postupu sjednání členství. V případě dotazů náš můžete kontaktovat na tel.: 724124818 nebo <a href='mailto:recepce@golfhostivar.cz'>recepce@golfhostivar.cz</a>");
 
       $mailer->send($mail);
 
@@ -205,10 +215,9 @@ class ApiPresenter extends Nette\Application\UI\Presenter
           'id' => $event->id
       ]);
       $mail = new Nette\Mail\Message();
-      $mail->setFrom('Franta <peta.lukas@volny.cz>')
-          ->addTo('info@montyit.cz')
-          ->addTo('zdenka.krizova@golfhostivar.cz')
-          ->setSubject('Nová registrace')
+      $mail->setFrom($this->golfConfig->get('emailFrom'), 'Golf Hostivař')
+          ->addTo($this->golfConfig->get('adminEmail'))
+          ->setSubject("Nová registrace na $event->title")
           ->setHtmlBody("Nový registrovaný účastník. <a href='$link'>koukni</a>");
 
       $mailer->send($mail);

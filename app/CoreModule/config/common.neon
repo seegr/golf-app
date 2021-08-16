@@ -59,6 +59,8 @@ services:
 	ClientUniqueId:
 	    factory: App\CoreModule\Model\ClientUniqueId
 	    inject: true
+	mail.mailer:
+	    factory: Nette\Mail\SmtpMailer(%mailer%)
 	
 	nette.latteFactory:
 		setup:
