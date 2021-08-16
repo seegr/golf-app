@@ -206,7 +206,7 @@ class ApiPresenter extends Nette\Application\UI\Presenter
           ->addTo($vals->e_mail)
           ->addReplyTo($this->golfConfig->get('adminEmail'), $this->golfConfig->get('adminName'))
           ->setSubject('Potvrzení registrace')
-          ->setHtmlBody("Dobrý den,<br><br>potvrzujeme vaši registraci na kurz Budu golfista v termínu ($event->title). Jakmile se kurz naplní, zašleme vám podrobnější informace, včetně postupu sjednání členství. V případě dotazů náš můžete kontaktovat na tel.: 724124818 nebo <a href='mailto:recepce@golfhostivar.cz'>recepce@golfhostivar.cz</a>");
+          ->setHtmlBody("Dobrý den,<br><br>potvrzujeme vaši registraci na kurz Budu golfista v termínu ($event->title). Jakmile se kurz naplní, zašleme vám podrobnější informace, včetně postupu sjednání členství. V případě dotazů náš můžete kontaktovat na tel.: 724124818 nebo <a href='mailto:recepce@golfhostivar.cz'>recepce@golfhostivar.cz</a><br><br>S přáním příjemného dne Golf Hostivař");
 
       $mailer->send($mail);
 
