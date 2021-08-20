@@ -221,3 +221,10 @@ body.admin.calendar {
 		}
 	}
 }
+
+body.contents-list {
+	tr.archived td:not(.col-action) {
+		text-decoration: line-through;
+		opacity: 0.5;
+	}
+}

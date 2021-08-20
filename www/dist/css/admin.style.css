@@ -22475,3 +22475,8 @@ body.admin.calendar #td-calendar .event .event-lektors {
   font-weight: bold;
   color: dimgrey;
 }
+
+body.contents-list tr.archived td:not(.col-action) {
+  text-decoration: line-through;
+  opacity: 0.5;
+}

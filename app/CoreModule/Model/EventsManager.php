@@ -338,8 +338,8 @@ class EventsManager extends ContentsManager
       "isFull" => $isFull,
       "space" => !$isFull,
       "free" => !$isFull,
-      "partSpace" => $event->reg_part ? ($event->reg_part - $partCount > 0 ? true : false) : true,
-      "subSpace" => $event->reg_sub ? ($event->reg_sub - $subCount > 0 ? true : false) : true
+      "partSpace" => $event->reg_part ? ($event->reg_part - $partCount > 0 ? true : false) : false,
+      "subSpace" => $event->reg_sub ? ($event->reg_sub - $subCount > 0 ? true : false) : false
     ];
 
 		if ($data["personsPercent"] <= 50) {

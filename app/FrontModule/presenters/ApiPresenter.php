@@ -186,8 +186,9 @@ class ApiPresenter extends Nette\Application\UI\Presenter
   {
       $mailer = $this->mailer;
       $mail = new Nette\Mail\Message();
-      $mail->setFrom('Golf Hostivař <peta.lukas@volny.cz>')
-          ->addTo($this->golfConfig->get('adminEmail'))
+      $mail->setFrom($this->golfConfig->get('emailFrom'), 'Golf Hostivař')
+          ->addTo('info@montyit.cz')
+          ->addReplyTo($this->golfConfig->get('adminEmail'), $this->golfConfig->get('adminName'))
           ->setSubject('Potvrzení registrace')
           ->setBody('Děkujeme za registraci na náš golf kurz. Ozveme se Vám');
 

@@ -92,6 +92,12 @@ class ContentsListPresenter extends AdminPresenter {
       $list = new DataGrid;
   
       $type = $this->type->short;
+
+      $list->setRowCallback(function($i, $tr) {
+          if ($i->archived) {
+              $tr->addClass('archived');
+          }
+      });
   
       // $list->addColumnText("type", "Typ", "type.title")
       // 	->setSortable()

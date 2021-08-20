@@ -72,6 +72,7 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
     $list = new DataGrid;
 
     $list->setDataSource($persons);
+    $list->setDefaultSort(['time' => 'DESC']);
     $list->setRowCallback(function($i, $tr) {
       if (!$i["active"]) {
         $tr->addClass("unactive");
@@ -110,6 +111,7 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
     $list->addColumnText("telefon", "Telefon")->setSortable();
     $list->addColumnText("email_odeslan", "E-mail odeslán")->setSortable();
     $list->addColumnText("cislo_clenstvi", "Číslo členství")->setSortable();
+    $list->addColumnDateTime("time", "Registrace")->setFormat(self::DATETIME_FORMAT)->setSortable();
     // $list->addColumnText("zaplaceno", "Zaplaceno (Kč)")->setSortable();
 
     $list->addAction("personForm", "", ":Core:Admin:EventsPersons:personForm", [
