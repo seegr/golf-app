@@ -62,7 +62,7 @@ class ContentsManager extends BaseManager {
 	}
 
 	public function getActiveContents($type = null) {
-		return $this->getPublishedContents($type, true);
+        return $this->getContents($type)->where("archived IS NULL OR archived = 0");
 	}
 
 	public function getContent($id, $formData = false) {
@@ -590,7 +590,10 @@ class ContentsManager extends BaseManager {
 			]);
 		}
 
-		if ($onlyActive) $sel->where("contents.active", true);
+		if ($onlyActive) {
+            $sel->where("contents.active", true);
+            $sel->where("archived IS NULL OR archived = 0");
+        }
 
 		// if ($start && $end) {
 		// 	$sel = $sel->where("

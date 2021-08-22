@@ -1,8 +1,14 @@
 {block content}
   {* <a n:href="exportPersons!" class="btn btn-primary">Exportovat účastníky</a> *}
   <div class="mb-3">
-    {form personSearchForm}
+    <form n:name=personSearchForm autocomplete="off">
       <div class="row">
+{*        <div class="col-4">*}
+{*          {input start, class => 'form-control datepicker period-start', placeholder => "Od", autocomplete => 'off'}*}
+{*        </div>*}
+{*        <div class="col-4">*}
+{*          {input end, class => 'form-control datepicker period-end', placeholder => "Do", autocomplete => 'off'}*}
+{*        </div>*}
         <div class="col-4">
           {input text, placeholder => "Prohledat účastníky..."}
         </div>
@@ -14,7 +20,7 @@
           <button n:name="submit" class='btn btn-success'>Hledat</button>
         </div>
       </div>
-    {/form}
+    </form>
   </div>
   {control allPersonsList}
 {/block}

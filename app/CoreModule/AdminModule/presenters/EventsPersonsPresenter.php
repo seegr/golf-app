@@ -4,6 +4,7 @@ namespace App\CoreModule\AdminModule\Presenters;
 
 use Monty\DataGrid;
 use Monty\Form;
+use Monty\Helper;
 use Nette\Utils\ArrayHash;
 use Monty\Html;
 
@@ -44,7 +45,7 @@ class EventsPersonsPresenter extends AdminPresenter
             }
 
             $date = $this->EventsManager->getEventDate($date);
-            bdump($date, "date");
+//            bdump($date, "date");
             $template->date = $date;
         }
 
@@ -69,6 +70,9 @@ class EventsPersonsPresenter extends AdminPresenter
             $personData = $template->person = ArrayHash::from($this->FormsManager->getRecord($id, true));
             $template->form = $person->ref("record")->ref("form");
             $form->setDefaults($personData);
+            if (!empty($personData->telefon)) {
+                $form['telefon']->setDefaultValue(Helper::formatPhone($personData->telefon));
+            }
         }
 
         $this->eventId = $event->id;
@@ -165,6 +169,8 @@ class EventsPersonsPresenter extends AdminPresenter
 
         $f = $this->FormsFormsFactory->customForm($form->id);
 
+        $f['submit']->setCaption("Uložit");
+
         $f->onSuccess[] = function ($f, $v) use ($form, $event) {
             bdump($v);
             bdump($this->getParameters(), "pars");
@@ -187,12 +193,16 @@ class EventsPersonsPresenter extends AdminPresenter
 
         $id = $this->getParameter('id');
 
-        $events = $this->EventsManager->getEvents()->select("contents.*, CONCAT(contents.title, ' (#', contents.id, ')') AS titleid");
+        $events = $this->EventsManager->getActiveContents();
+        $eventsArr = [];
+        foreach ($events as $ev) {
+            $eventsArr[$ev->id] = $ev->title . ' (' . $this->EventsManager->getEventMinDate($ev->id)->format(self::DATE_FORMAT) . ')';
+        }
 
         $form->addHidden('id', $id);
         $form->addSelect("event", "Akce")
             ->setRequired()
-            ->setItems($events->fetchPairs('id', 'titleid'))
+            ->setItems($eventsArr)
             ->setDefaultValue($this->eventId);
         $form->addSubmit('submit', 'Přesunout');
 

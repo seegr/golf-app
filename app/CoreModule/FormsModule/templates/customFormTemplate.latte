@@ -93,7 +93,7 @@
 			{/if}
 		{/foreach}
 	</div>
-	<button n:name="submit" class="btn btn-success ajax" data-loader="this" data-naja-force-redirect>Odeslat</button>
+	<button n:name="submit" class="btn btn-success ajax" data-loader="this" data-naja-force-redirect>{$form['submit']->caption}</button>
 </form>
 
 {define modal, $id, $title, $content}

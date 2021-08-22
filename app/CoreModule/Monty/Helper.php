@@ -555,4 +555,14 @@ class Helper extends \Monty\Utils {
 	    return $arr;
 	}
 
+	public static function formatPhone(string $phone): string
+    {
+        $phoneTrimmed = str_replace(' ', '', $phone);
+        if (strlen($phoneTrimmed) === 9) {
+            return '+420 ' . $phone;
+        } else {
+            return $phone;
+        }
+    }
+
 }

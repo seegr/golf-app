@@ -3,7 +3,9 @@ services:
 		class: App\CoreModule\Components\Authorizator
 		setup:
 			- addResource("Admin:Dashboard")
+			- addResource("Admin:EventsPersonsList")
 			- addResource("Front:Home")
 
 			- allow("admin", "Admin:Dashboard")
+			- allow("admin", "Admin:EventsPersonsList")
 			- allow("guest", "Front:Home")

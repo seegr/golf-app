@@ -16,7 +16,7 @@
             <span class="app-name"><i class="fad fa-golf-ball"></i> Kurzy</span>
             <a n:href=":Admin:Dashboard:dashboard" class="btn btn-outline-primary"><i class="fad fa-home"></i></a>
             <a n:href=":Core:Admin:ContentsList:contentsList, type => event" class="btn btn-outline-primary">Kurzy</a>
-            <a n:href=":Admin:Dashboard:eventsPersonsList" class="btn btn-outline-primary">Účastníci</a>
+            <a n:href=":Admin:EventsPersonsList:eventsPersonsList" class="btn btn-outline-primary">Účastníci</a>
             <a n:if="$user->isInRole('superadmin')" n:href=":Core:Admin:Users:usersList" class="btn btn-outline-primary">Uživatelé</a>
             <a n:if="$user->isAllowed('Core:Forms:Admin:Forms')" n:href=":Core:Forms:Admin:Forms:formsList" class="btn btn-outline-primary">Formuláře</a>
             <a n:href=":Admin:Dashboard:importExportCourses" class="btn btn-outline-primary">Import/Export kurzů</a>
