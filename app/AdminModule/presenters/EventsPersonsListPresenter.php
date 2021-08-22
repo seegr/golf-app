@@ -1,6 +1,6 @@
 <?php
 
-namespace App\AdminModule\presenters;
+namespace App\AdminModule\Presenters;
 
 use App\CoreModule\AdminModule\Presenters\AdminPresenter;
 use Monty\DataGrid;
