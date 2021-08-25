@@ -42,6 +42,7 @@ class EventsPersonsPresenter extends AdminPresenter
             if (!$date) {
                 $lastDate = $this->EventsManager->getEventDates($id)->order("start DESC")->fetch();
                 $date = $lastDate->id;
+//                bdump($date);
             }
 
             $date = $this->EventsManager->getEventDate($date);

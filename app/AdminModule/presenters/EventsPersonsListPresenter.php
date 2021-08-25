@@ -27,7 +27,6 @@ class EventsPersonsListPresenter extends AdminPresenter
     /** @persistent */
     public $end;
 
-
     public function createComponentAllPersonsList()
     {
         $persons = $this->FormsManager->getFormsRecords()

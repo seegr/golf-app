@@ -78,7 +78,7 @@ trait CoursesTrait
                                 'content' => $ev->content,
                                 'start' => $ev->start,
                                 'end' => $ev->end,
-                                "summary" => $this->EventsManager->getEventRegSummary($ev->content, $ev->id)
+                                "summary" => $this->EventsManager->getEventRegSummary($ev->content, null, true)
                             ];
                             $events[$time][$day][] = $data;
                             $coursesParents[] = $ev->content;

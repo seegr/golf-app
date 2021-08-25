@@ -128,8 +128,6 @@ class BasePresenter extends Nette\Application\UI\Presenter
 
 		$this->Forms = $this->FormsFactory;
         $this->clientUniqueId->set();
-        bdump($this->clientUniqueId->get());
-        Debugger::log($this->clientUniqueId->get());
 		$this->defineVariables();
 		$this->checkPermissions();
 		$this->loginStartup();

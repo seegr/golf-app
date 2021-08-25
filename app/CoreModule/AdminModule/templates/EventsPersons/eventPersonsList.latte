@@ -12,7 +12,7 @@
     {/form}
   {/ifset}
 
-  {* {dump $regSummary} *}
+   {dump $regSummary}
   <div class="mb-2">
     <a n:href="personForm, eventId => $event->id, date => isset($date) ? $date->id : null" class="btn btn-outline-success">Nový účastník</a>
     <div class="d-inline-block">Obsazenost: <span class="badge badge-{$regSummary->spotsColor}">{$regSummary->partCount} / {$regSummary->partLimit}</span></div>

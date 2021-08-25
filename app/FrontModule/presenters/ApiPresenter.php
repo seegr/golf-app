@@ -104,7 +104,7 @@ class ApiPresenter extends Nette\Application\UI\Presenter
           'start' => $date->start,
           'end' => $date->end,
           'lektor' => !empty($customFields->lektor) ? $customFields->lektor : null,
-          'summary' => $this->EventsManager->getEventRegSummary($event->id, $date->id)
+          'summary' => $this->EventsManager->getEventRegSummary($event->id)
       ];
 
       $this->sendResponse(new JsonResponse($data));
@@ -124,15 +124,15 @@ class ApiPresenter extends Nette\Application\UI\Presenter
       $date = $this->EventsManager->getEventDate($vals->id);
       $event = $date->ref('content');
 
-      $role = $this->getParticipantRole($event->id, $date->id);
+      $role = $this->getParticipantRole($event->id);
 
       unset($vals->id);
 
       $recId = $this->FormsManager->saveRecord($event->reg_form, $vals);
 
-      $this->EventsManager->insertEventPerson($event->id, $recId, "part", $date->id);
+      $this->EventsManager->insertEventPerson($event->id, $recId, "part");
 
-      Debugger::log('event:' . $event->id . ' date:' . $date->id . ' role:' . $role);
+      Debugger::log('event:' . $event->id . ' role:' . $role);
 
       //todo mailer service
 
