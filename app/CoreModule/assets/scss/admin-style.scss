@@ -227,4 +227,7 @@ body.contents-list {
 		text-decoration: line-through;
 		opacity: 0.5;
 	}
+	tr.unactive td:not(.col-action) {
+		opacity: 0.5;
+	}
 }

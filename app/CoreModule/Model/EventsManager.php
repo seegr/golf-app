@@ -38,14 +38,26 @@ class EventsManager extends ContentsManager
         }
     }
 
-    public function getEventsDates()
+    public function getEventsDates($active = null)
     {
-        return $this->db->table(self::TABLE_CONTENT_EVENTS_DATES);
+        $sel = $this->db->table(self::TABLE_CONTENT_EVENTS_DATES, 'cd')
+//            ->select('contents_events_dates.start AS start')
+            ->alias('content', 'c');
+
+        if ($active) {
+            $sel->where([
+                'contents_events_dates.active' => true,
+                'c.active' => true,
+                'c.archived IS NULL OR c.archived = ?' => 0
+            ]);
+        }
+
+        return $sel;
     }
 
-    public function getEventDates($id)
+    public function getEventDates($id, $active = null)
     {
-        return $this->getEventsDates()->where("content", $id);
+        return $this->getEventsDates($active)->where("content", $id);
     }
 
     public function getEventDate($id)

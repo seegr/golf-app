@@ -98,6 +98,9 @@ class ContentsListPresenter extends AdminPresenter
             if ($i->archived) {
                 $tr->addClass('archived');
             }
+            if (!$i->active) {
+                $tr->addClass('unactive');
+            }
         });
 
         // $list->addColumnText("type", "Typ", "type.title")
@@ -194,6 +197,11 @@ class ContentsListPresenter extends AdminPresenter
                 return $i->archived ? "fad fa-inbox-out btn btn-primary ajax" : "fad fa-inbox-in btn btn-danger ajax";
             })
             ->setConfirmation(new StringConfirmation("Opravdu chceš archivovat %s?", "title"));
+        $list->addAction("active", "", "eventPublishedToggle!", ["event_id" => "id"])
+            ->setClass(function ($i) {
+                return $i->active ? "fad fa-check-circle btn btn-success ajax" : "fad fa-circle btn btn-secondary ajax";
+            })
+            ->setConfirmation(new StringConfirmation("Opravdu chceš skrýt/publikovat %s?", "title"));
 
         // $list->addGroupAction("Smazat")->onSelect[] = function($ids) use ($list) {
         // 	\Tracy\Debugger::barDump($ids, "ids");

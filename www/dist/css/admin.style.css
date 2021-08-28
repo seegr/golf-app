@@ -22480,3 +22480,6 @@ body.contents-list tr.archived td:not(.col-action) {
   text-decoration: line-through;
   opacity: 0.5;
 }
+body.contents-list tr.unactive td:not(.col-action) {
+  opacity: 0.5;
+}

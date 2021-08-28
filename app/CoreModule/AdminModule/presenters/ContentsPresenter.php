@@ -402,10 +402,10 @@ class ContentsPresenter extends AdminPresenter {
 
 		if ($date->active) {
 			$state = false;
-			$this->flashMessage("Akce byla skryta", "alert-warning");
+			$this->flashMessage("Termín skrytý", "alert-warning");
 		} else {
 			$state = true;
-			$this->flashMessage("Akce zveřejněna", "alert-success");
+			$this->flashMessage("Termín zveřejněný", "alert-success");
 		}
 
 		$date->update(["active" => $state]);

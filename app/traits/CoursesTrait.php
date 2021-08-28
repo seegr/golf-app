@@ -47,9 +47,9 @@ trait CoursesTrait
 
     public function getFutureCoursesBegins()
     {
-        $fEvents = $this->EventsManager->getEventsDates()
-            ->where("start >= ?", new DateTime)
-            ->order("start ASC");
+        $fEvents = $this->EventsManager->getEventsDates(true)
+            ->where("contents_events_dates.start >= ?", new DateTime)
+            ->order("contents_events_dates.start ASC");
         // bdump($fEvents->fetchAll());
 
         $times = self::getCoursesRange(true);
