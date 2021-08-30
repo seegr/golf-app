@@ -17,6 +17,7 @@ use Nette\Utils\ArrayHash;
 use Tracy\Debugger;
 use Monty\Mailer;
 use Nette\Mail\SmtpMailer;
+use Nette\Bridges\ApplicationLatte\TemplateFactory;
 
 
 class ApiPresenter extends Nette\Application\UI\Presenter
@@ -42,6 +43,9 @@ class ApiPresenter extends Nette\Application\UI\Presenter
 
     /** @var GolfConfig @inject */
     public GolfConfig $golfConfig;
+
+    /** @var TemplateFactory @inject */
+    public TemplateFactory $templateFactory;
 
 
   public function startup(): void
@@ -202,12 +206,18 @@ class ApiPresenter extends Nette\Application\UI\Presenter
   public function sendConfirmationEmail($vals, $event)
   {
       $mailer = $this->mailer;
+
+      $template = $this->templateFactory->createTemplate();
+      $html = $template->renderToString(__DIR__ . '/../templates/mails/registrationConfirm.latte', [
+          'title' => $event->title
+      ]);
+
       $mail = new Nette\Mail\Message();
       $mail->setFrom($this->golfConfig->get('emailFrom'), 'Golf Hostivař')
           ->addTo($vals->e_mail)
           ->addReplyTo($this->golfConfig->get('adminEmail'), $this->golfConfig->get('adminName'))
           ->setSubject('Potvrzení registrace')
-          ->setHtmlBody("Dobrý den,<br><br>potvrzujeme vaši registraci na kurz Budu golfista v termínu ($event->title). Jakmile se kurz naplní, zašleme vám podrobnější informace, včetně postupu sjednání členství. V případě dotazů náš můžete kontaktovat na tel.: 724124818 nebo <a href='mailto:recepce@golfhostivar.cz'>recepce@golfhostivar.cz</a><br><br>S přáním příjemného dne Golf Hostivař");
+          ->setHtmlBody($html);
 
       $mailer->send($mail);
 

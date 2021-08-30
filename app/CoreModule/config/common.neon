@@ -61,7 +61,11 @@ services:
 	    inject: true
 	mail.mailer:
 	    factory: Nette\Mail\SmtpMailer(%mailer%)
-	
+	TemplateFactory:
+		class: Nette\Bridges\ApplicationLatte\TemplateFactory
+		autowired: self
+		inject: true
+
 	nette.latteFactory:
 		setup:
 			- addFilter('interval', 'Monty\Filters::dateTimeInterval')
