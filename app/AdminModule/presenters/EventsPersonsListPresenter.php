@@ -69,7 +69,8 @@ class EventsPersonsListPresenter extends AdminPresenter
         $list->setDataSource($persons);
         $list->addColumnLink("course", "Kurz", ":Core:Admin:Contents:contentForm", null, ['id' => 'event'])->setSortable();
         $list->addColumnDateTime("start", "Začátek")->setRenderer(function($i) {
-            $date = $this->EventsManager->getEventDates($i)->order("start ASC")->fetch();
+        	bdump($i);
+            $date = $this->EventsManager->getEventDates($i['event'])->order("start ASC")->fetch();
             if (!$date) return;
 
             return $date->start->format(self::DATETIME_FORMAT);
