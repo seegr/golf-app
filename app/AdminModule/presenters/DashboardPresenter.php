@@ -125,8 +125,8 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
         $sheet->setCellValue('C1', 'BUDU GOLFISTA');
         $sheet->setCellValue('C3', $this->formatHtml('Vždy se ptejte, zda si budou půjčovat hole a pokud ano, rovnou si vezměte <strong>zálohu.</strong>'));
         $sheet->setCellValue('C5', $this->formatHtml('Na první lekci každému odbavit <strong>Karta ke kurzu zdarma</strong>.'));
-        $sheet->setCellValue('C6', $this->formatHtml('Na každou <strong>lekci s trenérem</strong> jim odbavte půjčení hole a 2 koše na driving, <strong>nebo</strong> akademii - pokud tak rozhodne trenér, ale většinou to budou koše. Při tréninku mimo lekci se musí odbavovat jako'));
-        $sheet->setCellValue('C7', 'běžný člen - tzn. čerpat z členství (pozor v typu platby z čeho čerpáte), nebo platit.');
+        $sheet->setCellValue('C6', $this->formatHtml('Na každou <strong>lekci s trenérem</strong> jim odbavte půjčení hole a 2 koše na driving, <strong>nebo</strong> akademii - pokud tak rozhodne trenér, ale většinou to budou koše.'));
+        $sheet->setCellValue('C7', 'Při tréninku mimo lekci se musí odbavovat jako běžný člen - tzn. čerpat z členství (pozor v typu platby z čeho čerpáte), nebo platit.');
         $sheet->setCellValue('C8', $this->formatHtml('Pokud lekci vynechají, <strong>na náhradu nemají nárok</strong>.'));
         $sheet->setCellValue('C10', 'Termín: ' . $start->format("j.n.Y"));
         $sheet->setCellValue('C11', 'Čas: ' . $start->format($timeFormat) . ' - ' . $end->format($timeFormat));
@@ -151,12 +151,12 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
         $this->setCellStringFormat($sheet, 'A1:J30');
         $this->setCellWidth($sheet, 'A', 3);
         $this->setCellWidth($sheet, 'B', 5.5);
-        $this->setCellWidth($sheet, 'C', 23);
-        $this->setCellWidth($sheet, 'D', 23);
-        $this->setCellWidth($sheet, 'E', 33);
+        $this->setCellWidth($sheet, 'C', 20);
+        $this->setCellWidth($sheet, 'D', 20);
+        $this->setCellWidth($sheet, 'E', 20);
         $this->setCellWidth($sheet, 'F', 20);
-        $this->setCellWidth($sheet, 'G', 20);
-        $this->setCellWidth($sheet, 'H', 20);
+        $this->setCellWidth($sheet, 'G', 15);
+        $this->setCellWidth($sheet, 'H', 15);
     }
 
     private function setCellBold(Worksheet $sheet, string $cells)
