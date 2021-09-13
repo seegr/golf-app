@@ -217,17 +217,14 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
     {
         $allCounter = $this->allCounter;
 
-        $fields = $this->FormsManager->getFormFields($course->reg_form)->fetchAll();
-//        $fieldsKeys = $fields->fetchPairs(null, 'name');
-//        Debugger::log($fieldsKeys);
+        $fields = $this->FormsManager->getFormFields($course->reg_form)->fetchAssoc('name->');
         $order = ['lastname', 'firstname', 'e_mail', 'telefon', 'cislo_clenstvi', 'email_odeslan'];
 
         $rows = [];
 
         $header = [];
-//        $header[] = '';
-        foreach ($fields as $field) {
-            $header[$field->name] = $field->label;
+        foreach ($order as $fieldName) {
+            $header[$fieldName] = $fields[$fieldName]->label;
         }
         $header = array_intersect_key($header, array_flip($order));
         $rows[] = [''] + $header;
@@ -238,15 +235,8 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
         $i = 1;
         foreach ($persons as $per) {
             $pRow = [$i];
-//            $pData = array_intersect_key($per, $fieldsKeys);
-//            $properOrderedArray = array_replace(array_flip(array('lastname', 'firstname', 'e_mail', 'telefon', 'cislo_clenstvi', 'email_odeslan')), $pData);
             $pData = array_merge(array_flip($order), $per);
-//            if ($i == 1) Debugger::log($pData);
-//            $fieldsKeys = array_flip($fieldsKeys);
-//            unset($fieldsKeys['poznamka']);
-//            if ($i == 1) Debugger::log($fieldsKeys);
             $pData = array_intersect_key($pData, array_flip($order));
-//            if ($i == 1) Debugger::log($pData);
 
             $pRow = $pRow + $pData;
             $rows[] = $pRow;
