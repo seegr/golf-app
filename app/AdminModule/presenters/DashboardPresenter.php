@@ -284,6 +284,8 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
             \Tracy\Debugger::barDump($sheet, "sheet");
 
             foreach ($sheet as $row) {
+            	if (empty($row[0])) continue;
+
                 $data = ArrayHash::from([
                     "title" => $row[0],
                     "start" => $row[1],
