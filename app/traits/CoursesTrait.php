@@ -18,14 +18,9 @@ trait CoursesTrait
         bdump($dates->fetchAll(), "dates");
     }
 
-    public static function getTimes(): array
-    {
-        return ["08:00", "09:00", "10:00", "17:00", "18:00", "18:30", "19:00", "19:30"];
-    }
-
     public static function getCoursesRange(bool $toArray = false)
     {
-        $period = new DatePeriod(new DateTime("08:00"), new DateInterval("PT1H"), new DateTime("20:01"));
+        $period = new DatePeriod(new DateTime("07:00"), new DateInterval("PT1H"), new DateTime("20:01"));
         
         if ($toArray) {
             $times = [];

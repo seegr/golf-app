@@ -191,16 +191,32 @@ class ContentsListPresenter extends AdminPresenter
             $list->addColumnText('id', "#ID")->setAlign('center');
         }
         $list->addColumnDateTime("created", "Vytvořeno")->setFormat("j.n.Y H:i")->setSortable();
-        // $list->addAction("edit", "", "contentForm")->setClass("fas fa-pencil btn btn-warning");
         $list->addAction("archive", "", "contentToggleArchive!", ["event_id" => "id"])
             ->setClass(function ($i) {
-                return $i->archived ? "fad fa-inbox-out btn btn-primary ajax" : "fad fa-inbox-in btn btn-danger ajax";
+                return $i->archived ? "fad fa-inbox-out btn btn-primary ajax" : "fad fa-inbox-in btn btn-warning ajax";
             })
+			->addAttributes([
+				'data-toggle' => 'tooltip',
+				'title' => 'Archivace'
+			])
             ->setConfirmation(new StringConfirmation("Opravdu chceš archivovat %s?", "title"));
+		$list->addAction("delete", "", "contentDelete!", ["event_id" => "id"])
+			->setClass(function ($i) {
+				return "fad fa-trash btn btn-danger ajax";
+			})
+			->addAttributes([
+				'data-toggle' => 'tooltip',
+				'title' => 'Smazat'
+			])
+			->setConfirmation(new StringConfirmation("Opravdu chceš smazat %s?", "title"));
         $list->addAction("active", "", "eventPublishedToggle!", ["event_id" => "id"])
             ->setClass(function ($i) {
                 return $i->active ? "fad fa-check-circle btn btn-success ajax" : "fad fa-circle btn btn-secondary ajax";
             })
+			->addAttributes([
+				'data-toggle' => 'tooltip',
+				'title' => 'Publikování'
+			])
             ->setConfirmation(new StringConfirmation("Opravdu chceš skrýt/publikovat %s?", "title"));
 
         // $list->addGroupAction("Smazat")->onSelect[] = function($ids) use ($list) {
@@ -256,9 +272,18 @@ class ContentsListPresenter extends AdminPresenter
 
         $message = $content->archived ? 'Událost archivována' : 'Událost obnovena';
 
-        $this->flashMessage($message, "alert-danger");
+        $this->flashMessage($message, "alert-warning");
         $this->redrawControl("content");
     }
+
+	public function handleContentDelete($event_id)
+	{
+		$content = $this->ContentsManager->getContent($event_id);
+		$content->delete();
+
+		$this->flashMessage('Událost smazána', "alert-danger");
+		$this->redrawControl("content");
+	}
 
     public function handleEventPublishedToggle($event_id)
     {
