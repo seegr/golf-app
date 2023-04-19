@@ -208,9 +208,9 @@ class ApiPresenter extends Nette\Application\UI\Presenter
       $mailer = $this->mailer;
 
       $template = $this->templateFactory->createTemplate();
-      $html = $template->renderToString(__DIR__ . '/../templates/mails/registrationConfirm.latte', [
-          'title' => $event->title
-      ]);
+//      $html = $template->renderToString(__DIR__ . '/../templates/mails/registrationConfirm.latte', [
+//          'title' => $event->title
+//      ]);
 
 //      $mail = new Nette\Mail\Message();
 //      $mail->setFrom($this->golfConfig->get('emailFrom'), 'Golf Hostivař')
