@@ -10,3 +10,4 @@ session/
 log/
 db_backup/
 .DS_Store
+.idea/

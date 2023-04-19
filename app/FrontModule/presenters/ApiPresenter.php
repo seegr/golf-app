@@ -212,14 +212,13 @@ class ApiPresenter extends Nette\Application\UI\Presenter
           'title' => $event->title
       ]);
 
-      $mail = new Nette\Mail\Message();
-      $mail->setFrom($this->golfConfig->get('emailFrom'), 'Golf Hostivař')
-          ->addTo($vals->e_mail)
-          ->addReplyTo($this->golfConfig->get('adminEmail'), $this->golfConfig->get('adminName'))
-          ->setSubject('Potvrzení registrace')
-          ->setHtmlBody($html);
-
-      $mailer->send($mail);
+//      $mail = new Nette\Mail\Message();
+//      $mail->setFrom($this->golfConfig->get('emailFrom'), 'Golf Hostivař')
+//          ->addTo($vals->e_mail)
+//          ->addReplyTo($this->golfConfig->get('adminEmail'), $this->golfConfig->get('adminName'))
+//          ->setSubject('Potvrzení registrace')
+//          ->setHtmlBody($html);
+//      $mailer->send($mail);
 
       // admin mail
       $link = $this->link('//:Core:Admin:EventsPersons:eventPersonsList', [
@@ -230,7 +229,6 @@ class ApiPresenter extends Nette\Application\UI\Presenter
           ->addTo($this->golfConfig->get('adminEmail'))
           ->setSubject("Nová registrace na $event->title")
           ->setHtmlBody("Nový registrovaný účastník. <a href='$link'>koukni</a>");
-
       $mailer->send($mail);
   }
 
