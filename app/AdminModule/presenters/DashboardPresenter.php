@@ -8,6 +8,7 @@ use Monty\Helper;
 use Monty\Form;
 use Nette\Utils\ArrayHash;
 use Nette\Utils\Html;
+use Nette\Utils\Json;
 use Nette\Utils\Strings;
 use PhpOffice\PhpSpreadsheet\RichText\RichText;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -288,8 +289,9 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
 
                 $data = ArrayHash::from([
                     "title" => $row[0],
-                    "start" => $row[1],
-                    "end" => $row[2]
+                    "course" => $row[1],
+                    "start" => $row[2],
+                    "end" => $row[3]
                 ]);
 
                 bdump($data);
@@ -301,7 +303,8 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
                     "type" => "event",
                     "registration" => "event",
                     "reg_form" => 1,
-                    "reg_part" => 4
+                    "reg_part" => 4,
+                    "custom_fields" => ['course' => $data->course]
                 ]);
 
                 $this->EventsManager->saveEventDate([

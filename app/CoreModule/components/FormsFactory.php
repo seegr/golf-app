@@ -110,6 +110,7 @@ class FormsFactory extends BaseFormsFactory
 			} else if ($type == "price") {
 				$control = $group->addPrice($name, $title);
 			} else if ($type == "select") {
+                bdump($field->options);
                 $control = $group->addSelect($name, $title, (array)$field->options);
             }
 

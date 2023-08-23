@@ -6,8 +6,8 @@ parameters:
 	appName: "GolfApp"
 	golf:
 		courses:
-			refresh: Refresh
 			golfista: Budu Golfista
+			refresh: Refresh
 	
 router:
 	homeRoute: "Admin:Dashboard:dashboard"
@@ -26,8 +26,8 @@ contents:
 				title: Kurz
 				type: select
 				options:
-					refresh: Refresh
 					golfista: Budu Golfista
+					refresh: Refresh
 
 services:
 	GoflConfig: App\model\GolfConfig(%golf%)
