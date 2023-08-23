@@ -277,11 +277,11 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
 
         $f->onSuccess[] = function ($f, $v) {
             $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
-            \Tracy\Debugger::barDump($v->file, "file");
+            bdump($v->file, "file");
             $file = $v->file;
             $excel = $reader->load($file->getTemporaryFile());
             $sheet = $excel->getSheet(0)->toArray();
-            \Tracy\Debugger::barDump($sheet, "sheet");
+            bdump($sheet, "sheet");
 
             foreach ($sheet as $row) {
             	if (empty($row[0])) continue;

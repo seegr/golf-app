@@ -17,18 +17,18 @@ class BaseControl extends Nette\Application\UI\Control {
 	// public function __construct($presenter = null)
 	// {
 	// 	if ($presenter) {
-	// 		\Tracy\Debugger::barDump("attaching");
+	// 		bdump("attaching");
 	// 		$this->attached($presenter);
 	// 		$this->presenter = $presenter;
 	// 	}
-	// 	\Tracy\Debugger::barDump($this, self::class);
+	// 	bdump($this, self::class);
 	// }
 
 	// protected function attached(Nette\ComponentModel\IComponent $obj): void
 	// {
-	// 	\Tracy\Debugger::barDump($obj, "obj");
+	// 	bdump($obj, "obj");
 	// 	$this->presenter = $obj;
-	// 	// \Tracy\Debugger::barDump($this->getPresenter(), "presenter");
+	// 	// bdump($this->getPresenter(), "presenter");
 	// }
 
 	public function render() {
@@ -59,17 +59,17 @@ class BaseControl extends Nette\Application\UI\Control {
 
 	public function renderIt($template) {
 		$templateFile = $template->getFile();
-		#\Tracy\Debugger::barDump($templateFile, "templateFile");
+		#bdump($templateFile, "templateFile");
 
 		if ($this->renderToString) {
-			#\Tracy\Debugger::barDump(1);
-			// \Tracy\Debugger::barDump($template->getParameters(), "pars");
+			#bdump(1);
+			// bdump($template->getParameters(), "pars");
 			$html = $template->getLatte()->renderToString($templateFile, $template->getParameters());
-			#\Tracy\Debugger::barDump($html, "basecontrol html");
+			#bdump($html, "basecontrol html");
 			// $this->renderToString();
 			return $html;
 		} else {
-			#\Tracy\Debugger::barDump(2);
+			#bdump(2);
 			$template->render();
 		}
 	}

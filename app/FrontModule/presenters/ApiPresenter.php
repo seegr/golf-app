@@ -105,6 +105,7 @@ class ApiPresenter extends Nette\Application\UI\Presenter
       $data = [
           'id' => $date->id,
           'title' => $event->title,
+          'course' => $customFields->course ? $this->golfConfig->get('courses')[$customFields->course] : null,
           'start' => $date->start,
           'end' => $date->end,
           'lektor' => !empty($customFields->lektor) ? $customFields->lektor : null,
@@ -206,19 +207,22 @@ class ApiPresenter extends Nette\Application\UI\Presenter
   public function sendConfirmationEmail($vals, $event)
   {
       $mailer = $this->mailer;
+      $eventCustomFields = Json::decode($event->custom_fields);
 
-      $template = $this->templateFactory->createTemplate();
-//      $html = $template->renderToString(__DIR__ . '/../templates/mails/registrationConfirm.latte', [
-//          'title' => $event->title
-//      ]);
+      if ($courseType = $eventCustomFields->course) {
+          $template = $this->templateFactory->createTemplate();
+          $html = $template->renderToString(__DIR__ . "/../templates/mails/registrationConfirm-$courseType.latte", [
+              'title' => $event->title
+          ]);
 
-//      $mail = new Nette\Mail\Message();
-//      $mail->setFrom($this->golfConfig->get('emailFrom'), 'Golf Hostivař')
-//          ->addTo($vals->e_mail)
-//          ->addReplyTo($this->golfConfig->get('adminEmail'), $this->golfConfig->get('adminName'))
-//          ->setSubject('Potvrzení registrace')
-//          ->setHtmlBody($html);
-//      $mailer->send($mail);
+          $mail = new Nette\Mail\Message();
+          $mail->setFrom($this->golfConfig->get('emailFrom'), 'Golf Hostivař')
+              ->addTo($vals->e_mail)
+              ->addReplyTo($this->golfConfig->get('adminEmail'), $this->golfConfig->get('adminName'))
+              ->setSubject('Potvrzení registrace')
+              ->setHtmlBody($html);
+          $mailer->send($mail);
+      }
 
       // admin mail
       $link = $this->link('//:Core:Admin:EventsPersons:eventPersonsList', [

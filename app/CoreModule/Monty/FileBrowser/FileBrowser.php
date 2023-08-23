@@ -120,16 +120,16 @@ class FileBrowser extends Nette\Application\UI\Control {
 		$files = [];
 
 		if ($this->filesSource) {
-			\Tracy\Debugger::barDump($this->filesSource, "filesSource");
+			bdump($this->filesSource, "filesSource");
 			$keys = ArrayHash::from($this->keys);
 			$keySrc = $keys->src;
 			$keyLabel = $keys->label;
 			$keyPath = $keys->path;
 
 			foreach ($this->filesSource as $id => $item) {
-				#\Tracy\Debugger::barDump($id, "id");
-				#\Tracy\Debugger::barDump($item, "item");
-				\Tracy\Debugger::barDump($this->keys, "keys");
+				#bdump($id, "id");
+				#bdump($item, "item");
+				bdump($this->keys, "keys");
 
 				$path = $item->$keyPath;
 				$src = $item->$keySrc;
@@ -157,7 +157,7 @@ class FileBrowser extends Nette\Application\UI\Control {
 		}
 
 		$callback = $this->selectedActions[$action]->callback;
-		\Tracy\Debugger::barDump($callback);
+		bdump($callback);
 
 		$callback($selected);
 	}

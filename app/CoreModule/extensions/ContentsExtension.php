@@ -10,7 +10,7 @@ class ContentsExtension extends BaseExtension
 
 	public function loadConfiguration()
 	{
-		// \Tracy\Debugger::barDump($this->config, "config");
+		// bdump($this->config, "config");
 	}
 
 	public function beforeCompile(): void

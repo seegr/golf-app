@@ -39,7 +39,7 @@ final class OAuthGoogleControl extends \Monty\OAuth\OAuthControl
 			$client->setRedirectUri($this->LinkGenerator->link($this->redirectUri));
 			$client->addScope("https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email");
 
-			// \Tracy\Debugger::barDump($client, "client");
+			// bdump($client, "client");
 
 			return $client;
 		} else {
@@ -51,10 +51,10 @@ final class OAuthGoogleControl extends \Monty\OAuth\OAuthControl
 	{
 		// $oAuth = new Google_Service_Oauth2($this->getClient());
 		$oAuth = new Google_Service_Oauth2($client);
-		\Tracy\Debugger::barDump($oAuth->userinfo_v2_me->get(), "google userinfo");
+		bdump($oAuth->userinfo_v2_me->get(), "google userinfo");
 		// $gUser = ArrayHash::from($oAuth->userinfo_v2_me->get());
 		$gUser = $oAuth->userinfo_v2_me->get();
-		\Tracy\Debugger::barDump($gUser, "gUser");
+		bdump($gUser, "gUser");
 
 		return $gUser;
 	}

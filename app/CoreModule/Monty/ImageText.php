@@ -48,13 +48,13 @@ class ImageText extends \Nette\Utils\Image {
 		$fontSize = $size * 4;
 		
 		$dimensions = imagettfbbox($fontSize, 0, $font, $text);
-		\Tracy\Debugger::barDump($dimensions, "dimensions");
+		bdump($dimensions, "dimensions");
 		$width = $dimensions[4];
 		$height = abs($dimensions[5]);
 
 		$image = $this->image;
 		/*$this->image = $image;
-		\Tracy\Debugger::barDump($image, "image");*/
+		bdump($image, "image");*/
 
 		switch ($color) {
 			case "white":
@@ -67,7 +67,7 @@ class ImageText extends \Nette\Utils\Image {
 		}
 
 
-		#\Tracy\Debugger::barDump($brandDimensions, "brandDimensions");
+		#bdump($brandDimensions, "brandDimensions");
 
 		/*switch ($position) {
 			case "bottomRight";
@@ -97,13 +97,13 @@ class ImageText extends \Nette\Utils\Image {
 			$authorFontSize = $image->width * 0.015;
 			$authorColor = imagecolorallocatealpha($image->getImageResource(), 255, 255, 255, 40);
 			$authorDimensions = imagettfbbox($authorFontSize, 0, $authorFont, $authorText);
-			\Tracy\Debugger::barDump($authorDimensions, "dimensions");
+			bdump($authorDimensions, "dimensions");
 			$authorX = $image->width - $authorDimensions[4] - 10;
 			$authorY = $image->height - 10;
 			$image->ttfText($authorFontSize, 0, $authorX, $authorY, $authorColor, $authorFont, $authorText);
 		}*/
 
-		#\Tracy\Debugger::barDump($image, "image");
+		#bdump($image, "image");
 
 		//$this->image = $image;
 		#$image->sharpen();

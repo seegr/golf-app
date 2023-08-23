@@ -77,7 +77,7 @@ class FileSystem {
 		if ($file instanceof FileUpload) {
 			$fileName = $file->getName();
 		} else {
-			\Tracy\Debugger::barDump(pathinfo($file), "pathInfo");
+			bdump(pathinfo($file), "pathInfo");
 			$fileName = pathinfo($file)["basename"];
 		}
 

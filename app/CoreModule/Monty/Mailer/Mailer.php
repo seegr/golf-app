@@ -36,7 +36,7 @@ class Mailer {
 	public function __construct(Nette\Application\LinkGenerator $linkGenerator, Nette\Application\UI\ITemplateFactory $templateFactory) {
 		$this->linkGenerator = $linkGenerator;
 		$this->templateFactory = $templateFactory;
-		#\Tracy\Debugger::barDump($linkGenerator, "linkGenerator");
+		#bdump($linkGenerator, "linkGenerator");
 	}
 
 	public function setConfig($config) {

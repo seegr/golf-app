@@ -22,14 +22,14 @@ class AliasesManager extends BaseManager {
 	}
 
 	public function saveAlias($type, $item, $prefix = null, $append = null) {
-		// \Tracy\Debugger::barDump("saveAlias");
+		// bdump("saveAlias");
 		if ($this->hasItemAlias($type, $item)) return;
 
 		$lastAlias = $this->getLastAlias($type, $item);
 		$alias = $this->generateUniqueAlias($item, self::TABLE_ALIASES, "alias", $prefix);
 
-		// \Tracy\Debugger::barDump($lastAlias, "lastAlias");
-		// \Tracy\Debugger::barDump($alias, "alias");
+		// bdump($lastAlias, "lastAlias");
+		// bdump($alias, "alias");
 		
 		if ($alias == $lastAlias) return;
 

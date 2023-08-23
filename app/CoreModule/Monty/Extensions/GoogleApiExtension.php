@@ -13,7 +13,7 @@ class GoogleApiExtension extends Nette\DI\CompilerExtension
 
 	public function getConfigSchema(): Nette\Schema\Schema
 	{
-		\Tracy\Debugger::barDump($this, "getConfigSchema");
+		bdump($this, "getConfigSchema");
 		return Expect::structure([
 			"id" => Expect::string(),
 			"secret" => Expect::string(),
@@ -26,9 +26,9 @@ class GoogleApiExtension extends Nette\DI\CompilerExtension
 
 	public function loadConfiguration()
 	{
-		\Tracy\Debugger::barDump($this->config, "loadConfiguration");
+		bdump($this->config, "loadConfiguration");
 		$builder = $this->getContainerBuilder();
-		// \Tracy\Debugger::barDump($builder, "builder");
+		// bdump($builder, "builder");
 		// $builder->addDefinition($this->prefix('googleApi'));
 			// ->setFactory(App\Model\HomepageArticles::class, ['@connection'])
 			// ->addSetup('setLogger', ['@logger']);
@@ -46,9 +46,9 @@ class GoogleApiExtension extends Nette\DI\CompilerExtension
 
 	public function setClient()
 	{
-		\Tracy\Debugger::barDump($this, "setClient");
+		bdump($this, "setClient");
 		$config = $this->config;
-		\Tracy\Debugger::barDump($config, "config");
+		bdump($config, "config");
 		// $gClient = new Google_Client();
 		// $gClient->setClientId($gConfigs->id);
 		// $gClient->setClientSecret($gConfigs->secret);
@@ -56,7 +56,7 @@ class GoogleApiExtension extends Nette\DI\CompilerExtension
 		// $gClient->setRedirectUri($this->link("//:Front:Users:googleSignInCallback"));
 		// $gClient->addScope("https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email");
 
-		// \Tracy\Debugger::barDump($gClient, "gClient");
+		// bdump($gClient, "gClient");
 	}
 
 }

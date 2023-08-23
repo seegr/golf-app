@@ -25,7 +25,7 @@ class PersonsManager extends BaseManager {
 
 	public function savePerson($vals, $forceInsert = false) {
 		$vals = ArrayHash::from($vals);
-		\Tracy\Debugger::barDump($vals, "vals");
+		bdump($vals, "vals");
 
 		$data = [
 			"id" => !empty($vals->id) ? $vals->id : null,

@@ -66,9 +66,9 @@ class ContentsManager extends BaseManager {
 	}
 
 	public function getContent($id, $formData = false) {
-		// \Tracy\Debugger::barDump($id, "id");		
+		// bdump($id, "id");		
 		$itemId = is_numeric($id) ? null : $this->getItemIdByAlias("contents", $id);
-		// \Tracy\Debugger::barDump($itemId, "alias itemId");
+		// bdump($itemId, "alias itemId");
 
 		$id = $itemId ? $itemId : $id;
 
@@ -85,7 +85,7 @@ class ContentsManager extends BaseManager {
 		}
 
 		if ($content && $formData) {
-			// \Tracy\Debugger::barDump($content, "content");
+			// bdump($content, "content");
 			$data = [];
 
 			foreach ($content as $col => $val) {
@@ -96,7 +96,7 @@ class ContentsManager extends BaseManager {
 				}
 			}
 
-			// \Tracy\Debugger::barDump($data, "data");
+			// bdump($data, "data");
 			$content = ArrayHash::from($data);
 		}
 
@@ -104,7 +104,7 @@ class ContentsManager extends BaseManager {
 	}
 
 	public function contentSave($vals) {
-		\Tracy\Debugger::barDump($vals, "vals");
+		bdump($vals, "vals");
 
 		if (!is_object($vals)) $vals = ArrayHash::from($vals);
 
@@ -182,12 +182,12 @@ class ContentsManager extends BaseManager {
 
 	public function isFieldContact($name) {
 		if (strrpos($name, "contacts") !== false) {
-			\Tracy\Debugger::barDump($name, "je contact field");
+			bdump($name, "je contact field");
 			if (strrpos($name, "_") !== false) {
 				$type = explode("_", $name);
 				$type = $type[1];
 
-				\Tracy\Debugger::barDump($type, "type");
+				bdump($type, "type");
 
 				return $type;
 			}
@@ -226,15 +226,15 @@ class ContentsManager extends BaseManager {
 
 	public function saveContentTypeFieldsVals($content, $vals, $type) {
 		$fields = $this->getContentTypeFields($type)->fetchPairs(null, "name");
-		\Tracy\Debugger::barDump($fields, "fields");
+		bdump($fields, "fields");
 
 		if (!$fields) return;
 
 		foreach ($vals as $field => $val) {
 			if (in_array($field, $fields) && strpos($field, "contacts_") === false) {
-				// \Tracy\Debugger::barDump($content, "content");
-				// \Tracy\Debugger::barDump($field, "field");
-				// \Tracy\Debugger::barDump($val, "val");
+				// bdump($content, "content");
+				// bdump($field, "field");
+				// bdump($val, "val");
 				$this->getContentsTypesFieldsVals()->where("content", $content)->where("field", $field)->delete();
 				$this->saveContentTypeFieldVal($content, $field, $val);
 			}
@@ -286,7 +286,7 @@ class ContentsManager extends BaseManager {
 
 		$types = [];
 		foreach ($typeFields as $name) {
-			\Tracy\Debugger::barDump($name, "name");
+			bdump($name, "name");
 			if ($cName = $this->isFieldContact($name)) {
 				$types[] = $cName;
 			}
@@ -296,7 +296,7 @@ class ContentsManager extends BaseManager {
 		$arr["contacts"] = $this->getContentContacts($id)->fetchPairs(null, "id");
 		$arr["contacts"] = count($arr["contacts"]) ? $arr["contacts"] : null;
 		foreach ($types as $type) {
-			\Tracy\Debugger::barDump($type, "contact type");
+			bdump($type, "contact type");
 			$arr["contacts_" . $type] = $this->getContentContacts($id, $type)->fetchPairs(null, "id");
 			$arr["contacts_" . $type] = count($arr["contacts_" . $type]) ? $arr["contacts_" . $type] : null;
 		}
@@ -314,7 +314,7 @@ class ContentsManager extends BaseManager {
 	}*/
 
 	public function saveContentContacts($id, $contacts = [], $type = null) {
-		\Tracy\Debugger::barDump($contacts, "contacts");
+		bdump($contacts, "contacts");
 		$this->getContentContacts($id, $type)->delete();
 
 		if ($contacts) 
@@ -378,7 +378,7 @@ class ContentsManager extends BaseManager {
 	}
 
 	public function saveContentImage($vals) {
-		\Tracy\Debugger::barDump($vals, "save content image");
+		bdump($vals, "save content image");
 		$vals = is_array($vals) ? ArrayHash::from($vals) : $vals;
 
 		$data = [
@@ -388,7 +388,7 @@ class ContentsManager extends BaseManager {
 		
 		if (empty($vals->id)) {
 			$contentId = $this->getContent($vals->content)->id;
-			\Tracy\Debugger::barDump($contentId, "contentId");
+			bdump($contentId, "contentId");
 
 			$data["content"] = $contentId;
 		}
@@ -423,8 +423,8 @@ class ContentsManager extends BaseManager {
 	}
 
 	public function saveContentFile($content, $file) {
-		\Tracy\Debugger::barDump($content, "content");
-		\Tracy\Debugger::barDump($file, "file");
+		bdump($content, "content");
+		bdump($file, "file");
 		return $this->getContentsFiles()->insert(["content" => $content, "file" => $file]);
 	}
 
@@ -559,7 +559,7 @@ class ContentsManager extends BaseManager {
 					$contacts = $emps;
 				}
 
-				\Tracy\Debugger::barDump($contacts, "contacts");
+				bdump($contacts, "contacts");
 				$data[$field] = $contacts;
 			}
 		}
@@ -625,7 +625,7 @@ class ContentsManager extends BaseManager {
 			$conds["start <= ? AND end >= ?"] = [$start, $start];
 		}
 
-		// \Tracy\Debugger::barDump($conds, "conds");
+		// bdump($conds, "conds");
 
 		$sel = $sel->whereOr($conds);
 
@@ -658,7 +658,7 @@ class ContentsManager extends BaseManager {
 		if (!$type) return;
 
 		$type = $type->short;
-		// \Tracy\Debugger::barDump($type, "type");
+		// bdump($type, "type");
 		return isset($this->contentCustomFields[$type]) ? $this->contentCustomFields[$type] : [];
 	}
 
@@ -677,8 +677,8 @@ class ContentsManager extends BaseManager {
 	}*/
 
 	public function eventRepeatSave($vals) {
-		\Tracy\Debugger::barDump($vals, "event date form");
-		\Tracy\Debugger::barDump($vals->type, "type");
+		bdump($vals, "event date form");
+		bdump($vals->type, "type");
 		$event = $this->getEvent($vals->parent);
 
 		return;
@@ -689,7 +689,7 @@ class ContentsManager extends BaseManager {
 			$firstChild = $this->getEventFirstChild($event->id);
 			$event = $firstChild;
 		}
-		// \Tracy\Debugger::barDump($event, "event");
+		// bdump($event, "event");
 
 		$event_time_start = $event->start->format("H:i");
 		$event_time_end = $event->end->format("H:i");
@@ -700,11 +700,11 @@ class ContentsManager extends BaseManager {
 		} else {
 			$end = new \DateTime($vals->start);
 		}
-		// \Tracy\Debugger::barDump($start, "start");
-		// \Tracy\Debugger::barDump($end, "end");
+		// bdump($start, "start");
+		// bdump($end, "end");
 
 		$diff = $start->diff($end);
-		// \Tracy\Debugger::barDump($diff, "diff");
+		// bdump($diff, "diff");
 
 		switch ($vals->type) {
 			case "days":
@@ -721,17 +721,17 @@ class ContentsManager extends BaseManager {
 		}
 
 		if ($vals->type == "dates") {
-			// \Tracy\Debugger::barDump($vals->dates, "dates");
+			// bdump($vals->dates, "dates");
 			$dates = explode(",", trim($vals->dates));
 		} else {
 			foreach ($interval as $dt) {
-				// \Tracy\Debugger::barDump($dt, "dt");
+				// bdump($dt, "dt");
 				$dayNum = $dt->format("N");
-				// \Tracy\Debugger::barDump($dayNum, "loop day num");
+				// bdump($dayNum, "loop day num");
 
 				if ($vals->type == "days") {
 					if (in_array($dayNum, $vals->days)) {
-						// \Tracy\Debugger::barDump("den sedi - ukladam");
+						// bdump("den sedi - ukladam");
 						$dates[] = $dt->format("j.n.Y");
 					}
 				} else {
@@ -750,13 +750,13 @@ class ContentsManager extends BaseManager {
 		$data = ArrayHash::from([]);
 		$data->parent = $vals->parent;
 
-		\Tracy\Debugger::barDump($dates, "dates");
+		bdump($dates, "dates");
 		// return;
 
 		$ids = [];
 		foreach ($dates as $date) {
 			$diff = $event->start->diff($event->end);
-			// \Tracy\Debugger::barDump($diff, "diff");
+			// bdump($diff, "diff");
 
 			$data->start = $event->start->modify($date);
 			$endDateModify = "+" . $diff->days . " days";
@@ -775,8 +775,8 @@ class ContentsManager extends BaseManager {
 		if ($customFields = $content->custom_fields) {
 			$customFields = ArrayHash::from(Json::decode($customFields, true));
 			$fields = $this->getContentCustomFields($content->ref("type")->short);
-			\Tracy\Debugger::barDump($fields, "fields");
-			\Tracy\Debugger::barDump($customFields, "customFields");
+			bdump($fields, "fields");
+			bdump($customFields, "customFields");
 
 			$data = [];
 			foreach ($fields as $fieldId => $fData) {

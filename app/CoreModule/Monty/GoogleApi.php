@@ -53,7 +53,7 @@ class GoogleApi extends Nette\DI\CompilerExtension
 
 	public function setClient()
 	{
-		// \Tracy\Debugger::barDump($this, "setClient");
+		// bdump($this, "setClient");
 
 		if (!$this->id || !$this->secret) return;
 
@@ -63,7 +63,7 @@ class GoogleApi extends Nette\DI\CompilerExtension
 		$gClient->setApplicationName($this->appName);
 		$gClient->setRedirectUri($this->LinkGenerator->link("Core:Front:Users:googleSignInCallback"));
 		$gClient->addScope("https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email");
-		// \Tracy\Debugger::barDump($gClient, "gClient");
+		// bdump($gClient, "gClient");
 
 		$this->client = $gClient;
 

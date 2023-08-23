@@ -46,7 +46,7 @@ class DataGrid extends \Ublaboo\DataGrid\DataGrid
 
 	public function onRender() {
 		parent::onRender();
-		// \Tracy\Debugger::barDump("tralala");
+		// bdump("tralala");
 
 		$this->getTemplate()->tableClass = $this->tableClass;
 		$this->setFilterControls();
@@ -141,7 +141,7 @@ class DataGrid extends \Ublaboo\DataGrid\DataGrid
 	// }
 
 	public function orderColumns(array $keys) {
-		// \Tracy\Debugger::barDump($this->columns, "columns");
+		// bdump($this->columns, "columns");
 
 		$oldCols = $this->columns;
 		$cols = [];
@@ -151,11 +151,11 @@ class DataGrid extends \Ublaboo\DataGrid\DataGrid
 			unset($oldCols[$key]);
 		}
 
-		// \Tracy\Debugger::barDump($cols, "cols");
+		// bdump($cols, "cols");
 
 		$this->columns = $cols + $oldCols;
 
-		// \Tracy\Debugger::barDump($this->columns, "cols");
+		// bdump($this->columns, "cols");
 	}
 
 	public function moveColumnStart($key) {
@@ -177,12 +177,12 @@ class DataGrid extends \Ublaboo\DataGrid\DataGrid
 	public function setFilterControls()
 	{
 		foreach ($this->filters as $filter) {
-			// \Tracy\Debugger::barDump($filter, "filter");
-			// \Tracy\Debugger::barDump($filter->getPrototype());
+			// bdump($filter, "filter");
+			// bdump($filter->getPrototype());
 			$filter->setAttribute("class", $filter->getAttributes()["class"] + ["datagrid-form-control"]);
 			$classes = $filter->getAttributes()["class"];
 			$classes[] = "datagrid-form-control";
-			// \Tracy\Debugger::barDump($classes, "classes");
+			// bdump($classes, "classes");
 			$filter->setAttribute("class", $classes);
 			$filter->setAttribute("autocomplete", "off");
 		}		

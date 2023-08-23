@@ -95,17 +95,17 @@ class Watermark {
 		$size = $this->size ? $this->size : 1;
 
 		if ($this->canvas) {
-			\Tracy\Debugger::barDump("canvas - 1");
+			bdump("canvas - 1");
 			$fontSize = $this->canvas->width * 0.025 * $size;
 		} else {
-			\Tracy\Debugger::barDump("canvas - 2");
+			bdump("canvas - 2");
 			$fontSize = $size * 10;
 		}
 
 		$fontSize = $fontSize * $scale;
 
 		$box = imagettfbbox($fontSize, 0, $font, $text);
-		\Tracy\Debugger::barDump($box, "dimensions");
+		bdump($box, "dimensions");
 		$width = $box[2] - $box[0];
 		$height = $box[1] + abs($box[7]);
 
@@ -124,8 +124,8 @@ class Watermark {
 			$opacity = $this->getOpacity();
 
 			$font = $this->getFont();
-			\Tracy\Debugger::barDump($font, "font");
-			\Tracy\Debugger::barDump(is_file($font), "font is file?");
+			bdump($font, "font");
+			bdump(is_file($font), "font is file?");
 
 			$scale = 1;
 			$textBox = $this->getTextBox($scale);

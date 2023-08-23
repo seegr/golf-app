@@ -163,7 +163,7 @@ class Helper extends \Monty\Utils {
 	}
 
 	public static function generateUniqueFileName($file, $prefix = null) {
-		#\Tracy\Debugger::barDump($file, "file - generateUniqueFileName");
+		#bdump($file, "file - generateUniqueFileName");
 		$origName = $file->getName();
 		$origNameArr = explode(".", $origName);
 		$ext = end($origNameArr);
@@ -173,11 +173,11 @@ class Helper extends \Monty\Utils {
 		$name = "";
 		if ($prefix) $name .= $prefix;
 
-		#\Tracy\Debugger::barDump($file, "file");
+		#bdump($file, "file");
 		$fileInfo = new \SplFileInfo($file);
-		#\Tracy\Debugger::barDump($file, "file splinfo");
+		#bdump($file, "file splinfo");
 		$pathInfo = pathinfo($file);
-		#\Tracy\Debugger::barDump($pathInfo, "pathInfo");
+		#bdump($pathInfo, "pathInfo");
 
 		$name .= $fileName . "_" . uniqid() . "." . $ext;
 
@@ -185,13 +185,13 @@ class Helper extends \Monty\Utils {
 	}
 
 	public static function shorten($string, $length, $rawEncode = false) {
-		\Tracy\Debugger::barDump($string, "string");
+		bdump($string, "string");
 		$length = $length - 3; // because of three dots
 
 		if (strlen($string) >= $length) {
 			$str = $rawEncode ? substr($string, 0, $length) : mb_substr($string, 0, $length);
 		    $str .= "...";
-		    \Tracy\Debugger::barDump($str, "str");
+		    bdump($str, "str");
 		    return $str;
 		}
 		else {
@@ -210,8 +210,8 @@ class Helper extends \Monty\Utils {
 		$spans = [];
 		$datetimes = [];
 		foreach ($parts as $part) {
-			// \Tracy\Debugger::barDump($part, "part");
-			// \Tracy\Debugger::barDump($$part, "part");
+			// bdump($part, "part");
+			// bdump($$part, "part");
 			$letter = $part[0];
 
 			$span = "_" . $letter;
@@ -258,13 +258,13 @@ class Helper extends \Monty\Utils {
 
 	public static function isWholeDay($start, $end) {
 		if (self::isSameDay($start, $end)) {
-			// \Tracy\Debugger::barDump(1);
+			// bdump(1);
 			$start = $start->format("H:i");
 			$end = $end->format("H:i");
 
 			return $start == "00:00" && $end == "23:59" ? true : false;
 		} else {
-			// \Tracy\Debugger::barDump(2);
+			// bdump(2);
 			return false;
 		}
 	}
@@ -328,13 +328,13 @@ class Helper extends \Monty\Utils {
 	}
 
 	public static function isImage($path) {
-		// \Tracy\Debugger::barDump($path, "path");
+		// bdump($path, "path");
 		return file_exists($path) && filesize($path) && exif_imagetype($path) ? true : false;
 	}
 
 	public static function getTimeDiffString($arg1, $arg2 = null) {
-		// \Tracy\Debugger::barDump($arg1, "arg1");
-		// \Tracy\Debugger::barDump($arg2, "arg2");
+		// bdump($arg1, "arg1");
+		// bdump($arg2, "arg2");
 		$wrap = Html::el("span class=time-diff");
 
 		if ($arg1 && $arg2) {
@@ -348,7 +348,7 @@ class Helper extends \Monty\Utils {
 			}
 		}
 
-		\Tracy\Debugger::barDump($int, "int");
+		bdump($int, "int");
 
 		$text = "Před ";
 		if (!$int->d && !$int->h && !$int->i) {
@@ -378,7 +378,7 @@ class Helper extends \Monty\Utils {
 		}
 		
 		// $wrap->addHtml($text);
-		// \Tracy\Debugger::barDump($text, "text");
+		// bdump($text, "text");
 
 		$wrap->addHtml("<span class='time-diff-number'>" . $text . "</span>");
 
@@ -387,7 +387,7 @@ class Helper extends \Monty\Utils {
 
 	public static function sortAssocArray($arr, $key, $sort = "asc") {
 		$cols = array_column($arr, $key, "id");
-		\Tracy\Debugger::barDump($cols, "cols");
+		bdump($cols, "cols");
 
 		$sort = strtoupper($sort);
 		$sort = $sort == "ASC" ? SORT_ASC : SORT_DESC;
@@ -451,19 +451,19 @@ class Helper extends \Monty\Utils {
 		$second = $second ? $second : [];
 
 		if (is_array($first) && is_array($second)) {
-			// \Tracy\Debugger::barDump(1);
+			// bdump(1);
 			$res = $first + $second;
 		} elseif (self::isJson($first) && self::isJson($second)) {
-			// \Tracy\Debugger::barDump(2);
+			// bdump(2);
 			$arr1 = Json::decode($first);
 			$arr2 = Json::decode($second);
 
 			$res = $arr1 + $arr2;
 		} elseif (is_array($first) && self::isJson($second)) {
-			// \Tracy\Debugger::barDump(3);
+			// bdump(3);
 			$res = $arr1 + Json::decode($second);
 		} elseif (self::isJson($first) && is_array($second)) {
-			// \Tracy\Debugger::barDump(4);
+			// bdump(4);
 			$arr1 = Json::decode($first);
 
 			$res = Json::encode($arr1 + $second);
@@ -487,7 +487,7 @@ class Helper extends \Monty\Utils {
 		try {
 			Json::decode($str);
 
-			// \Tracy\Debugger::barDump("is Json");
+			// bdump("is Json");
 			return true;
 		} catch (\Nette\Utils\JsonException $e) {
 			return false;	
@@ -498,14 +498,14 @@ class Helper extends \Monty\Utils {
 	{
 		$path = trim($route, ":");
 		$path = explode(":", $path);
-		// \Tracy\Debugger::barDump($path, "exp path");
+		// bdump($path, "exp path");
 
 		$action = end($path);
 		array_pop($path);
 		$presenter = implode(":", $path);
 
-		// \Tracy\Debugger::barDump($presenter, "presenter");
-		// \Tracy\Debugger::barDump($action, "action");
+		// bdump($presenter, "presenter");
+		// bdump($action, "action");
 		return [
 			"presenter" => $presenter,
 			"action" => $action

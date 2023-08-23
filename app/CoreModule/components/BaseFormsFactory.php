@@ -25,12 +25,12 @@ class BaseFormsFactory {
 		$form->onRender[] = [$this, "makeBootstrap4"];
 
 		$form->onError[] = function($form) {
-			\Tracy\Debugger::barDump($form->getErrors(), "form errors");
+			bdump($form->getErrors(), "form errors");
 			// $vals = $form->getValues();
-			// \Tracy\Debugger::barDump($vals, "vals");
+			// bdump($vals, "vals");
 
 			$presenter = $form->getPresenter();
-			\Tracy\Debugger::barDump($presenter, "presenter");
+			bdump($presenter, "presenter");
 			foreach ($form->getErrors() as $error) {
 				$presenter->flashMessage($error, "alert-warning");
 			}
@@ -83,10 +83,10 @@ class BaseFormsFactory {
 		$renderer->wrappers['control']['errorcontainer'] = 'span class=form-control-feedback';
 		$renderer->wrappers['control']['.error'] = 'is-invalid';
 
-		// \Tracy\Debugger::barDump($form, "form");
-		// \Tracy\Debugger::barDump($form->getGroups(), "groups");
+		// bdump($form, "form");
+		// bdump($form->getGroups(), "groups");
 		foreach ($form->getControls() as $name => $control) {
-			// \Tracy\Debugger::barDump($control, "control");
+			// bdump($control, "control");
 			$type = $control->getOption('type');
 			if ($type === 'button') {
 				// $control->getControlPrototype()->addClass(empty($usedPrimary) ? 'btn btn-primary' : 'btn btn-secondary');
@@ -98,9 +98,9 @@ class BaseFormsFactory {
 			} elseif ($type === 'file') {
 				$control->getControlPrototype()->addClass('form-control-file');
 			} elseif (in_array($type, ['checkbox', 'radio'], true)) {
-				// \Tracy\Debugger::barDump($control, "control");
+				// bdump($control, "control");
 				// $wrap = $control->getSeparatorPrototype()->setName("div");
-				// \Tracy\Debugger::barDump($wrap, "wrap");
+				// bdump($wrap, "wrap");
 				// $wrap->addClass('custom-control');
 				// $wrap->addClass("custom-control-" . $type);
 				// $control->getControlPrototype()->addClass("custom-control-input");

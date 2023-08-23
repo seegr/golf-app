@@ -33,7 +33,7 @@ class ContentsListPresenter extends FrontPresenter
 
 		$this->bodyClass[] = $type->short;
 
-		\Tracy\Debugger::barDump($this->navItem, "kuk");
+		bdump($this->navItem, "kuk");
 		if ($navItem = $this->navItem) {
 			$template->navItem = $navItem;
 			$template->pageHeading = $navItem->title;
@@ -42,7 +42,7 @@ class ContentsListPresenter extends FrontPresenter
 			$template->pageHeading = $this->Translator->translate("global.content.types." . $type->short, 2);
 		}
 
-		\Tracy\Debugger::barDump($this);
+		bdump($this);
 
 		$filter = $this["filter"];
 		$filter["category"]->setItems([null => "- Kategorie -"] + $this->ContentsManager->getContentTypeCategories($type)->fetchPairs("id", "title"));
@@ -50,7 +50,7 @@ class ContentsListPresenter extends FrontPresenter
 
 		switch ($type->short) {
 			case "event":
-				\Tracy\Debugger::barDump("events!");
+				bdump("events!");
 				$items = $this->ContentsManager->getFutureEvents(false, true);
 				$items->order("contents_events_dates.start ASC");
 				$colClass = "col-12 col-md-6 col-lg-4";
@@ -84,16 +84,16 @@ class ContentsListPresenter extends FrontPresenter
 		$allItems = (clone $items);
 		$template->allItems = $this->limit + $this->offset >= count($allItems) ? true : false;
 
-		\Tracy\Debugger::barDump($items, "items");
+		bdump($items, "items");
 
 		$items->limit($this->limit, $this->offset);
 
 		$template->items = $items;
-		\Tracy\Debugger::barDump($items->fetchAll());
+		bdump($items->fetchAll());
 		$template->colClass = $colClass;
 
 		$navItemPars = $this->getCurrentNavItemPars();
-		\Tracy\Debugger::barDump($navItemPars, "navItemPars");
+		bdump($navItemPars, "navItemPars");
 		$template->filter = isset($navItemPars->filter) ? $navItemPars->filter : null;
 	}
 

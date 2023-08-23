@@ -25,7 +25,7 @@ class FilesListPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
 		parent::startup();
 
 		// $filter = $this["filter"]->getFilter();
-		// \Tracy\Debugger::barDump($filter, "filter");
+		// bdump($filter, "filter");
 
 		$this["fileUploadForm"]->onSuccess[] = function() {
 			$this->redrawFilesList();
@@ -35,18 +35,18 @@ class FilesListPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
 	public function renderFilesList($type = "all", $page = 1) {
 		$this->template->contentBlock = "content";
 		$this->getFilesList($type, $page);
-		\Tracy\Debugger::barDump("renderFilesList");
+		bdump("renderFilesList");
 	}
 
 	// public function renderFilePicker($type = "all", $page = 1) {
 	// 	$this->getFilesList($type, $page);
 	// 	$this->template->contentBlock = "custom";
-	// 	\Tracy\Debugger::barDump("renderFilePicker");
+	// 	bdump("renderFilePicker");
 	// }
 
 	public function getFilesList($type, $page) {
-		\Tracy\Debugger::barDump("getFilesList");
-		\Tracy\Debugger::barDump($type, "type");
+		bdump("getFilesList");
+		bdump($type, "type");
 
 		$template = $this->template;
 		$template->setFile(__DIR__ . "/../templates/FilesList/filesList.latte");
@@ -78,7 +78,7 @@ class FilesListPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
 		}
 
 		$filter = $this["filter"]->getFilter();
-		\Tracy\Debugger::barDump($filter, "filter");
+		bdump($filter, "filter");
 
 		if (!empty($filter->order)) {
 			$files->order($filter->order);
@@ -87,7 +87,7 @@ class FilesListPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
 		}
 
 		if (!empty($filter->text)) {
-			\Tracy\Debugger::barDump("name jojo");
+			bdump("name jojo");
 			$files->whereOr([
 				"files.name LIKE ?" => "%$filter->text%"
 			]);
@@ -136,7 +136,7 @@ class FilesListPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
 	}
 
 	public function redrawFilesList() {
-		\Tracy\Debugger::barDump("redraw");
+		bdump("redraw");
 		$this->redrawControl("files-wrap-area");
 		$this->redrawControl("files-wrap");
 	}

@@ -46,7 +46,7 @@ class Event {
 	}
 
 	public function setTitle($title) {
-		// \Tracy\Debugger::barDump("set title", $title);
+		// bdump("set title", $title);
 		if (is_array($title)) {
 			$title = implode(", ", $title);
 		}
@@ -96,7 +96,7 @@ class Event {
 
 	public function setRender($event = null) {
 		$event = $event ? $event : $this;
-		// \Tracy\Debugger::barDump($this, "event");
+		// bdump($this, "event");
 		
 		if ($this->link) {
 			$eventEl = Html::el("a");

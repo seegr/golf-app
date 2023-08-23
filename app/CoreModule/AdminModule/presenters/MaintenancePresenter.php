@@ -31,7 +31,7 @@ class MaintenancePresenter extends AdminPresenter {
 		$this->template->act = $act;
 
 		$class = new \ReflectionClass(__CLASS__);
-		// \Tracy\Debugger::barDump(__CLASS__, "class");
+		// bdump(__CLASS__, "class");
 		// $methods = get_class_methods("\App\AdminModule\Presenters\MaintenancePresenter");
 		$methods = [];
 		foreach ($class->getMethods() as $m) {
@@ -39,7 +39,7 @@ class MaintenancePresenter extends AdminPresenter {
 				$methods[] = $m->name;
 			}
 		}
-		// \Tracy\Debugger::barDump($methods, "methods");
+		// bdump($methods, "methods");
 
 		$handles = [];
 		foreach (preg_grep("/handle(.*)/", $methods) as $index => $handle) {
@@ -57,7 +57,7 @@ class MaintenancePresenter extends AdminPresenter {
 		if (($key = array_search("beforeRender", $methods)) !== false) {
 		    unset($methods[$key]);
 		}
-		\Tracy\Debugger::barDump($methods, "methods");
+		bdump($methods, "methods");
 
 		$this->template->handles = $handles;
 		$this->template->methods = $methods;
@@ -76,11 +76,11 @@ class MaintenancePresenter extends AdminPresenter {
 	public function randomizeContentImage(): void
 	{
 		$images = $this->FilesManager->getImages(false);
-		// \Tracy\Debugger::barDump($images->fetchAll());
+		// bdump($images->fetchAll());
 
 		foreach ($this->ContentsManager->getContents() as $c) {
 			$rand = $this->FilesManager->getRandomRows($images);
-			// \Tracy\Debugger::barDump($rand);
+			// bdump($rand);
 			$c->update(["image" => $rand->id]);
 		}
 

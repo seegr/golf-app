@@ -84,7 +84,7 @@ class Form extends Nette\Application\UI\Form
 		// $controls = $this->getControls();
 
 		foreach ($controls as $control) {
-			// \Tracy\Debugger::barDump($control, "control");
+			// bdump($control, "control");
 			$control->setAttribute("placeholder", $control->caption);
 		}
 	}
@@ -92,15 +92,15 @@ class Form extends Nette\Application\UI\Form
 	public function renderAutocomplete()
 	{
 		$state = $this->autocomplete;
-		// \Tracy\Debugger::barDump("renderAutocomplete");
-		// \Tracy\Debugger::barDump($state, "state");
+		// bdump("renderAutocomplete");
+		// bdump($state, "state");
 
 		foreach ($this->getComponents() as $control) {
 			$cls = Helper::getObjectClassName($control);
-			// \Tracy\Debugger::barDump($cls, "cls");
+			// bdump($cls, "cls");
 			if (!in_array($cls, ["TextInput", "SelectBox", "MultiSelectBox"])) continue;
 
-			// \Tracy\Debugger::barDump($control, "control");
+			// bdump($control, "control");
 			if ($state === false) {
 				$val = "off";
 			} elseif ($state === true) {
@@ -111,13 +111,13 @@ class Form extends Nette\Application\UI\Form
 				$val = "off";
 			}
 
-			// \Tracy\Debugger::barDump($control->name, $val);
+			// bdump($control->name, $val);
 			$control->setAttribute("autocomplete", $val);
 		}
 
 		if ($state !== true) {
 			// $cont = $this->getControlPrototype();
-			// \Tracy\Debugger::barDump($cont, "form cont");
+			// bdump($cont, "form cont");
 			$this->setHtmlAttribute("autocomplete", "off");
 		}
 	}
@@ -126,15 +126,15 @@ class Form extends Nette\Application\UI\Form
 		foreach ($this->getComponents() as $control) {
 			// if ($control::class == )
 			$cls = Helper::getObjectClassName($control);
-			// \Tracy\Debugger::barDump($cls, "input class");
+			// bdump($cls, "input class");
 
 			if (in_array($cls, ["TextInput", "SelectBox", "MultiSelectBox"])) {
 				$control->getControlPrototype()->addClass("form-control");
 			} else if ($cls == "Checkbox") {
 				$inputHtml = $control->getControlPrototype();
-				// \Tracy\Debugger::barDump($inputHtml, "inputHtml");
+				// bdump($inputHtml, "inputHtml");
 				$labelHtml = $control->getLabelPrototype();
-				// \Tracy\Debugger::barDump($labelHtml, "labelHtml");
+				// bdump($labelHtml, "labelHtml");
 			}
 		}
 	}
@@ -164,7 +164,7 @@ class Form extends Nette\Application\UI\Form
 			$arr[$control->getName()] = $control->getValue();
 		}
 
-		\Tracy\Debugger::barDump($arr, "group vals");
+		bdump($arr, "group vals");
 		return ArrayHash::from($arr);
 	}
 
@@ -181,7 +181,7 @@ class Form extends Nette\Application\UI\Form
 	// public function setControlsDefaults(): void
 	// {
 	// 	foreach ($this->getTextInputs() as $control) {
-	// 		\Tracy\Debugger::barDump($control, "control");
+	// 		bdump($control, "control");
 	// 	}
 	// }
 

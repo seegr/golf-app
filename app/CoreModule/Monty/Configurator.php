@@ -11,7 +11,7 @@ class Configurator extends \Nette\Configurator
 
 	public function getNameByUrl($webalize = false): string
 	{
-		// \Tracy\Debugger::barDump($_SERVER, "server");
+		// bdump($_SERVER, "server");
 		$name = $_SERVER["SERVER_NAME"];
 		$name = explode(".", $name);
 		$count = count($name);
@@ -19,7 +19,7 @@ class Configurator extends \Nette\Configurator
 			array_unshift($name, "www");
 		}
 
-		// \Tracy\Debugger::barDump($name, "name");
+		// bdump($name, "name");
 
 		if (!in_array($name[1], ["localhost", "127.0.0.1"])) {
 			$name = $name[1] . "." . $name[2];

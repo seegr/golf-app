@@ -32,7 +32,7 @@ class FormValidators {
 	}
 
 	public static function checkStartEndDatetime($end, $start) {
-		// \Tracy\Debugger::barDump($args, "args");
+		// bdump($args, "args");
 		$end = DateTime::from($end->getValue());
 		$start = DateTime::from($start);
 
@@ -52,8 +52,8 @@ class FormValidators {
 
 	public static function eventRepeatEndOrRepeats($end, $repeats) {
 		$end = $end->getValue();
-		#\Tracy\Debugger::barDump($end, "end");
-		#\Tracy\Debugger::barDump($repeats, "repeats");
+		#bdump($end, "end");
+		#bdump($repeats, "repeats");
 
 		if ($repeats || $end) {
 			return true;
@@ -61,7 +61,7 @@ class FormValidators {
 	}
 
 	public static function isNotGreaterZero($number) {
-		\Tracy\Debugger::barDump("is greater zero");
+		bdump("is greater zero");
 		if ($number > 0) {
 			return true;
 		}
@@ -69,7 +69,7 @@ class FormValidators {
 
 	public static function isUrlValid($url) {
 		$url = $url->getValue();
-		\Tracy\Debugger::barDump($url, "url");
+		bdump($url, "url");
 
 		$regex = "/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/";
 		$res = Strings::match($url, $regex);
@@ -79,17 +79,17 @@ class FormValidators {
 
 	public static function phoneFormatCheck($input) {
 		$str = $input->getValue();
-		\Tracy\Debugger::barDump($str, "str");
+		bdump($str, "str");
 		$str = str_replace(" ", "", $str);
 		$len = strlen($str);
-		\Tracy\Debugger::barDump($len, "len");
+		bdump($len, "len");
 
 
 		if ($len < 13) {
 			return false;
 		} else {
 			preg_match('/^(\+\d{3})\s*(\d{3})\s*(\d{3})\s*(\d{3})$/', $str, $matches);
-			\Tracy\Debugger::barDump($matches, "matches");
+			bdump($matches, "matches");
 			return $matches ? true : false;
 		}
 	}

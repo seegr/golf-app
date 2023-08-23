@@ -30,10 +30,10 @@ class Action extends \Ublaboo\DataGrid\Column\Action {
 
 		return $this;
 		// if ($state) {
-		// 	\Tracy\Debugger::barDump($this, "this");
-		// 	\Tracy\Debugger::barDump($this->key, "key");
+		// 	bdump($this, "this");
+		// 	bdump($this->key, "key");
 		// 	$actions = $this->grid->getActions();
-		// 	\Tracy\Debugger::barDump($actions, "actions");
+		// 	bdump($actions, "actions");
 		// 	$this->grid->removeAction($this->key);
 		// }
 	}*/

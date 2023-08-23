@@ -4,6 +4,10 @@ translation:
 
 parameters:
 	appName: "GolfApp"
+	golf:
+		courses:
+			refresh: Refresh
+			golfista: Budu Golfista
 	
 router:
 	homeRoute: "Admin:Dashboard:dashboard"
@@ -16,18 +20,14 @@ contents:
 		exclude: ["short", "text", "heading", "image", "meta_keys", "meta_desc"]
 		fields:
 			lektor:
-				title: "Lektor"
-				type: "text"
-	# event:
-	# 	fields:
-	# 		place:
-	# 			title: "Místo"
-	# 			type: "text"
-	# 			required: true
-	# 		register_url:
-	# 			title: "Registrační formulář"
-	# 			type: "url"
-	# 			required: false
+				title: Lektor
+				type: text
+			course:
+				title: Kurz
+				type: select
+				options:
+					refresh: Refresh
+					golfista: Budu Golfista
 
 services:
 	GoflConfig: App\model\GolfConfig(%golf%)

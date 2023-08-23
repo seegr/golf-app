@@ -45,7 +45,7 @@ class UsersPresenter extends FrontPresenter
 			try {
 				$id = $this->UsersManager->saveUser($v);
 				$user = $this->UsersManager->getUser($id);
-				\Tracy\Debugger::barDump($user, "user");
+				bdump($user, "user");
 
 				$user->update(["active" => false]);
 

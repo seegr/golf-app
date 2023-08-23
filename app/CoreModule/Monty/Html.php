@@ -24,7 +24,7 @@ class Html extends \Nette\Utils\Html {
 
 		$btn->addHtml($i);
 
-		#\Tracy\Debugger::barDump($btn, "btn");
+		#bdump($btn, "btn");
 
 		return $btn;
 	}

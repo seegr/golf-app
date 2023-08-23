@@ -12,9 +12,9 @@ class HomepagePresenter extends FrontPresenter
 
 	public function renderHomepage(): void
 	{
-		// \Tracy\Debugger::barDump("default renderHomepage");
+		// bdump("default renderHomepage");
 		// $navTree = $this->NavigationsManager->getNavigationTree(1);
-		// \Tracy\Debugger::barDump($navTree, "navTree");
+		// bdump($navTree, "navTree");
 	}
 
 }

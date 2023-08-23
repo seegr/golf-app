@@ -54,10 +54,10 @@ class Tree extends Nette\Application\UI\Control {
 
 
 	public function setData($data) {
-		#\Tracy\Debugger::barDump("setData");
+		#bdump("setData");
 		$this->data = $data;
 
-		// \Tracy\Debugger::barDump($this->data, "data");
+		// bdump($this->data, "data");
 
 		// $items = [];
 		// foreach ($this->data as $item) {
@@ -88,7 +88,7 @@ class Tree extends Nette\Application\UI\Control {
 	}
 
 	public function setChecked(array $checked) {
-		// \Tracy\Debugger::barDump($checked, "checked");
+		// bdump($checked, "checked");
 		$this->checked = $checked;
 
 		return $this;
@@ -141,7 +141,7 @@ class Tree extends Nette\Application\UI\Control {
 	}
 
 	public function getEditLink(array $attrs) {
-		#\Tracy\Debugger::barDump($attrs, "attrs");
+		#bdump($attrs, "attrs");
 		$presenter = $this->getPresenter();
 
 		$attrs = [
@@ -164,7 +164,7 @@ class Tree extends Nette\Application\UI\Control {
 
 
 	// public function createComponentCheckedForm() {
-	// 	\Tracy\Debugger::barDump("createComponentCheckedForm");
+	// 	bdump("createComponentCheckedForm");
 	// 	$form = new Form;
 
 	// 	$form->addCheckboxList("items");
@@ -174,7 +174,7 @@ class Tree extends Nette\Application\UI\Control {
 
 
 	public function handleGetChecked(array $items) {
-		#\Tracy\Debugger::barDump($items, "items");
+		#bdump($items, "items");
 
 		foreach ($this->onGetChecked as $callback) {
 			$callback($items);
@@ -182,12 +182,12 @@ class Tree extends Nette\Application\UI\Control {
 	}
 
 	public function handleOrderChange($itemId, $nextItemId, $prevItemId, $parentId) {
-		// \Tracy\Debugger::barDump($itemId, "itemId");
-		// \Tracy\Debugger::barDump($nextItemId, "nextItemId");
-		// \Tracy\Debugger::barDump($prevItemId, "prevItemId");
-		// \Tracy\Debugger::barDump($parentId, "parentId");
+		// bdump($itemId, "itemId");
+		// bdump($nextItemId, "nextItemId");
+		// bdump($prevItemId, "prevItemId");
+		// bdump($parentId, "parentId");
 		$vars = get_defined_vars();
-		\Tracy\Debugger::barDump($vars, "vars");
+		bdump($vars, "vars");
 		foreach ($this->onOrderChange as $callback) {
 			$callback($itemId, $nextItemId, $prevItemId, $parentId);
 		}

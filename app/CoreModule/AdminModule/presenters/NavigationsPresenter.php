@@ -43,7 +43,7 @@ class NavigationsPresenter extends AdminPresenter
 		if ($id) {
 			$this->id = $id;
 			$item = $template->item = $this->NavigationsManager->getNavigationItem($id);
-			\Tracy\Debugger::barDump($item, "itemData");
+			bdump($item, "itemData");
 			$form->setDefaults($item);
 		} else {
 			$form["navigation"]->setValue($navigation);
@@ -57,7 +57,7 @@ class NavigationsPresenter extends AdminPresenter
 	}
 
 	public function renderNavigationItemForm($id, $navId) {
-		\Tracy\Debugger::barDump($id, "renderNavigationItemForm id");
+		bdump($id, "renderNavigationItemForm id");
 		$this->template->item = $this->NavigationsManager->getNavigationItem($id);
 	}
 
@@ -77,17 +77,17 @@ class NavigationsPresenter extends AdminPresenter
 		$tree->setEditAction("navigationItemForm", ["navigation" => $this->id]);
 		$tree->setDeleteAction("navigationItemDelete!");
 		$tree->onOrderChange[] = function($itemId, $nextItemId, $prevItemId, $parentId) {
-			\Tracy\Debugger::barDump($itemId, "itemId");
-			\Tracy\Debugger::barDump($nextItemId, "nextItemId");
-			\Tracy\Debugger::barDump($prevItemId, "prevItemId");
-			\Tracy\Debugger::barDump($parentId, "parentId");
+			bdump($itemId, "itemId");
+			bdump($nextItemId, "nextItemId");
+			bdump($prevItemId, "prevItemId");
+			bdump($parentId, "parentId");
 			// $item = $this->NavigationsManager->getNavigationItem($itemId);
 			$sel = $this->NavigationsManager->getNavigationsItems();
-			\Tracy\Debugger::barDump($sel->fetchAll(), "sel fetch");
-			\Tracy\Debugger::barDump($parentId, "parentId");
+			bdump($sel->fetchAll(), "sel fetch");
+			bdump($parentId, "parentId");
 			if ($parentId) {
 				$sel->where("parent", $parentId);
-				\Tracy\Debugger::barDump($sel->fetchAll(), "sel fetch");
+				bdump($sel->fetchAll(), "sel fetch");
 			}
 			
 			$this->NavigationsManager->itemOrderChange($itemId, $prevItemId, $nextItemId, $sel);
@@ -127,7 +127,7 @@ class NavigationsPresenter extends AdminPresenter
 
 	// 	if ($itemId) {
 	// 		$item = $this->NavigationsManager->getNavigationItem($itemId);
-	// 		\Tracy\Debugger::barDump($item, "itemData");
+	// 		bdump($item, "itemData");
 	// 		$form->setDefaults($item);
 	// 	} else {
 	// 		$form["navigation"]->setValue($navId);
@@ -162,7 +162,7 @@ class NavigationsPresenter extends AdminPresenter
 		// $cropper->setRatio("1/0.156");
 
 		$cropper->onCropp[] = function($vals) {
-			\Tracy\Debugger::barDump($vals, "headerImage cropper vals");
+			bdump($vals, "headerImage cropper vals");
 			$fileId = $this->FilesManager->uploadImage($vals->path, $this->getUser()->id);
 			// $this->UsersManager->getUser($user->id)->update(["image" => $vals->image]);
 			$this->NavigationsManager->getNavigationItem($this->id)->update(["header_image" => $fileId]);

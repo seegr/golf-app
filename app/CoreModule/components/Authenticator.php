@@ -19,12 +19,12 @@ class Authenticator extends \App\CoreModule\Model\UsersManager implements \Nette
 	 */
 	function authenticate(array $credentials): IIdentity
 	{
-		// \Tracy\Debugger::barDump($credentials, "credentials");
+		// bdump($credentials, "credentials");
 
 		list($user, $password) = $credentials;
 
 		$user = $this->getUser($user);
-		// \Tracy\Debugger::barDump($user, "user");
+		// bdump($user, "user");
 		$pass = new Passwords;
 
 		if (!$user) {
@@ -52,7 +52,7 @@ class Authenticator extends \App\CoreModule\Model\UsersManager implements \Nette
 	// 	list($username, $password) = $credentials;
 
 	// 	$user = $this->getUser($username);
-	// 	// \Tracy\Debugger::barDump($user, "user");
+	// 	// bdump($user, "user");
 
 	// 	if (!$user) {
 	// 		throw new Nette\Security\AuthenticationException('The username is incorrect.', self::IDENTITY_NOT_FOUND);

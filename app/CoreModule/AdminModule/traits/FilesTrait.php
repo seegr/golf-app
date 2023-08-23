@@ -14,7 +14,7 @@ trait FilesTrait {
 
 
 	public function handleDownloadFile($key) {
-		\Tracy\Debugger::barDump($key, "key");
+		bdump($key, "key");
 		$file = $this->FilesManager->getFile($key);
 
 		if (!$file) $this->error("Soubor nenalezen", 404);
@@ -47,7 +47,7 @@ trait FilesTrait {
 		$form->addSubmit("submit", "Nahrát");
 
 		$form->onSuccess[] = function($f, $v) {
-			\Tracy\Debugger::barDump($v, "vals");
+			bdump($v, "vals");
 			foreach($v->files as $file) {
 				$this->FilesManager->uploadFile($file, $this->getUser()->id);
 			}

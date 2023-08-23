@@ -58,7 +58,7 @@ class BaseManager
 
 	public function getTree($selection, $parent = null, $cols = [], $orderCol = null): array
 	{
-		//\Tracy\Debugger::barDump($parent, "parent");
+		//bdump($parent, "parent");
 		if (is_string($selection)) $selection = $this->db->table($selection);
 		if (!$orderCol) $selection->order("order");
 
@@ -86,7 +86,7 @@ class BaseManager
 			}
 
 			//$data = ArrayHash::from($data);
-			//\Tracy\Debugger::barDump($data, "data");
+			//bdump($data, "data");
 			
 			$tree[] = ArrayHash::from($data);
 		}
@@ -121,8 +121,8 @@ class BaseManager
 	}
 
 	public function generateUniqueAlias($item, $table = null, $column = "alias", $prefix = null, $append = null) {
-		\Tracy\Debugger::barDump($item, "item");
-		\Tracy\Debugger::barDump($item->title, "item title");
+		bdump($item, "item");
+		bdump($item->title, "item title");
 		$alias = "";
 		if ($prefix) {
 			if (!is_numeric($prefix)) {
@@ -135,7 +135,7 @@ class BaseManager
 		
 		$alias .= Strings::webalize($item->title);
 		$alias .= $append ? "-" . Strings::webalize($append) : null;
-		// \Tracy\Debugger::barDump($alias, "alias");
+		// bdump($alias, "alias");
 
 		$table = $table ? $table : self::TABLE_ALIASES;
 
@@ -146,12 +146,12 @@ class BaseManager
 		} else {
 			// $append = $append ? $append + 1 : 1;
 			// $last = $this->getAliases()->where("alias LIKE ?", "%$alias%")->order("id DESC")->fetchField("alias");
-			// \Tracy\Debugger::barDump($last, "last");
+			// bdump($last, "last");
 			// $last = explode("-", $last);
 			// $last = end($last);
-			// \Tracy\Debugger::barDump($last, "last");
+			// bdump($last, "last");
 			// $last = is_numeric($last) ? $last + 1 : 1;
-			// \Tracy\Debugger::barDump($last, "last");
+			// bdump($last, "last");
 
 			return $this->generateUniqueAlias($item, $table, $column, $item->id);
 		}
@@ -173,14 +173,14 @@ class BaseManager
 
 	public function itemOrderChange($item, $itemPrev, $itemNext, $items, $orderColumn = "order") {
 		// $this->itemsReorder($items, $orderColumn);
-		// \Tracy\Debugger::barDump($item_id, "item_id");
-		// \Tracy\Debugger::barDump($prev_id, "prev_id");
-		// \Tracy\Debugger::barDump($next_id, "next_id");
+		// bdump($item_id, "item_id");
+		// bdump($prev_id, "prev_id");
+		// bdump($next_id, "next_id");
 
 		if ($item && is_string($item)) {
-			\Tracy\Debugger::barDump("item is string");
+			bdump("item is string");
 			$item = (clone $items)->where("id", $item)->fetch();
-			\Tracy\Debugger::barDump($item, "item fetch");
+			bdump($item, "item fetch");
 		}
 		$items->order($orderColumn);
 		$lastOrder = count($items);
@@ -196,13 +196,13 @@ class BaseManager
 		$prevOrder = $itemPrev ? $itemPrev->$orderColumn : null;
 		$nextOrder = $itemNext ? $itemNext->$orderColumn : null;
 
-		// \Tracy\Debugger::barDump($itemOrder, "itemOrder");
-		// \Tracy\Debugger::barDump($prevOrder, "prevOrder");
-		// \Tracy\Debugger::barDump($nextOrder, "nextOrder");
-		// \Tracy\Debugger::barDump($items->fetchAll(), "items");
-		// \Tracy\Debugger::barDump($item, "item");
-		// \Tracy\Debugger::barDump($itemPrev, "itemPrev");
-		// \Tracy\Debugger::barDump($itemNext, "itemNext");
+		// bdump($itemOrder, "itemOrder");
+		// bdump($prevOrder, "prevOrder");
+		// bdump($nextOrder, "nextOrder");
+		// bdump($items->fetchAll(), "items");
+		// bdump($item, "item");
+		// bdump($itemPrev, "itemPrev");
+		// bdump($itemNext, "itemNext");
 
 
 		$newOrder = $nextOrder ? $nextOrder : $lastOrder;
@@ -230,22 +230,22 @@ class BaseManager
 	}
 
 	public function changeItemOrder($selection, $itemId, $nextItemId, $prevItemId, $orderColumn = "order") {
-		// \Tracy\Debugger::barDump($selection->fetchAll(), "sel");
+		// bdump($selection->fetchAll(), "sel");
 		$item = (clone $selection)->get($itemId);
 		$itemNext = (clone $selection)->get($nextItemId);
 		$itemPrev = (clone $selection)->get($prevItemId);
-		// \Tracy\Debugger::barDump($item, "item");
+		// bdump($item, "item");
 
 		$itemOrder = $item->$orderColumn;
 		$prevOrder = $itemPrev ? $itemPrev->$orderColumn : null;
 		$nextOrder = $itemNext ? $itemNext->$orderColumn : null;
 
-		// \Tracy\Debugger::barDump($itemOrder, "itemOrder");
-		// \Tracy\Debugger::barDump($prevOrder, "prevOrder");
-		// \Tracy\Debugger::barDump($nextOrder, "nextOrder");
+		// bdump($itemOrder, "itemOrder");
+		// bdump($prevOrder, "prevOrder");
+		// bdump($nextOrder, "nextOrder");
 
 		if ($itemOrder < $prevOrder) {
-			\Tracy\Debugger::barDump("nahoru");
+			bdump("nahoru");
 			foreach ($selection as $item) {
 				if ($item->$orderColumn != $itemOrder) {
 					//** update items before
@@ -258,7 +258,7 @@ class BaseManager
 				}
 			}
 		} else {
-			\Tracy\Debugger::barDump("dolu");
+			bdump("dolu");
 			foreach ($selection as $item) {
 				if ($item->$orderColumn != $itemOrder) {
 					if ($item->$orderColumn < $itemOrder && ($item->$orderColumn > $prevOrder || $prevOrder == null)) {
@@ -275,12 +275,12 @@ class BaseManager
 
 	public function itemsReorder($items, $orderColumn = "order") {
 		$items->order($orderColumn);
-		\Tracy\Debugger::barDump($items->fetchAll(), "reoder items");
+		bdump($items->fetchAll(), "reoder items");
 
 		$i = 1;
 		foreach ($items as $item) {
 			// $data["order"] = $i;
-			\Tracy\Debugger::barDump($i, "order loop i");
+			bdump($i, "order loop i");
 			$item->update([
 				$orderColumn => $i
 			]);
@@ -290,7 +290,7 @@ class BaseManager
 	}
 
 	public function saveTableItem($table, $data) {
-		\Tracy\Debugger::barDump("saveTableItem");
+		bdump("saveTableItem");
 		$table = $this->db->table($table);
 
 		if (isset($data["id"]) && $data["id"]) {
@@ -315,7 +315,7 @@ class BaseManager
 	public function saveReferences($table, $item_col, $item_id, $ref_col, $ref_ids) {
 		$this->db->table($table)->where($item_col, $item_id)->delete();
 
-		// \Tracy\Debugger::barDump($ref_ids, "saveReferences - ref_ids");
+		// bdump($ref_ids, "saveReferences - ref_ids");
 		if ($ref_ids) {
 			foreach ($ref_ids as $id) {
 				$this->db->table($table)->insert([
@@ -329,7 +329,7 @@ class BaseManager
 	public function getRandomRows($sel, $limit = 1) {
 		$sel = clone $sel;
 		$rand = array_rand($sel->fetchAll(), $limit);
-		// \Tracy\Debugger::barDump($rand, "rand");
+		// bdump($rand, "rand");
 
 		$sel->where("id", $rand);
 
@@ -337,21 +337,21 @@ class BaseManager
 	}
 
 	public function generateUniqueShort($item, $sel = null, $short = null, $titleCol = "title", $shortCol = "short") {
-		\Tracy\Debugger::barDump($item, "item");
+		bdump($item, "item");
 		$table = $item->getTable()->getName();
-		\Tracy\Debugger::barDump($table, "table");
+		bdump($table, "table");
 
 		$short = Strings::webalize($short ? $short : $item->$titleCol);
 
 		$sel = $sel ? $sel : $this->db->table($table);
 		$sel->where("id != ?", $item->id)->where($shortCol, $short);
-		\Tracy\Debugger::barDump($sel->fetchAll(), "sel");
+		bdump($sel->fetchAll(), "sel");
 
 		if (count($sel)) {
 			$short .= "-" . $item->id;
 		}
 
-		\Tracy\Debugger::barDump($short, "short");
+		bdump($short, "short");
 
 		// $item->update([$shortCol => $short]);
 
@@ -385,9 +385,9 @@ class BaseManager
 
 	public function saveSetting($atr, $val)
 	{
-		\Tracy\Debugger::barDump($atr, "atr");
+		bdump($atr, "atr");
 		if ($setting = $this->getSettingRow($atr)) {
-			\Tracy\Debugger::barDump($setting, "setting");
+			bdump($setting, "setting");
 			$id = $setting->id;
 			$setting->update(["val" => $val]);
 		} else {

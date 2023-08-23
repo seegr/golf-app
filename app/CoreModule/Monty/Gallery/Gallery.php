@@ -57,7 +57,7 @@ class Gallery extends BaseControl {
 
 
 	public function render($attrs = []) {
-		#\Tracy\Debugger::barDump($this, "gallery control");
+		#bdump($this, "gallery control");
 		$template = $this->template;
 
 		$template->id = Strings::webalize($this->getParent()->getName()) . "-" . $this->lookupPath();
@@ -67,7 +67,7 @@ class Gallery extends BaseControl {
 
 		$random = isset($attrs["random"]) ? isset($attrs["random"]) : $this->random;
 
-		// \Tracy\Debugger::barDump($this->images, "images");
+		// bdump($this->images, "images");
 		$images = $this->images;
 		$template->random = $this->random;
 		$template->title = $this->title;
@@ -158,7 +158,7 @@ class Gallery extends BaseControl {
 
 		$id = str_replace(":", "", $id);
 
-		\Tracy\Debugger::barDump($id, "id");
+		bdump($id, "id");
 		return $id;
 	}
 
@@ -253,7 +253,7 @@ class Gallery extends BaseControl {
 
 	public function fromFolder($folder) {
 		foreach (\Monty\Tools\FileSystem::getImagesFromFolder($folder) as $key => $file) {
-			#\Tracy\Debugger::barDump($file, "file");
+			#bdump($file, "file");
 			$image = $this->addImage($file->fullname, $file->path);
 		}
 	}
@@ -295,16 +295,16 @@ class Gallery extends BaseControl {
 	}
 
 	public function getRandomImage($notId = false) {
-		\Tracy\Debugger::barDump($notId, "not id");
-		#\Tracy\Debugger::barDump($this->images, "images");
-		#\Tracy\Debugger::barDump($this->currentImageId, "current image id");
+		bdump($notId, "not id");
+		#bdump($this->images, "images");
+		#bdump($this->currentImageId, "current image id");
 		$random = rand(1, $this->getImagesCount());
 		$this->currentImageId = $random;
 
-		#\Tracy\Debugger::barDump($random, "random");
+		#bdump($random, "random");
 
 		$image = $this->images[$random];
-		#\Tracy\Debugger::barDump($image, "image");
+		#bdump($image, "image");
 
 		if ($this->orientation) {
 			if ($image->orientation == $this->orientation) {
@@ -398,7 +398,7 @@ class Gallery extends BaseControl {
 
 	protected function cloneForm($multiplierForm, $imageForm) {
 		foreach ($imageForm->getComponents() as $inputId => $input) {
-			//\Tracy\Debugger::barDump($input, "input");
+			//bdump($input, "input");
 			#$id = $inputsType == "fileInputs" ?  "file_" . $input->name : $input->name;
 
 			$clonedInput = clone $input;
@@ -453,28 +453,28 @@ class Gallery extends BaseControl {
 
 
 	public function handleGetRandomImage() {
-		\Tracy\Debugger::barDump($this->currentImageId, "currentImageId");
+		bdump($this->currentImageId, "currentImageId");
 		$this->template->randomImage = $this->getRandomImage($this->currentImageId);
 		$this->redrawControl("gallery");
 	}
 
 	public function handleNextImage($currentImageId) {
-		\Tracy\Debugger::barDump($currentImageId, "currentImageId");
+		bdump($currentImageId, "currentImageId");
 		$this->random = false;
-		#\Tracy\Debugger::barDump($this->images, "images");
+		#bdump($this->images, "images");
 		$count = $this->getImagesCount();
 		$next = $currentImageId + 1;
 		if ($next > $count) {
 			$next = 1;
 		}
 
-		\Tracy\Debugger::barDump($next, "next");
+		bdump($next, "next");
 		$this->currentImageId = $next;
 		$this->redrawControl("gallery");
 	}
 
 	public function handleLoadMore($page) {
-		\Tracy\Debugger::barDump($page, "page");
+		bdump($page, "page");
 		$this->page = $page;
 		$this->offset = ($this->page - 1) * $this->limit;
 
@@ -498,9 +498,9 @@ class Gallery extends BaseControl {
 	}
 
 	public function handleOrderChange($item, $itemPrev, $itemNext) {
-		/*\Tracy\Debugger::barDump($item, "item");
-		\Tracy\Debugger::barDump($itemPrev, "itemPrev");
-		\Tracy\Debugger::barDump($itemNext, "itemNext");*/
+		/*bdump($item, "item");
+		bdump($itemPrev, "itemPrev");
+		bdump($itemNext, "itemNext");*/
 
 		foreach ($this->onOrderChange as $callback) {
 			$callback($item, $itemPrev, $itemNext);
@@ -510,18 +510,18 @@ class Gallery extends BaseControl {
 	}
 
 	public function handleEditsSave($forms) {
-		\Tracy\Debugger::barDump("handleEditsSave");
-		\Tracy\Debugger::barDump($forms, "forms");
+		bdump("handleEditsSave");
+		bdump($forms, "forms");
 
 		/*if (strpos($forms, "[") !== false) {
-			\Tracy\Debugger::barDump("je tam");
+			bdump("je tam");
 			$forms = str_replace("[]", "", $forms);
-			\Tracy\Debugger::barDump($forms, "formsReplaced");
+			bdump($forms, "formsReplaced");
 		}*/
 		$forms = json_decode($forms, true);
-		\Tracy\Debugger::barDump($forms, "forms");
+		bdump($forms, "forms");
 
-		#\Tracy\Debugger::barDump($this->imagesForm->onSuccess, "imagesForm  onsucces");
+		#bdump($this->imagesForm->onSuccess, "imagesForm  onsucces");
 
 		foreach ($forms as $id => $vals) {
 			foreach ($this->imagesForm->onSuccess as $callback) {
@@ -529,7 +529,7 @@ class Gallery extends BaseControl {
 
 				$data = [];
 				foreach ($vals as $par => $val) {
-					\Tracy\Debugger::barDump(strpos($par, "[]"), $par . " key");
+					bdump(strpos($par, "[]"), $par . " key");
 					$key = strpos($par, "[]") !== false ? str_replace("[]", "", $par) : $par;
 					$data[$key] = $val;
 				}
@@ -546,14 +546,14 @@ class Gallery extends BaseControl {
 
 		$this->reloadComponent();
 
-		// \Tracy\Debugger::barDump($this->getName(), "name");
+		// bdump($this->getName(), "name");
 		// $presenter = $this->getPresenter();
 		// $name = $this->getName();
 		// $presenter->removeComponent($presenter->getComponent($name));
 	}
 
 	public function handleSelectionDelete(array $images) {
-		\Tracy\Debugger::barDump($images, "images - control");
+		bdump($images, "images - control");
 		foreach ($this->onSelectionDelete as $callback) {
 			$callback($images);
 		}
@@ -562,7 +562,7 @@ class Gallery extends BaseControl {
 	}
 
 	public function reloadComponent() {
-		\Tracy\Debugger::barDump("reloadComponent...");
+		bdump("reloadComponent...");
 		$presenter = $this->getPresenter();
 		$presenter->removeComponent($presenter[$this->getName()]);
 	}

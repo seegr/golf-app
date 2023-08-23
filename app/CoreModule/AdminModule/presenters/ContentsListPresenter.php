@@ -47,14 +47,14 @@ class ContentsListPresenter extends AdminPresenter
 
     public function startup(): void
     {
-        \Tracy\Debugger::barDump("startup");
+        bdump("startup");
         parent::startup();
         $this->defineType();
     }
 
     public function actionContentsList($type): void
     {
-        \Tracy\Debugger::barDump("actionContentsList");
+        bdump("actionContentsList");
         $template = $this->template;
         $list = $this["contentsList"];
         $list->setRefreshUrl(false);
@@ -83,7 +83,7 @@ class ContentsListPresenter extends AdminPresenter
 
     public function renderContentsList($type)
     {
-        \Tracy\Debugger::barDump("renderContentsList");
+        bdump("renderContentsList");
         $template = $this->template;
         $list = $this["contentsList"];
     }
@@ -123,8 +123,8 @@ class ContentsListPresenter extends AdminPresenter
 
                 return $el;
             })->setSortable()->setSortableCallback(function ($data, $sort) {
-                \Tracy\Debugger::barDump($data, "data");
-                \Tracy\Debugger::barDump($sort, "sort");
+                bdump($data, "data");
+                bdump($sort, "sort");
                 $sort = reset($sort);
                 bdump($sort, "reset sort");
 
@@ -181,8 +181,8 @@ class ContentsListPresenter extends AdminPresenter
                     return $el;
                 }
             })->setAlign("center")->setSortable()->setSortableCallback(function ($data, $sort) {
-                \Tracy\Debugger::barDump($data, "data");
-                \Tracy\Debugger::barDump($sort, "sort");
+                bdump($data, "data");
+                bdump($sort, "sort");
                 $sort = reset($sort);
                 // bdump($sort, "reset sort");
 
@@ -220,7 +220,7 @@ class ContentsListPresenter extends AdminPresenter
             ->setConfirmation(new StringConfirmation("Opravdu chceš skrýt/publikovat %s?", "title"));
 
         // $list->addGroupAction("Smazat")->onSelect[] = function($ids) use ($list) {
-        // 	\Tracy\Debugger::barDump($ids, "ids");
+        // 	bdump($ids, "ids");
 
         // 	$this->ContentsManager->getContents()->where("id", $ids)->delete();
         // 	$list->reload();

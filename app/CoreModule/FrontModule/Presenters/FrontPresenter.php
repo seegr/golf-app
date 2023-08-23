@@ -27,17 +27,17 @@ class FrontPresenter extends App\CoreModule\Presenters\BasePresenter
 		$template = $this->template;
 
 		$frontLayoutPath = __DIR__ . "/../../../FrontModule/templates/@layout.latte";
-		// \Tracy\Debugger::barDump($frontLayoutPath, "frontlayout");
+		// bdump($frontLayoutPath, "frontlayout");
 		if (file_exists($frontLayoutPath)) {
-			// \Tracy\Debugger::barDump("front layout jojo", $frontLayoutPath);
+			// bdump("front layout jojo", $frontLayoutPath);
 			$this->setLayout($frontLayoutPath);
 
-			// \Tracy\Debugger::barDump($this->getLayout(), "current layout");
+			// bdump($this->getLayout(), "current layout");
 		}
 
 		[, $presenter] = Nette\Application\Helpers::splitName($this->getName());
 		$templateFile = self::FRONT_ROOT . "templates/$presenter/$this->view.latte";
-		// \Tracy\Debugger::barDump($templateFile, "lookin for templateFile");
+		// bdump($templateFile, "lookin for templateFile");
 		if (file_exists($templateFile)) {
 			$template->setFile($templateFile);
 		}

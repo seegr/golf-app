@@ -21,8 +21,8 @@ class Authorizator extends \Nette\Security\Permission implements \Nette\Security
     // 	$this->addRole("guest");
 
     // 	foreach ($roles as $role) {
-	 		// #\Tracy\Debugger::barDump($role->short);
-	 		// #\Tracy\Debugger::barDump("dedi od " . $role->inherit);
+	 		// #bdump($role->short);
+	 		// #bdump("dedi od " . $role->inherit);
 	 		// // $parent = $role->parent ? $role->ref("parent")->short : null;
     // 		// $this->addRole($role->short, $parent);
     // 		$this->addRole($role->short);
@@ -46,7 +46,7 @@ class Authorizator extends \Nette\Security\Permission implements \Nette\Security
 	public function defineRoles(): void
 	{
 		foreach ($this->UsersManager->getRoles() as $role) {
-			// \Tracy\Debugger::barDump($role, "role");
+			// bdump($role, "role");
 			$this->addRole($role->short, $role->inherit ? $role->ref("inherit")->short : null);
 		}
 	}

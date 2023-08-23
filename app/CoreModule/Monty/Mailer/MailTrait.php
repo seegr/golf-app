@@ -39,11 +39,11 @@ trait MailTrait {
 
 		$path = strpos($file, "/") !== false ? $file : $this->templatesFolder . "/" . $file;
 
-		\Tracy\Debugger::barDump($path, "path");
+		bdump($path, "path");
 		$template = $this->templateFactory->createTemplate();
 		$template->setFile($path);
 
-		\Tracy\Debugger::barDump($this->templatePars, "templatePars");
+		bdump($this->templatePars, "templatePars");
 		$this->templatePars = $this->templatePars + $template->getParameters() + $params;
 		$template->setParameters($this->templatePars);
 
@@ -54,7 +54,7 @@ trait MailTrait {
 		$this->latte = $latte;
 		$this->templatePath = $path;
 		
-		\Tracy\Debugger::barDump($template, "template");
+		bdump($template, "template");
 		$this->setHtmlBody($template);
 
 		return $this;
@@ -79,14 +79,14 @@ trait MailTrait {
 	}
 
 	public function onSend($vals) {
-		\Tracy\Debugger::barDump("onSend...");
-		\Tracy\Debugger::barDump($this->montyMailer->onSend, "mailer onSend callbacks");
-		\Tracy\Debugger::barDump($this->onSend, "send");
+		bdump("onSend...");
+		bdump($this->montyMailer->onSend, "mailer onSend callbacks");
+		bdump($this->onSend, "send");
 
 		$callbacks = array_merge($this->montyMailer->onSend, $this->onSend);
-		\Tracy\Debugger::barDump($callbacks, "callbacks");
+		bdump($callbacks, "callbacks");
 		foreach ($callbacks as $callback) {
-			\Tracy\Debugger::barDump($callback, "callback");
+			bdump($callback, "callback");
 			Callback::invoke($callback, $vals);
 		}
 	}

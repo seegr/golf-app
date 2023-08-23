@@ -76,7 +76,7 @@ class Aws {
 		    ]);
 
 		    // Display the object in the browser.
-		    //\Tracy\Debugger::barDump($result, "result");
+		    //bdump($result, "result");
 		    if (!$type) {
 		    	$type = $result['ContentType'];
 		    	if ($downloadName) header("Content-Disposition: attachment; filename=" . $downloadName);

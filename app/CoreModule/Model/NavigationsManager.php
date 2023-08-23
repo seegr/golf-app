@@ -60,7 +60,7 @@ class NavigationsManager extends BaseManager {
 	}
 
 	public function getNavigationTree($id, $parent = null, $onlyActive = false) {
-		//\Tracy\Debugger::barDump($parent, "parent");
+		//bdump($parent, "parent");
 		$selection = $this->getNavigationItems($id, $onlyActive);
 
 		$defaultSelection = clone $selection;
@@ -75,7 +75,7 @@ class NavigationsManager extends BaseManager {
 
 		$tree = [];
 
-		// \Tracy\Debugger::barDump($selection->fetchAll(), "nav selection");
+		// bdump($selection->fetchAll(), "nav selection");
 		foreach ($selection as $item) {
 			$data = ArrayHash::from([]);
 
@@ -83,14 +83,14 @@ class NavigationsManager extends BaseManager {
 			$data["title"] = $item->title;
 			// $data["parameters"] = ["nav_item" => $data["id"]];
 
-			// if ($item->item_alias) \Tracy\Debugger::barDump($item->title, "is item alias");
+			// if ($item->item_alias) bdump($item->title, "is item alias");
 			$item = $item->item_alias ? $item->ref("item_alias") : $item;
 
 			if ($item->url) {
-				\Tracy\Debugger::barDump($item->title, "has url");
+				bdump($item->title, "has url");
 				$data["link"] = $item->url;
 			} elseif ($item->route) {
-				// \Tracy\Debugger::barDump($item->title, "has route");
+				// bdump($item->title, "has route");
 				$data["route"] = $item->route;
 				$data["params"] = json_decode($item->params, true);
 			} else {
@@ -107,12 +107,12 @@ class NavigationsManager extends BaseManager {
 			$data["childs"]	= $childs ? $childs : null;
 
 			//$data = ArrayHash::from($data);
-			// \Tracy\Debugger::barDump($data, "data");
+			// bdump($data, "data");
 			
 			$tree[$item->id] = $data;
 		}
 
-		// \Tracy\Debugger::barDump($tree, "tree");
+		// bdump($tree, "tree");
 		return $tree;
 	}
 
@@ -133,7 +133,7 @@ class NavigationsManager extends BaseManager {
 	}*/
 
 	public function saveNavigationItem($vals) {
-		\Tracy\Debugger::barDump($vals, "vals");
+		bdump($vals, "vals");
 		$data = [
 			"title" => $vals->title,
 			"navigation" => $vals->navigation,
@@ -162,7 +162,7 @@ class NavigationsManager extends BaseManager {
 			$maxOrder = $this->getNavigationItems($vals->navigation);
 			if ($vals->parent) $maxOrder->where("parent", $vals->parent);
 			$maxOrder = $maxOrder->max("order");
-			#\Tracy\Debugger::barDump($maxOrder, "maxOrder");
+			#bdump($maxOrder, "maxOrder");
 
 			$item->update([
 				"order" => $maxOrder + 1,
@@ -180,36 +180,36 @@ class NavigationsManager extends BaseManager {
 
 		if ($item->alias && !$forced) return;
 
-		\Tracy\Debugger::barDump($id, "id");
+		bdump($id, "id");
 		$itemTrace = $this->getItemTrace($id);
 		$itemTrace = array_keys($itemTrace);
 
-		// \Tracy\Debugger::barDump($itemTrace, "itemTrace");
+		// bdump($itemTrace, "itemTrace");
 		$titles = $this->getNavigationsItems()->where("id", $itemTrace)->fetchPairs(null, "title");
-		// \Tracy\Debugger::barDump($items, "items");
+		// bdump($items, "items");
 
 		$aliasStr = "";
 		foreach ($titles as &$title) {
 			$title= Strings::webalize($title);
 		}
 		$aliasStr = implode("-", $titles);
-		\Tracy\Debugger::barDump($aliasStr, "aliasStr");
+		bdump($aliasStr, "aliasStr");
 
 		// $alias = $this->saveAlias("navigation", $id, $aliasStr);
 		// if ($alias) $item->update(["alias" => $alias]);
 	}
 
 	public function getItemIdByRequest($request, $multiple = false) {
-		#\Tracy\Debugger::barDump($request, "request");
+		#bdump($request, "request");
 
 		$pars = $request->getParameters();
-		#\Tracy\Debugger::barDump($pars, "pars");
+		#bdump($pars, "pars");
 
 		$route = ":" . $request->getPresenterName() . ":" . $pars["action"];
-		#\Tracy\Debugger::barDump($route, "route");
+		#bdump($route, "route");
 		unset($pars["action"]);
 		$jsonPars = json_encode($pars);
-		#\Tracy\Debugger::barDump($jsonPars, "jsonPars");
+		#bdump($jsonPars, "jsonPars");
 
 		$items = $this->getNavigationsItems()->where("route", $route);
 
@@ -217,7 +217,7 @@ class NavigationsManager extends BaseManager {
 
 		foreach ($items as $item) {
 			$itemPars = !empty($item->params) ? json_decode($item->params, true) : [];
-			#\Tracy\Debugger::barDump($itemPars, "itemPars");
+			#bdump($itemPars, "itemPars");
 
 			$finded = !count(array_diff($itemPars, $pars)) ? $item->id : null;
 
@@ -232,13 +232,13 @@ class NavigationsManager extends BaseManager {
 			}
 		}
 
-		#\Tracy\Debugger::barDump($result, "items");
+		#bdump($result, "items");
 
 		return $result;
 	}
 
 	public function getItemTrace($id, $trace = []) {
-		#\Tracy\Debugger::barDump($trace, "trace");
+		#bdump($trace, "trace");
 		$item = $this->getNavigationItem($id);
 
 		if (!$item) return;
@@ -253,7 +253,7 @@ class NavigationsManager extends BaseManager {
 	}
 
 	public function getBreadcrumbs($trace) {
-		// \Tracy\Debugger::barDump($trace, "trace");
+		// bdump($trace, "trace");
 		$trace = array_reverse($trace, true);
 
 		$breadcrumbs = [];
@@ -261,7 +261,7 @@ class NavigationsManager extends BaseManager {
 			$breadcrumbs[] = $item->title;
 		}
 
-		// \Tracy\Debugger::barDump($trace, "trace");
+		// bdump($trace, "trace");
 		return $breadcrumbs;
 	}
 
@@ -273,7 +273,7 @@ class NavigationsManager extends BaseManager {
 
 	public function getItemSlugTrace($id) {
 		$trace = $this->getItemTrace($id);
-		// \Tracy\Debugger::barDump($trace, "getItemTraceSlug trace");
+		// bdump($trace, "getItemTraceSlug trace");
 
 		if (!$trace) return;
 
@@ -296,7 +296,7 @@ class NavigationsManager extends BaseManager {
 	public function getItemBySlugTrace($trace) {
 		$trace = trim($trace, "/");
 		$slugs = explode("/", $trace);
-		// \Tracy\Debugger::barDump($slugs, "slugs");
+		// bdump($slugs, "slugs");
 
 		$len = $slugs;
 		$i = 0;
@@ -307,7 +307,7 @@ class NavigationsManager extends BaseManager {
 				"short" => $slug,
 				"parent" => $parent
 			])->fetch();
-			// \Tracy\Debugger::barDump($item->title, "item");
+			// bdump($item->title, "item");
 			if ($item) $parent = $item->id;
 		}
 

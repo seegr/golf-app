@@ -176,7 +176,7 @@ abstract class Presenter extends \Nette\Application\UI\Presenter {
 
 	// 	$path = __DIR__ . "/../templates/" . $name;
 
-	// 	\Tracy\Debugger::barDump($path, "path");
+	// 	bdump($path, "path");
 	// 	return $path;
 	// }
 }

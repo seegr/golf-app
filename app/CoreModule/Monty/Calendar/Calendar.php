@@ -83,7 +83,7 @@ class Calendar extends BaseControl {
 			$this->sortEvents();
 		}
 
-		#\Tracy\Debugger::barDump($this->Date, "Date");
+		#bdump($this->Date, "Date");
 
 		$this["yearSelectForm"]["year"]->setDefaultValue($this->Date->year);
 		$this["monthSelectForm"]["month"]->setDefaultValue($this->Date->month);
@@ -109,18 +109,18 @@ class Calendar extends BaseControl {
 		$template->dayCallback = $this->dayCallback;
 		$template->dayCallbackNewWrap = $this->dayCallbackNewWrap;
 
-		#\Tracy\Debugger::barDump($this->getEvents(), "events");
+		#bdump($this->getEvents(), "events");
 
-		#\Tracy\Debugger::barDump($this->eventsHaystack, "eventsHaystack");
-		#\Tracy\Debugger::barDump($this->getEvents(), "events");
-		#\Tracy\Debugger::barDump($this->holidays, "holidays");
+		#bdump($this->eventsHaystack, "eventsHaystack");
+		#bdump($this->getEvents(), "events");
+		#bdump($this->holidays, "holidays");
 
 		$template->setFile(__DIR__ . "/templates/" . $this->calendarType . ".latte");
 
-		#\Tracy\Debugger::barDump($this->confirmButton, "confirmButton");
+		#bdump($this->confirmButton, "confirmButton");
 
 		// if ($this->renderToString) {
-		// 	// \Tracy\Debugger::barDump($template->getParameters(), "pars");
+		// 	// bdump($template->getParameters(), "pars");
 		// 	return $template->getLatte()->renderToString($templateFile, $template->getParameters());
 		// 	// $this->renderToString();
 		// } else {
@@ -152,7 +152,7 @@ class Calendar extends BaseControl {
 			$this->holidays = $this->eventsToDateArray($holidays);
 		}
 
-		// \Tracy\Debugger::barDump($this->holidays, "holidays");
+		// bdump($this->holidays, "holidays");
 	}
 
 	public function eventsToDateArray($events, $startCol = "start", $endCol = "end", $titleCol = "title") {
@@ -196,34 +196,34 @@ class Calendar extends BaseControl {
 
 	private function setExtDates() {
 		#$template = $this->template;
-		#\Tracy\Debugger::barDump($this->month, "month");
-		// \Tracy\Debugger::barDump($this, "cal");
+		#bdump($this->month, "month");
+		// bdump($this, "cal");
 
 		if ($this->remember) {
 			$session = $this->getSession();
-			// \Tracy\Debugger::barDump($session->year, "sess year");
-			// \Tracy\Debugger::barDump($session->month, "sess month");
+			// bdump($session->year, "sess year");
+			// bdump($session->month, "sess month");
 
 			$this->year = $session->year ? $session->year : $this->year;
 			$this->month = $session->month ? $session->month : $this->month;
-			// \Tracy\Debugger::barDump($this->year, "year");
-			// \Tracy\Debugger::barDump($this->month, "month");
+			// bdump($this->year, "year");
+			// bdump($this->month, "month");
 		}
 
 		if ($this->year) {
-			// \Tracy\Debugger::barDump(1);
+			// bdump(1);
 			$year = $this->year;
 		} else {
-			// \Tracy\Debugger::barDump(2);
+			// bdump(2);
 			$year = $this->Date->tYear;
 			$this->year = $year;
 		}
 
 		if ($this->month) {
-			// \Tracy\Debugger::barDump(3);
+			// bdump(3);
 			$month = $this->month;
 		} else {
-			// \Tracy\Debugger::barDump(4);
+			// bdump(4);
 			$month = $this->Date->tMonth;
 			$this->month = $month;
 		}
@@ -333,12 +333,12 @@ class Calendar extends BaseControl {
 	}
 
 	public function sortEvents() {
-		#\Tracy\Debugger::barDump($this->Date, "Date");
-		#\Tracy\Debugger::barDump($this->Date->month, "cal month");
-		#\Tracy\Debugger::barDump($this->Date->year, "cal year");
+		#bdump($this->Date, "Date");
+		#bdump($this->Date->month, "cal month");
+		#bdump($this->Date->year, "cal year");
 
 		$events = $this->eventsHaystack;
-		#\Tracy\Debugger::barDump($events, "events");
+		#bdump($events, "events");
 
 		if (!$this->year) {
 			throw new \Exception("you have to set calendar year");
@@ -356,33 +356,33 @@ class Calendar extends BaseControl {
 
 		if ($events && count($events) > 0) {
 			foreach ($events as $event) {
-				#\Tracy\Debugger::barDump($event, "event");
+				#bdump($event, "event");
 				$startTimestamp = $event->start->getTimestamp();
 				$endTimestamp = $event->end->getTimestamp();
 
-				#\Tracy\Debugger::barDump($event->DateTimeStart, "start");
-				#\Tracy\Debugger::barDump($event->DateTimeEnd, "end");
+				#bdump($event->DateTimeStart, "start");
+				#bdump($event->DateTimeEnd, "end");
 
-				#\Tracy\Debugger::barDump($startTimestamp, "startTimestamp");
-				#\Tracy\Debugger::barDump($endTimestamp, "endTimestamp");
+				#bdump($startTimestamp, "startTimestamp");
+				#bdump($endTimestamp, "endTimestamp");
 
 				$eventStartDate = $event->start->format("Y-m-d");
 				$eventEndDate = $event->end->format("Y-m-d");
 
 				if ($eventStartDate != $eventEndDate) { //** multipledays event
-					#\Tracy\Debugger::barDump("multiple days event");
+					#bdump("multiple days event");
 					$daysDiff = $event->start->diff($event->end)->days;
-					#\Tracy\Debugger::barDump($daysDiff, "daysDiff");
+					#bdump($daysDiff, "daysDiff");
 
 					$this->events[$eventStartDate][] = $event;
 					$i = 0;
 					for ($i; $i < $daysDiff; $i++) {
 						$date = $event->start->add(new \DateInterval("P1D"))->format("Y-m-d");
-						#\Tracy\Debugger::barDump($date, "date in diff");
+						#bdump($date, "date in diff");
 						$this->events[$date][] = $event;
 					}
 				} else { //** one day event
-					#\Tracy\Debugger::barDump("one day event");
+					#bdump("one day event");
 					$date = $event->start->format("Y-m-d");
 					$this->events[$date][] = $event;
 				}
@@ -446,13 +446,13 @@ class Calendar extends BaseControl {
 
 	public function getDayAction($date) {
 		if ($this->dayAction) {
-			// \Tracy\Debugger::barDump($this->dayAction, "dayAction");
+			// bdump($this->dayAction, "dayAction");
 
 			$link = $this->dayAction[0];
 			$dayAttr = isset($this->dayAction[1]) ? $this->dayAction[1] : "date";
 			$attrs = isset($this->dayAction[2]) ? $this->dayAction[2] : [];
 
-			// \Tracy\Debugger::barDump($attrs, "attrs");
+			// bdump($attrs, "attrs");
 			return $this->presenter->link($link, [$dayAttr => $date] + $attrs);
 		}
 	}
@@ -612,7 +612,7 @@ class Calendar extends BaseControl {
 
 		if ($this->remember) {
 			$id = $this->getId();
-			\Tracy\Debugger::barDump($this->getId(), "id");
+			bdump($this->getId(), "id");
 			$session = $this->getSession();
 			$session->year = $year;
 			$session->month = $month;
@@ -626,8 +626,8 @@ class Calendar extends BaseControl {
 	}
 
 	public function handleOnDayClick($day) {
-		\Tracy\Debugger::barDump("click");
-		\Tracy\Debugger::barDump($this->onDayClick);
+		bdump("click");
+		bdump($this->onDayClick);
 		foreach ($this->onDayClick as $callback) {
 			$callback($day);
 		}

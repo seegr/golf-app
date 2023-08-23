@@ -78,8 +78,8 @@ class EventsPersonsListPresenter extends AdminPresenter
             ->setFitContent();
         // ->setSortable();
         // ->setSortableCallback(function($data, $sort) {
-        //   \Tracy\Debugger::barDump($data, "data");
-        //   \Tracy\Debugger::barDump($sort, "sort");
+        //   bdump($data, "data");
+        //   bdump($sort, "sort");
         //   $sort = reset($sort);
         //   bdump($sort, "reset sort");
 

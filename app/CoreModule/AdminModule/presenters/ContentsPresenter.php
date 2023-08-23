@@ -43,13 +43,13 @@ class ContentsPresenter extends AdminPresenter {
 
     public function startup(): void
     {
-    	\Tracy\Debugger::barDump("startup");
+    	bdump("startup");
     	parent::startup();
 			$this->defineType();
     }
 
 		public function contentForm($id, $type) {
-			// \Tracy\Debugger::barDump("contentForm...");
+			// bdump("contentForm...");
 			$template = $this->template;
 			$form = $this->getForm();
 	
@@ -63,9 +63,8 @@ class ContentsPresenter extends AdminPresenter {
 	
 			$this->tempId = "contents_" . $type->short . "_images_" . $this->getUser()->id;
 	
-			// \Tracy\Debugger::barDump($form->getGroup("custom_fields"), "custom fields group");
+			// bdump($form->getGroup("custom_fields"), "custom fields group");
 			if ($customFieldsGroup = $form["custom_fields"]) {
-				// \Tracy\Debugger::barDump($form["custom_fields"], "custom fields container");
 				$template->_customFieldsGroup = $customFieldsGroup;
 				$template->_customFields = !empty($form["custom_fields"]) ? $form["custom_fields"]->getControls() : [];
 			}
@@ -77,7 +76,7 @@ class ContentsPresenter extends AdminPresenter {
 		}
 	
 		public function renderContentForm($id, $type) {
-			\Tracy\Debugger::barDump("renderContentForm...");
+			bdump("renderContentForm...");
 			$user = $this->getUser();
 	
 			$template = $this->template;
@@ -89,7 +88,7 @@ class ContentsPresenter extends AdminPresenter {
 			if ($id) {
 				$content = $this->ContentsManager->getContent($id);
 				$type = $content->ref("type");
-				\Tracy\Debugger::barDump($content, "content");
+				bdump($content, "content");
 				$form->setDefaults($this->ContentsManager->getContent($id, true));
 				$form["created"]->setDefaultValue($content->created ? $content->created->format(self::DATETIME_FORMAT) : null);
 				$form["start"]->setDefaultValue($content->start ? $content->start->format(self::DATETIME_FORMAT) : null);
@@ -103,7 +102,7 @@ class ContentsPresenter extends AdminPresenter {
 	
 				$images = $this->ContentsManager->getContentImages($this->getParameter("id"));
 	
-				// \Tracy\Debugger::barDump($type->short, "type short");
+				// bdump($type->short, "type short");
 				switch ($type->short) {
 					case "gallery":
 						if ($content->images_order) {
@@ -125,15 +124,15 @@ class ContentsPresenter extends AdminPresenter {
 				$images = $this->FilesManager->getTempFiles($this->tempId);
 			}
 	
-			\Tracy\Debugger::barDump("content images loop");
+			bdump("content images loop");
 			foreach ($images as $image) {
-				\Tracy\Debugger::barDump($image, "image");
+				bdump($image, "image");
 				$file = $image->ref("file");
 				$gal->addImage($file->url, $this->getThumb($file->id))
 					->setId($image->id);
 			}
 	
-			// \Tracy\Debugger::barDump($form, "form");
+			// bdump($form, "form");
 		}
 	
 		public function createComponentContentForm() {
@@ -150,21 +149,21 @@ class ContentsPresenter extends AdminPresenter {
 			};
 	
 			$form["save"]->onClick[] = function($btn, $vals) {
-				\Tracy\Debugger::barDump($vals, "save");
+				bdump($vals, "save");
 				$this->saveContent($vals);
 				$type = $this->ContentsManager->getContentType($vals->type);
 				$this->redirect(":Core:Admin:ContentsList:contentsList", ["type" => $type->short]);
 				// $this->redrawControl();
 			};
 			$form["save_stay"]->onClick[] = function($btn, $vals) {
-				\Tracy\Debugger::barDump($vals, "save_stay");
+				bdump($vals, "save_stay");
 				$id = $this->saveContent($vals);
-				// \Tracy\Debugger::barDump($id, "id");
+				// bdump($id, "id");
 				$this->redirect("this", ["id" => $id]);
 				$this->id = $id;
 			};
 			$form->onError[] = function($form) {
-				\Tracy\Debugger::barDump($form->getErrors(), "errors");
+				bdump($form->getErrors(), "errors");
 			};
 	
 			return $form;
@@ -172,7 +171,7 @@ class ContentsPresenter extends AdminPresenter {
 
 	public function actionContentForm($id, $type): void
 	{
-		// \Tracy\Debugger::barDump("actionContentForm...");
+		// bdump("actionContentForm...");
 		$this->contentForm($id, $type);
 
 		$template = $this->template;
@@ -192,7 +191,7 @@ class ContentsPresenter extends AdminPresenter {
 		$template->headerImageConf = $this->SettingsManager->getSetting("content_header_image");
 		
 		$form["save_stay"]->onClick[] = function($form, $vals) {
-			\Tracy\Debugger::barDump($this->id, "id");
+			bdump($this->id, "id");
 			$this->redirect("this", $this->id);
 			// $this->redrawControl();
 		};
@@ -247,7 +246,7 @@ class ContentsPresenter extends AdminPresenter {
 			->setConfirmation(new StringConfirmation("Opravdu chceš smazat %s?", "start"));
 
 		$l->addGroupAction("Zveřejnit")->onSelect[] = function($ids) use ($l) {
-			// \Tracy\Debugger::barDump($ids, "ids");
+			// bdump($ids, "ids");
 			$this->EventsManager->getEventsDates()->where("id", $ids)->update(["active" => true]);
 			$this->flashMessage("Termíny zveřejněny");
 			// $l->reload();
@@ -255,7 +254,7 @@ class ContentsPresenter extends AdminPresenter {
 		};
 
 		$l->addGroupAction("Skrýt")->onSelect[] = function($ids) use ($l) {
-			// \Tracy\Debugger::barDump($ids, "ids");
+			// bdump($ids, "ids");
 			$this->EventsManager->getEventsDates()->where("id", $ids)->update(["active" => false]);
 			$this->flashMessage("Termíny skryté", "alert-warning");
 			// $this->redrawControl("content");
@@ -263,7 +262,7 @@ class ContentsPresenter extends AdminPresenter {
 		};
 
 		$l->addGroupAction("Smazat")->onSelect[] = function($ids) use ($l) {
-			\Tracy\Debugger::barDump($ids, "ids");
+			bdump($ids, "ids");
 
 			$this->EventsManager->getEventsDates()->where("id", $ids)->delete();
 			
@@ -296,9 +295,9 @@ class ContentsPresenter extends AdminPresenter {
 
 	public function handleEventDateFormModal($date_id)
 	{
-		\Tracy\Debugger::barDump($date_id, "date_id");
+		bdump($date_id, "date_id");
 		$modal = $this["eventDateFormModal"];
-		\Tracy\Debugger::barDump($modal, "modal");
+		bdump($modal, "modal");
 
 		$modal->show();
 	}
@@ -309,14 +308,14 @@ class ContentsPresenter extends AdminPresenter {
 
 		unset($f["save_stay"]);
 
-		\Tracy\Debugger::barDump($this->getParameters(), "createComponentEventDateFormModal pars");
+		bdump($this->getParameters(), "createComponentEventDateFormModal pars");
 
 		$content = $this->ContentsManager->getContent($this->id);
 
 		$pars = $this->getParameters();
 		$date = isset($pars["date_id"]) ? $this->EventsManager->getEventDate($pars["date_id"]) : null;
 
-		\Tracy\Debugger::barDump($date, "date");
+		bdump($date, "date");
 		if ($content) {
 			$f->setDefaults([
 				"content" => $content->hash
@@ -330,7 +329,7 @@ class ContentsPresenter extends AdminPresenter {
 		}
 
 		$f["save"]->onClick[] = function($f, $v) {
-			\Tracy\Debugger::barDump($v, "EventDateForm vals");
+			bdump($v, "EventDateForm vals");
 
 			$this->EventsManager->saveEventDate($v);
 
@@ -343,8 +342,8 @@ class ContentsPresenter extends AdminPresenter {
 	}
 
 	public function handleChangeAttTitle($attId, $title) {
-		\Tracy\Debugger::barDump($attId, "attId");
-		\Tracy\Debugger::barDump($title, "title");
+		bdump($attId, "attId");
+		bdump($title, "title");
 		$this->ContentsManager->getContentAttachment($attId)->update(["title" => $title]);
 
 		$this->redrawControl("formWrap");
@@ -372,7 +371,7 @@ class ContentsPresenter extends AdminPresenter {
 	}
 
 	public function handleContentImageForm($imageId) {
-		\Tracy\Debugger::barDump($imageId, "imageId");
+		bdump($imageId, "imageId");
 		$template = $this->template;
 		$this["contentImageForm"]->setDefaults($this->ContentsManager->getContentImage($imageId));
 
@@ -383,9 +382,9 @@ class ContentsPresenter extends AdminPresenter {
 	}
 
 	public function handleAttOrderChange($itemId, $prevItemId, $nextItemId) {
-		\Tracy\Debugger::barDump($itemId, "id");
-		\Tracy\Debugger::barDump($prevItemId, "prevItemId");
-		\Tracy\Debugger::barDump($nextItemId, "nextItemId");
+		bdump($itemId, "id");
+		bdump($prevItemId, "prevItemId");
+		bdump($nextItemId, "nextItemId");
 
 		$items = $this->ContentsManager->getContentAttachments($this->getParameter("id"));
 		$this->ContentsManager->itemOrderChange($itemId, $prevItemId, $nextItemId, $items);

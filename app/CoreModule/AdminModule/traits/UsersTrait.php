@@ -48,7 +48,7 @@ trait UsersTrait {
 	}
 
 	public function toggleUserActive($id) {
-		\Tracy\Debugger::barDump("user toggle");
+		bdump("user toggle");
 		$user = $this->UsersManager->getUser($id);
 
 		if ($user->active) {

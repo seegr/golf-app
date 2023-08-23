@@ -7,6 +7,7 @@ use Nette\Database\Table\Selection;
 use DateInterval;
 use DatePeriod;
 use DateTime;
+use Nette\Utils\Json;
 
 trait CoursesTrait
 {
@@ -42,21 +43,20 @@ trait CoursesTrait
 
     public function getFutureCoursesBegins()
     {
+        $courseType = $this->golfConfig->get('courses');
+
         $fEvents = $this->EventsManager->getEventsDates(true)
             ->where("contents_events_dates.start >= ?", new DateTime)
             ->order("contents_events_dates.start ASC");
-        // bdump($fEvents->fetchAll());
+//         bdump($fEvents->fetchAll());
 
         $times = self::getCoursesRange(true);
-        // bdump($times, "times");
 
         $events = [];
         $len = count($times);
         $coursesParents = [];
         for ($i = 0; $i <= $len - 1; $i++) {
             $time = $times[$i]->format("H:i");
-            bdump($time);
-
             $next = !empty($times[$i+1]) ? $times[$i+1]->format("H:i") : null;
 
             $events[$time] = [];
@@ -68,9 +68,13 @@ trait CoursesTrait
                         $ev->start->format("H:i") >= $time &&
                         ($ev->start->format("H:i") < $next || !$next)) {
                         if (!in_array($ev->content, $coursesParents)) {
+                            $content = $ev->ref('content');
+                            $customFields = Json::decode($content['custom_fields']);
+                            $course = $customFields->course ? $courseType[$customFields->course] : null;
                             $data = [
                                 'id' => $ev->id,
                                 'content' => $ev->content,
+                                'course' => $course,
                                 'start' => $ev->start,
                                 'end' => $ev->end,
                                 "summary" => $this->EventsManager->getEventRegSummary($ev->content, null, true)

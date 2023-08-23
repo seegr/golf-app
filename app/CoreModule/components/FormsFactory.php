@@ -92,12 +92,12 @@ class FormsFactory extends BaseFormsFactory
             ->addRule(Form::MIN, "Minimum je 0 (neomezeně)", 0);
 
 		$customFields = $this->ContentsManager->getContentCustomFields($type);
-		// \Tracy\Debugger::barDump($customFields, "customFields");
+		// bdump($customFields, "customFields");
 
 		$group = $form->addContainer("custom_fields");
 		foreach ($customFields as $name => $field) {
 			$field = ArrayHash::from($field);
-			// \Tracy\Debugger::barDump($field, "field");
+//            bdump($field, "field");
 			$title = $field->title;
 			$type = $field->type;
 
@@ -109,7 +109,9 @@ class FormsFactory extends BaseFormsFactory
 				$control = $group->addUrl($name, $title);
 			} else if ($type == "price") {
 				$control = $group->addPrice($name, $title);
-			}
+			} else if ($type == "select") {
+                $control = $group->addSelect($name, $title, (array)$field->options);
+            }
 
 			// PHP 8
 			// $control = match($type) {
@@ -167,7 +169,7 @@ class FormsFactory extends BaseFormsFactory
 		$form = $this->newForm();
 
 		$roles = $this->UsersManager->getRoles()->where("short != ?", "guest")->fetchPairs("id", "title");
-		\Tracy\Debugger::barDump($roles, "roles");
+		bdump($roles, "roles");
 
 		// $form->addHidden("id");
 		$form->addMultiSelect("roles", "Role", $roles);

@@ -67,6 +67,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack --mode development --progress --color --config webpack.config.js",
-    "prod": "webpack --mode production --progress --color --config webpack.config.js"
+    "prod": "webpack --mode production --progress --color --config webpack.config.js",
+    "serve": "php -S 127.0.0.1:8000 -t www/"
   }
 }

@@ -15,10 +15,10 @@ class OAuthExtension extends Nette\DI\CompilerExtension
 	public function loadConfiguration()
 	{
 		$config = $this->config;
-		// \Tracy\Debugger::barDump($config, "config");
+		// bdump($config, "config");
 
 		$builder = $this->getContainerBuilder();
-		// \Tracy\Debugger::barDump($builder, "builder");
+		// bdump($builder, "builder");
 
 		// $container = $builder->addDefinition($this->prefix('container'))
 		// 	->setType(MenuContainer::class);
@@ -56,13 +56,13 @@ class OAuthExtension extends Nette\DI\CompilerExtension
 				->addSetup("setRedirectUri", [$gConf["redirectUri"]]);
 		}
 
-		// \Tracy\Debugger::barDump($builder, "builder");
+		// bdump($builder, "builder");
 	}
 
 	public function beforeCompile(): void
 	{
 		$builder = $this->getContainerBuilder();
-		// \Tracy\Debugger::barDump($builder, "builder");
+		// bdump($builder, "builder");
 
 	}
 

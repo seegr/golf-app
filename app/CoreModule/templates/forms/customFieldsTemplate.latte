@@ -20,7 +20,12 @@
 				{var $attrs[title] = $field->desc}
 			{/if} *}
 
-			<div class="form-group col-12 col-md-6" n:attr="$attrs">
+			<div n:class="
+					'form-group col-12 col-md-6',
+					$type === 'select' ? 'd-flex align-items-end'
+				"
+				n:attr="$attrs"
+			>
 				{* {dump $type} *}
 
 				{switch $type}

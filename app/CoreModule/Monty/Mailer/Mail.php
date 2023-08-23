@@ -30,14 +30,14 @@ class Mail extends \Nette\Mail\Message {
 
 	public function addTo($recipient, $name = null) {
 		/*if (is_array($recipient)) {
-			#\Tracy\Debugger::barDump("je pole");
+			#bdump("je pole");
 			foreach ($recipient as $email => $name) {
-				#\Tracy\Debugger::barDump($contact);
+				#bdump($contact);
 				#$this->setHeader('To', $this->formatEmail($contact, $name), true);
 				$this->addRecipient($email, $name);
 			}
 		} else {
-			#\Tracy\Debugger::barDump("neni pole");
+			#bdump("neni pole");
 			//$this->setHeader('To', $this->formatEmail($recipient, $name), true);
 			$this->addRecipient($recipient, $name);
 		}*/
@@ -74,15 +74,15 @@ class Mail extends \Nette\Mail\Message {
 	}
 
 	public function send() {
-		#\Tracy\Debugger::barDump("sending mail");
-		#\Tracy\Debugger::barDump($this->getHeaders(), "mail headers");
-		#\Tracy\Debugger::barDump($this->mailer, "mailer");
+		#bdump("sending mail");
+		#bdump($this->getHeaders(), "mail headers");
+		#bdump($this->mailer, "mailer");
 
-		#\Tracy\Debugger::barDump($this->getHtmlBody(), "html");
-		#\Tracy\Debugger::barDump($this->getBody(), "body");
+		#bdump($this->getHtmlBody(), "html");
+		#bdump($this->getBody(), "body");
 
 		$headers = $this->getHeaders();
-		#\Tracy\Debugger::barDump($headers, "headers");
+		#bdump($headers, "headers");
 
 		if (!isset($headers["To"])) {
 			throw new Exception("You have to add email recipient");
@@ -108,18 +108,18 @@ class Mail extends \Nette\Mail\Message {
 
 
 		$headers = $this->getHeaders();
-		\Tracy\Debugger::barDump($headers, "headers");
+		bdump($headers, "headers");
 		if (empty($headers["Subject"])) throw new \Exception("You have to set email subject!");
 		
 		switch ($this->mode) {
 			case "send":
-				\Tracy\Debugger::barDump("mail send");
+				bdump("mail send");
 				$this->mailer->send($this);
 			break;
 
 			case "log":
-				\Tracy\Debugger::barDump("mail log");
-				\Tracy\Debugger::barDump($this->getHeaders(), "mail headers");
+				bdump("mail log");
+				bdump($this->getHeaders(), "mail headers");
 			break;
 
 			default:
@@ -128,7 +128,7 @@ class Mail extends \Nette\Mail\Message {
 					$this->setHeader("Bcc", null);
 					$this->addTo($this->mode);
 				}
-				#\Tracy\Debugger::barDump($this->getHeader("To"), "To header");
+				#bdump($this->getHeader("To"), "To header");
 				$this->mailer->send($this);
 			break;
 		}

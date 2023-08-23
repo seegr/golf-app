@@ -25,14 +25,14 @@ trait UsersTrait
 	{
 		$template = $this->template;
 
-		// \Tracy\Debugger::barDump($this->OAuthFacebookControl, "OAuthFacebookControl");
+		// bdump($this->OAuthFacebookControl, "OAuthFacebookControl");
 		$this->FacebookClient = $this->OAuthFacebookControl->getClient();
-		// \Tracy\Debugger::barDump($this->FacebookClient, "FacebookClient");
+		// bdump($this->FacebookClient, "FacebookClient");
 		$template->fbLogin = $this->FacebookClient ? true : false;
 
-		// \Tracy\Debugger::barDump($this->OAuthGoogleControl, "OAuthGoogleControl");
+		// bdump($this->OAuthGoogleControl, "OAuthGoogleControl");
 		$this->GoogleClient = $this->OAuthGoogleControl->getClient();
-		// \Tracy\Debugger::barDump($this->GoogleClient, "GoogleClient");
+		// bdump($this->GoogleClient, "GoogleClient");
 		$template->googleLogin = $this->GoogleClient ? true : false;
 	}
 
@@ -40,7 +40,7 @@ trait UsersTrait
 	public function actionGoogleSignIn()
 	{
 		#$this->gClient = $gClient;
-		// \Tracy\Debugger::barDump($this->gClient, "gClient");
+		// bdump($this->gClient, "gClient");
 		$loginUrl = $this->GoogleClient->createAuthUrl();
 		$this->redirectUrl($loginUrl);
 	}
@@ -78,7 +78,7 @@ trait UsersTrait
 		$fb_helper = $fb->getRedirectLoginHelper();
 
 		$pars = $this->getParameters();
-		// \Tracy\Debugger::barDump($pars, "pars");
+		// bdump($pars, "pars");
 		if (!empty($pars["code"])) {
 			// $facebook_login_url = $fb_helper->getLoginUrl($this->link("//:Front:Users:facebookSignInCallbak"));
 
@@ -90,9 +90,9 @@ trait UsersTrait
 				$fb->setDefaultAccessToken($access_token);
 
 				$graph_response = $fb->get("/me?fields=email,first_name,last_name", $access_token);
-				// \Tracy\Debugger::barDump($graph_response, "graph res");
+				// bdump($graph_response, "graph res");
 				$fb_user = $graph_response->getGraphUser();
-				// \Tracy\Debugger::barDump($fb_user, "fb user info");
+				// bdump($fb_user, "fb user info");
 
 				$email = $fb_user->getEmail();
 				$user = $this->UsersManager->getUser($email);
@@ -152,7 +152,7 @@ trait UsersTrait
 		$form = $this->FormsFactory->loginForm();
 
 		$form->onSuccess[] = function($form, $vals) {
-			// \Tracy\Debugger::barDump($vals, "login vals");
+			// bdump($vals, "login vals");
 			try {
 				$user = $this->UsersManager->getUser($vals->user);
 				// if (!$user || ($user && !$user->active)) throw new \Nette\Security\AuthenticationException;
@@ -181,11 +181,11 @@ trait UsersTrait
 
 	public function loginRedirect() {
 		$loginSession = $this->getSession("login");
-		// \Tracy\Debugger::barDump($loginSession, "loginSession");
+		// bdump($loginSession, "loginSession");
 		
 		if ($loginSession->backlink_custom) {
 			$backlink = $this->getSession("login")->backlink_custom;
-			// \Tracy\Debugger::barDump($backlink, "backlink custom");
+			// bdump($backlink, "backlink custom");
 			unset($this->getSession("login")->backlink_custom);
 			if (strpos($backlink["page"], "/") !== false) {
 				$this->redirectUrl($backlink["page"]);
@@ -193,7 +193,7 @@ trait UsersTrait
 				$this->redirect($backlink["page"], $backlink["params"]);
 			}
 		} elseif ($loginSession->backlink) {
-			// \Tracy\Debugger::barDump($loginSession->backlink, "backlink");
+			// bdump($loginSession->backlink, "backlink");
 			$redirect = $loginSession->backlink;
 			unset($loginSession->backlink);
 			$this->restoreRequest($redirect);

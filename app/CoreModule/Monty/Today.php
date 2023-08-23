@@ -21,7 +21,7 @@ class Today {
 	}
 
 	public function setYear($year) {
-		// \Tracy\Debugger::barDump($year, "set year");
+		// bdump($year, "set year");
 		$this->year = $year;
 
 		$this->dt->modify("first day of this month");
@@ -32,7 +32,7 @@ class Today {
 	}
 
 	public function setMonth($month) {
-		// \Tracy\Debugger::barDump($month, "set month");
+		// bdump($month, "set month");
 		$this->month = $month;
 
 		$this->dt->modify("first day of this month");
@@ -44,26 +44,26 @@ class Today {
 	}
 
 	public function setAll() {
-		// \Tracy\Debugger::barDump($this->year, "year");
-		// \Tracy\Debugger::barDump($this->month, "month");
-		// \Tracy\Debugger::barDump($this->dt, "this-dt 1");
+		// bdump($this->year, "year");
+		// bdump($this->month, "month");
+		// bdump($this->dt, "this-dt 1");
 		$this->dt = $dt = $this->dt ? $this->dt : new DateTime;
 
 		// if ($this->date) $dt->modify($this->date);
-		// \Tracy\Debugger::barDump($dt, "this-dt 2");
+		// bdump($dt, "this-dt 2");
 
 		$this->today = new DateTime;
 
 		$this->year = $this->year ? $this->year : $dt->format("Y");
 		$this->month = $this->month ? $this->month : $dt->format("n");
-		// \Tracy\Debugger::barDump($dt, "this-dt 3");
+		// bdump($dt, "this-dt 3");
 
-		// \Tracy\Debugger::barDump("set date");
-		// \Tracy\Debugger::barDump($this->year, "year");
-		// \Tracy\Debugger::barDump($this->month, "month");
-		// \Tracy\Debugger::barDump($dt->format("j"), "day");
+		// bdump("set date");
+		// bdump($this->year, "year");
+		// bdump($this->month, "month");
+		// bdump($dt->format("j"), "day");
 		$dt->setDate($this->year, $this->month, $dt->format("j"));
-		// \Tracy\Debugger::barDump($dt, "this-dt 4");
+		// bdump($dt, "this-dt 4");
 
 		// $this->dt = $dt;
 
@@ -95,7 +95,7 @@ class Today {
 
 		$this->monthPeriod = new DatePeriod($start, DateInterval::createFromDateString('1 day'), $end);
 
-		// \Tracy\Debugger::barDump($this, "date after set");
+		// bdump($this, "date after set");
 	}
 
 	public function getTodayInterval() {

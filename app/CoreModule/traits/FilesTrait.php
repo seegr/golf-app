@@ -20,7 +20,7 @@ trait FilesTrait {
 	}
 
 	public function isImage($id) {
-		// \Tracy\Debugger::barDump("is image");
+		// bdump("is image");
 		return $this->FilesManager->isImage($id);
 	}
 

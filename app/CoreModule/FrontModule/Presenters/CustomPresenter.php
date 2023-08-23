@@ -17,8 +17,8 @@ class CustomPresenter extends FrontPresenter
 			$this->view = $template;
 			// $this->template->setFile($template . ".latte");
 		}
-		// \Tracy\Debugger::barDump($template, "template");
-		// \Tracy\Debugger::barDump($this->getParameters(), "pars");
+		// bdump($template, "template");
+		// bdump($this->getParameters(), "pars");
 	}
 
 
@@ -33,7 +33,7 @@ class CustomPresenter extends FrontPresenter
 		$template = $this->template;
 
 		if ($session->template) {
-			\Tracy\Debugger::barDump($session, "session");
+			bdump($session, "session");
 			$template->setFile($session->template);
 			$template->setParameters($session->attrs);
 		}

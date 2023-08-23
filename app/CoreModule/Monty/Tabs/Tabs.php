@@ -29,9 +29,9 @@ class Tabs extends Nette\Application\UI\Control {
 		$this->presenter = $this->getPresenter();
 
 		$template = clone $this->presenter->template;
-		\Tracy\Debugger::barDump($template, "template");
+		bdump($template, "template");
 		// $template = $this->template;
-		// \Tracy\Debugger::barDump($template, "template");
+		// bdump($template, "template");
 
 		$template->setFile(__DIR__ . "/templates/tabs.latte");
 

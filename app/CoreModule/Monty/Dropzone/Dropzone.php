@@ -80,15 +80,15 @@ class Dropzone extends Control {
 
 		$form->onSuccess[] = function($form, $vals) {
 			$hVals = $form->getHttpData();
-			#\Tracy\Debugger::barDump($vals, "vals");
+			#bdump($vals, "vals");
 			$uploadedFiles[] = ArrayHash::from([
 				"file" => $vals->file,
 				"vals" => $vals
 			]);
 
 			foreach ($this->onUpload as $callback) {
-				#\Tracy\Debugger::barDump($callback, "callback");
-				//\Tracy\Debugger::barDump($hVals, "hVals");
+				#bdump($callback, "callback");
+				//bdump($hVals, "hVals");
 				$file = $vals->file;
 				unset($vals["file"]);
 				$fileName = pathinfo($file->name)["filename"];
@@ -114,10 +114,10 @@ class Dropzone extends Control {
 
 
 	public function handleConfirm() {
-		\Tracy\Debugger::barDump("confirm handle");
+		bdump("confirm handle");
 
 		foreach ($this->onConfirm as $callback) {
-			#\Tracy\Debugger::barDump($callback, "callback");
+			#bdump($callback, "callback");
 			#$callback();
 		}
 	}
@@ -146,7 +146,7 @@ class Dropzone extends Control {
 	public function getInputsNames($form) {
 		$names = [];
 		foreach ($form->getComponents() as $id => $input) {
-			#\Tracy\Debugger::barDump($id, "input id");
+			#bdump($id, "input id");
 			$names[] = $id;
 		}
 
@@ -155,7 +155,7 @@ class Dropzone extends Control {
 
 	public function getInputsColClass() {
 		$count = count($this["inputs"]->getComponents());
-		#\Tracy\Debugger::barDump($count);
+		#bdump($count);
 
 		if ($count && $count <= 4) {
 			return "col-" . (12 / $count);
@@ -170,7 +170,7 @@ class Dropzone extends Control {
 
 	protected function appendDropzoneInputs($dropzoneForm, $inputsType) {
 		foreach ($this[$inputsType]->getComponents() as $inputId => $input) {
-			//\Tracy\Debugger::barDump($input, "input");
+			//bdump($input, "input");
 			#$id = $inputsType == "fileInputs" ?  "file_" . $input->name : $input->name;
 
 			$input->setParent($dropzoneForm->getParent());
@@ -179,11 +179,11 @@ class Dropzone extends Control {
 	}
 
 	public function handleUploadComplete() {
-		#\Tracy\Debugger::barDump($this->uploadedFiles, "uploadedFiles");
+		#bdump($this->uploadedFiles, "uploadedFiles");
 		
 		foreach ($this->onUploadComplete as $callback) {
-			#\Tracy\Debugger::barDump("onUploadComplete");
-			#\Tracy\Debugger::barDump($callback, "callback");
+			#bdump("onUploadComplete");
+			#bdump($callback, "callback");
 			$callback($this->uploadedFiles);
 		}
 	}

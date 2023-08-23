@@ -33,8 +33,8 @@ trait ContentsTrait
 			$type = null;
 		}
 
-		\Tracy\Debugger::barDump($id, "id");
-		\Tracy\Debugger::barDump($type, "type");
+		bdump($id, "id");
+		bdump($type, "type");
 		
 		$this->id = $id;
 		$this->type = $type;
@@ -45,12 +45,12 @@ trait ContentsTrait
 	}
 
 	public function saveContent($vals) {
-		\Tracy\Debugger::barDump($vals, "saveContent - vals");
+		bdump($vals, "saveContent - vals");
 		$id = $this->ContentsManager->contentSave($vals);
 		$content = $this->ContentsManager->getContent($id);
 
 		if (!empty($vals->image) && $vals->image->hasFile()) {
-			// \Tracy\Debugger::barDump("saving image");
+			// bdump("saving image");
 			$fileId = $this->FilesManager->uploadImage($vals->image, $this->getUser()->id);
 			$content->update(["image" => $fileId]);
 		}
@@ -76,7 +76,7 @@ trait ContentsTrait
 		}
 
 		$alias = $this->AliasesManager->saveAlias("contents", $content);
-		\Tracy\Debugger::barDump($alias, "alias");
+		bdump($alias, "alias");
 		$content->update(["alias" => $alias]);
 
 		$this->lastId = $id;
@@ -93,7 +93,7 @@ trait ContentsTrait
 		$type = $content->ref("type")->short;
 		$role = "admin";
 
-		// \Tracy\Debugger::barDump(count($this->getContentsEditors()->where("content", $id)->where("user", $user->id)), "count");
+		// bdump(count($this->getContentsEditors()->where("content", $id)->where("user", $user->id)), "count");
 
 		if (!$user->isInRole("superadmin") && ((
 			$content->user != $user->id &&
@@ -143,7 +143,7 @@ trait ContentsTrait
 		$gal->addImageAction("edit", null, "contentImageForm!")->setIcon("fas fa-pencil");
 
 		$gal->onSelectionDelete[] = function($files) {
-			\Tracy\Debugger::barDump($files, "files");
+			bdump($files, "files");
 			foreach ($files as $file) {
 				if ($this->getParameter("id")) {
 					$this->ContentsManager->getContentImage($file)->delete();
@@ -156,12 +156,12 @@ trait ContentsTrait
 		};
 
 		$gal->onOrderChange[] = function($item, $itemPrev, $itemNext) {
-			\Tracy\Debugger::barDump("change order");
-			\Tracy\Debugger::barDump($item, "item");
+			bdump("change order");
+			bdump($item, "item");
 
 			$image = $this->ContentsManager->getContentImage($item);
 			$images = $this->ContentsManager->getContentImages($image->content);
-			\Tracy\Debugger::barDump($images->fetchAll(), "images");
+			bdump($images->fetchAll(), "images");
 
 			$this->ContentsManager->changeItemOrder($images, $item, $itemNext, $itemPrev);
 			$this->ContentsManager->itemsReorder((clone $images));
@@ -204,7 +204,7 @@ trait ContentsTrait
 		// $cropper->setRatio(1, 0.156);
 
 		$cropper->onCropp[] = function($vals) {
-			\Tracy\Debugger::barDump($vals, "headerImage cropper vals");
+			bdump($vals, "headerImage cropper vals");
 			$fileId = $this->FilesManager->uploadImage($vals->path, $this->getUser()->id);
 			// $this->UsersManager->getUser($user->id)->update(["image" => $vals->image]);
 			$this->ContentsManager->getContent($this->id)->update(["header_image" => $fileId]);

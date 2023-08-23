@@ -81,9 +81,9 @@ class FormsPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPresent
 
 			$desc = Html::el("div");
 
-			\Tracy\Debugger::barDump($i->id, $i->title);
+			bdump($i->id, $i->title);
 			$fields = $this->FormsManager->getFormFields($i->id);
-			\Tracy\Debugger::barDump($fields->fetchAll(), "fields");
+			bdump($fields->fetchAll(), "fields");
 			$i = 1;
 			foreach ($fields as $field) {
 				$wrap = Html::el("span");
@@ -174,7 +174,7 @@ class FormsPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPresent
 		$form = $this->FormsFactory->formFieldForm();
 
 		$form["save"]->onClick[] = function($f, $v) {
-			\Tracy\Debugger::barDump($v, "v");
+			bdump($v, "v");
 			$this->FormsManager->saveFormField($v);
 
 			$this->redirect("formForm", $v->form);
@@ -187,7 +187,7 @@ class FormsPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPresent
 		};
 
 		$form["cancel"]->onClick[] = function($f, $v) {
-			\Tracy\Debugger::barDump($v, "vals");
+			bdump($v, "vals");
 			$this->redirect("formForm", $v->form);
 		};
 
@@ -270,14 +270,14 @@ class FormsPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPresent
 	}
 
 	public function handleFormFieldsReorder($item_id, $prev_id, $next_id) {
-		\Tracy\Debugger::barDump($item_id, "item_id");
-		\Tracy\Debugger::barDump($prev_id, "prev_id");
-		\Tracy\Debugger::barDump($next_id, "next_id");
+		bdump($item_id, "item_id");
+		bdump($prev_id, "prev_id");
+		bdump($next_id, "next_id");
 
 		$field = $this->FormsManager->getFormField($item_id);
-		\Tracy\Debugger::barDump($field, "field");
+		bdump($field, "field");
 		$items = $this->FormsManager->getFormFields($field->form);
-		\Tracy\Debugger::barDump($items->fetchAll(), "items");
+		bdump($items->fetchAll(), "items");
 
 		$this->FormsManager->itemOrderChange($item_id, $prev_id, $next_id, $items);
 
@@ -298,14 +298,14 @@ class FormsPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPresent
 
 		$form = $form->toArray();
 		$fields = $fields->fetchAll();
-		\Tracy\Debugger::barDump($form, "form");
+		bdump($form, "form");
 
 		unset($form["id"]);
 		$newForm = $this->FormsManager->saveForm(ArrayHash::from($form));
 		
 		foreach ($fields as $field) {
 			$field = $field->toArray();
-			\Tracy\Debugger::barDump($field, "field");
+			bdump($field, "field");
 			$fieldId = $field["id"];
 			unset($field["id"]);
 			$field["form"] = $newForm;
@@ -313,7 +313,7 @@ class FormsPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPresent
 
 			foreach ($this->FormsManager->getFormFieldOptions($fieldId) as $option) {
 				$option = $option->toArray();
-				\Tracy\Debugger::barDump($option, "option");
+				bdump($option, "option");
 				unset($option["id"]);
 				$option["field"] = $newField;
 				$this->FormsManager->saveFormFieldOption(ArrayHash::from($option));				

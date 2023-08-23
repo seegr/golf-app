@@ -31,7 +31,7 @@ class Modal extends BaseControl {
 		if ($this->latteContent) {
 			$temp = $this->getPresenter()->getTemplate();
 			$pars = $temp->getParameters();
-			// \Tracy\Debugger::barDump($pars, "pars");
+			// bdump($pars, "pars");
 			$template->content = $this->getPresenter()->template->getLatte()->renderToString($this->content, $pars);
 		} else {
 			$template->content = $this->content;
@@ -65,7 +65,7 @@ class Modal extends BaseControl {
 	// }
 
 	public function setContent($content) {
-		// \Tracy\Debugger::barDump("modal setContent");
+		// bdump("modal setContent");
 		$this->content = $content;
 
 		if (strrpos($content, ".latte")) {

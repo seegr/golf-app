@@ -20,7 +20,7 @@ class BootstrapFormRenderer extends \Nette\Forms\Rendering\DefaultFormRenderer {
 
 	public function renderPairMulti(array $controls): string
 	{
-		// \Tracy\Debugger::barDump($controls, "controls");
+		// bdump($controls, "controls");
 		$s = [];
 		foreach ($controls as $control) {
 			if (!$control instanceof Nette\Forms\IControl) {
@@ -48,7 +48,7 @@ class BootstrapFormRenderer extends \Nette\Forms\Rendering\DefaultFormRenderer {
 			$s[] = $el . $description;
 		}
 		$pair = $this->getWrapper('pair container');
-		// \Tracy\Debugger::barDump($pair, "pair");
+		// bdump($pair, "pair");
 		$pair->setClass("form-group col-auto w-100");
 
 		$pair->addHtml($this->renderLabel($control));
@@ -58,9 +58,9 @@ class BootstrapFormRenderer extends \Nette\Forms\Rendering\DefaultFormRenderer {
 
 	public function renderPair(Nette\Forms\IControl $control): string
 	{
-		// \Tracy\Debugger::barDump($control, "control");
+		// bdump($control, "control");
 		$pair = $this->getWrapper('pair container');
-		// \Tracy\Debugger::barDump($pair, "pair");
+		// bdump($pair, "pair");
 		// $class = $pair["attrs"]["class"];
 		$class = $pair->getAttribute("class");
 

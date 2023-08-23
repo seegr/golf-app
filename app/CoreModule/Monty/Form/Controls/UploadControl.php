@@ -37,7 +37,7 @@ class UploadControl extends Nette\Forms\Controls\UploadControl
 		$this->setOption('type', 'file');
 
 		$maxFileSize = Forms\Helpers::iniGetSize('upload_max_filesize');
-		// \Tracy\Debugger::barDump($maxFileSize, "maxFileSize");
+		// bdump($maxFileSize, "maxFileSize");
 
 		$this->addCondition(true) // not to block the export of rules to JS
 			->addRule([$this, 'isOk'], );
@@ -60,12 +60,12 @@ class UploadControl extends Nette\Forms\Controls\UploadControl
 	// 	} elseif ($validator === Form::MIME_TYPE) {
 	// 		$this->control->accept = implode(', ', (array) $arg);
 	// 	} elseif ($validator === Form::MAX_FILE_SIZE) {
-	// 		// \Tracy\Debugger::barDump("MAX_FILE_SIZE");
-	// 		// \Tracy\Debugger::barDump($arg, "arg");
-	// 		// \Tracy\Debugger::barDump(Forms\Helpers::iniGetSize('upload_max_filesize'), "upload_max_filesize");
+	// 		// bdump("MAX_FILE_SIZE");
+	// 		// bdump($arg, "arg");
+	// 		// bdump(Forms\Helpers::iniGetSize('upload_max_filesize'), "upload_max_filesize");
 	// 		if ($arg > Forms\Helpers::iniGetSize('upload_max_filesize')) {
 	// 			$ini = ini_get('upload_max_filesize');
-	// 			// \Tracy\Debugger::barDump($ini, "ini");
+	// 			// bdump($ini, "ini");
 	// 			trigger_error("Value of MAX_FILE_SIZE ($arg) is greater than value of directive upload_max_filesize ($ini).", E_USER_WARNING);
 	// 		}
 	// 		$this->getRules()->removeRule($validator);

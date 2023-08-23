@@ -38,7 +38,7 @@ class Item {
 
 
 	public function __construct($nav, $id, $link = null, $text = null, $class = null) {
-		#\Tracy\Debugger::barDump($id, "id");
+		#bdump($id, "id");
 		$this->nav = $nav;
 		$this->link = $link;
 		$this->text = $text;
@@ -71,7 +71,7 @@ class Item {
 	}
 
 	public function setParent($parent) {
-		// \Tracy\Debugger::barDump($this->text . " set parent " . $parent);
+		// bdump($this->text . " set parent " . $parent);
 		$this->parent = $parent;
 
 		return $this;
@@ -213,14 +213,14 @@ class Item {
 	}
 
 	public function getHtml() {
-		#\Tracy\Debugger::barDump($this->getPresenter(), "presenter by Item");
-		#\Tracy\Debugger::barDump("getHtml");
-		// \Tracy\Debugger::barDump($this->text, "getHtml");
-		// \Tracy\Debugger::barDump($this, "item");
+		#bdump($this->getPresenter(), "presenter by Item");
+		#bdump("getHtml");
+		// bdump($this->text, "getHtml");
+		// bdump($this, "item");
 		$btnWrap = Html::el("div");
 		$btnWrap->class[] = "item-wrap";
 		if ($this->class) {
-			// \Tracy\Debugger::barDump($this->class, "class");
+			// bdump($this->class, "class");
 			foreach ($this->class as $class) {
 				$btnWrap->class[] = $class;
 			}
@@ -244,10 +244,10 @@ class Item {
 			if ($this->active) $btnWrap->class[] = "active";
 			if ($this->childActive) $btnWrap->class[] = "child-active";
 
-			// \Tracy\Debugger::barDump($this->activeRoutes, "activeRoutes"); 
+			// bdump($this->activeRoutes, "activeRoutes"); 
 			if ($this->activeRoutes) {
 				foreach ($this->activeRoutes as $route) {
-					// \Tracy\Debugger::barDump($route, "route");
+					// bdump($route, "route");
 					if ($presenter->isLinkCurrent($route)) {
 						$btnWrap->class[] = "active";
 						break;
@@ -256,7 +256,7 @@ class Item {
 			}
 		}
 
-		// \Tracy\Debugger::barDump($this->position, "position");
+		// bdump($this->position, "position");
 		if ($this->link) {
 			$btn->class[] = "item-link";
 		} else {
@@ -344,12 +344,12 @@ class Item {
 
 		$btnWrap->addHtml($btn);
 
-		// \Tracy\Debugger::barDump($this->text, "getHtml");
-		// \Tracy\Debugger::barDump($this->childs, "childs");
-		// \Tracy\Debugger::barDump($this->level, "level");
-		// \Tracy\Debugger::barDump($this->nav->depth, "depth");
+		// bdump($this->text, "getHtml");
+		// bdump($this->childs, "childs");
+		// bdump($this->level, "level");
+		// bdump($this->nav->depth, "depth");
 		if ($this->level < $this->nav->depth && count($this->childs)) {
-			// \Tracy\Debugger::barDump("has child", $this->text);
+			// bdump("has child", $this->text);
 
 			$btnWrap->class[] = "parent";
 			if ($this->nav->type != "vertical") {
@@ -372,8 +372,8 @@ class Item {
 		}
 
 
-		// \Tracy\Debugger::barDump($btnWrap, "btnWrap");
-		// \Tracy\Debugger::barDump($btn, "btn");
+		// bdump($btnWrap, "btnWrap");
+		// bdump($btn, "btn");
 		return $btnWrap;
 	}
 

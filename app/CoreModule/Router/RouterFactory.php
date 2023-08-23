@@ -24,7 +24,7 @@ class RouterFactory implements App\CoreModule\Router\IRouterFactory
 		App\CoreModule\Model\BaseManager $BaseManager
 	)
 	{
-		// \Tracy\Debugger::barDump("router constructor");
+		// bdump("router constructor");
 		// $this->RouterManager = $RouterManager;
 		$this->MyRouter = $MyRouter;
 		$this->User = $User;
@@ -33,7 +33,7 @@ class RouterFactory implements App\CoreModule\Router\IRouterFactory
 
 	public function createRouter($RouterManager): RouteList
 	{
-		// \Tracy\Debugger::barDump("router defineRouteList");
+		// bdump("router defineRouteList");
 		$router = new RouteList;
 
 		// admin
@@ -41,7 +41,7 @@ class RouterFactory implements App\CoreModule\Router\IRouterFactory
 		$router->withModule("Core:Admin")->withPath('admin')
 			->addRoute("test", "Custom:test")
 			->addRoute("obsah-vypis/<type>", "ContentsList:contentsList")
-			->addRoute("obsah/<id>", "Contents:contentForm")
+			->addRoute("obsah[/<id>]", "Contents:contentForm")
 			->addRoute("uzivatele", "Users:usersList")
 			->addRoute("uzivatel[/<id>]", "Users:userForm")
 			->addRoute("navigace-vypis", "Navigations:navigationsList")
@@ -55,7 +55,7 @@ class RouterFactory implements App\CoreModule\Router\IRouterFactory
 
 		// front
 		$langMask = $this->getLangsMask();
-		// \Tracy\Debugger::barDump($langMask, "langMask");
+		// bdump($langMask, "langMask");
 		// $router->addRoute("[<lang=cs cs|en>/]", $RouterManager->homeRoute);
 		$router->addRoute($langMask, $RouterManager->homeRoute);
 
@@ -82,11 +82,11 @@ class RouterFactory implements App\CoreModule\Router\IRouterFactory
 
 	public function setMaintenanceRoute($router)
 	{
-		// \Tracy\Debugger::barDump($this->User, "user");
+		// bdump($this->User, "user");
 		$auth = $this->User->getAuthorizator();
-		// \Tracy\Debugger::barDump($auth, "auth");
+		// bdump($auth, "auth");
 		$resources = $auth->getResources();
-		// \Tracy\Debugger::barDump($resources, "resources");
+		// bdump($resources, "resources");
 		
 		$des = in_array("Admin:Maintenance", $resources) ? "Admin:Maintenance:default" : "Core:Admin:Maintenance:default";
 		$router->addRoute("admin/maintenance[/<act>]", $des);
@@ -105,8 +105,8 @@ class RouterFactory implements App\CoreModule\Router\IRouterFactory
 
 			$mask = "[<lang=" . $default->code . " ";
 
-			// \Tracy\Debugger::barDump($langs, "langs");
-			// \Tracy\Debugger::barDump(end($langs), "end lang");
+			// bdump($langs, "langs");
+			// bdump(end($langs), "end lang");
 			foreach ($langs as $lang) {
 				$mask .= $lang->code;
 				if ($lang == end($langs)) {

@@ -21,7 +21,7 @@ final class RouterManager
 	{
 		$this->routers = $routers;
 
-		// \Tracy\Debugger::barDump($this->routers, "routers");
+		// bdump($this->routers, "routers");
 
 		return $this;
 	}
@@ -34,12 +34,12 @@ final class RouterManager
 
 		foreach ($routers as $router) {
 			$rList = $router->createRouter($this);
-			// \Tracy\Debugger::barDump($rList, "rList");
+			// bdump($rList, "rList");
 
 			$list[] = $rList;
 		}
 
-		// \Tracy\Debugger::barDump($list, "RouterManager route list");
+		// bdump($list, "RouterManager route list");
 
 		return $list;
 	}
@@ -52,7 +52,7 @@ final class RouterManager
 
 	public function test()
 	{
-		// \Tracy\Debugger::barDump("hovno");
+		// bdump("hovno");
 	}
 
 }

@@ -50,8 +50,8 @@ class FilesManager extends BaseManager {
 
 	// public function __construct()
 	// {
-	// 	\Tracy\Debugger::barDump("FilesManager construct");
-	// 	\Tracy\Debugger::barDump(FILES_DIR, "filesDir");
+	// 	bdump("FilesManager construct");
+	// 	bdump(FILES_DIR, "filesDir");
 	// }
 
 	public function setAws($aws) {
@@ -115,7 +115,7 @@ class FilesManager extends BaseManager {
 	}
 
 	public function uploadImage($file, $user, $key = null, $protected = false) {
-		// \Tracy\Debugger::barDump("uploadImage");
+		// bdump("uploadImage");
 		if ($file instanceof FileUpload) {
 			$image = $file->toImage();
 			$name = $file->getName();
@@ -145,8 +145,8 @@ class FilesManager extends BaseManager {
 	}
 
 	public function storeFile($filePath, $user, $name = null, $key = null, $protected = false, $saveToFiles = true) {
-		\Tracy\Debugger::barDump("storeFile");
-		// \Tracy\Debugger::barDump($name, "name");
+		bdump("storeFile");
+		// bdump($name, "name");
 
 		if (!file_exists($filePath)) {
 			throw new \Exception("FilesManager: File $filePath not found");
@@ -160,21 +160,21 @@ class FilesManager extends BaseManager {
 
 		if ($this->aws) {
 			$result = $this->aws->s3UploadObject($key, $filePath, $protected);
-			\Tracy\Debugger::barDump($result, "result");
+			bdump($result, "result");
 			$url = $result->get("ObjectURL");
 		} else {
 			#$httpReq = new \Nette\Http\Request;
-			#\Tracy\Debugger::barDump($httpReq->getUrl(), "url");
+			#bdump($httpReq->getUrl(), "url");
 			// if (!$this->baseUrl) throw new \Exception("You have to set baseUrl");
 
 			if ($saveToFiles) {
-				\Tracy\Debugger::barDump("save to files");
-				\Tracy\Debugger::barDump($name, "name");
+				bdump("save to files");
+				bdump($name, "name");
 				FileSystem::createDir(FILES_DIR);
-				\Tracy\Debugger::barDump($filePath, "filePath");
+				bdump($filePath, "filePath");
 				$newPath = FILES_DIR . "/" . $key;
 				if (strrpos($filePath, "tmp/") !== false) {
-					\Tracy\Debugger::barDump("uploaded file");
+					bdump("uploaded file");
 					move_uploaded_file($filePath, $newPath);
 				} else {
 					rename($filePath, $newPath);
@@ -273,8 +273,8 @@ class FilesManager extends BaseManager {
 	}*/
 
 	public function fileDelete($id) {
-		\Tracy\Debugger::barDump("fileDelete");
-		\Tracy\Debugger::barDump($id, "id");
+		bdump("fileDelete");
+		bdump($id, "id");
 		$file = $this->getFile($id);
 
 		if ($file) {
@@ -296,7 +296,7 @@ class FilesManager extends BaseManager {
 	}
 
 	public function filesDelete($ids) {
-		#\Tracy\Debugger::barDump($ids, "ids");
+		#bdump($ids, "ids");
 		foreach ($ids as $id) {
 			$this->fileDelete($id);
 		}
@@ -311,7 +311,7 @@ class FilesManager extends BaseManager {
 	}
 
 	/*public function getImage($id) {
-		#\Tracy\Debugger::barDump($id, "getimage id");
+		#bdump($id, "getimage id");
 		return $this->getImages()->get($id);
 	}*/
 
@@ -356,7 +356,7 @@ class FilesManager extends BaseManager {
 	}
 
 	public function getImageThumbSrc($id, $width = null) {
-		// \Tracy\Debugger::barDump("getImageThumbSrc");
+		// bdump("getImageThumbSrc");
 		$file = $this->getFile($id);
 
 		if (!$file) return;
@@ -367,16 +367,16 @@ class FilesManager extends BaseManager {
 		// $src = $base . "/";
 		// $src .= $file->folder . "thumbs/" . $width . "/" . $file->filename;
 
-		// \Tracy\Debugger::barDump(FILES_DIR . $file->key, "path");
+		// bdump(FILES_DIR . $file->key, "path");
 		if (!file_exists(FILES_DIR . $file->key) || !$this->isImage($id)) {
-			// \Tracy\Debugger::barDump("no image");
+			// bdump("no image");
 			return "dist/images/item-no-image.jpg";
 		}
 
 		if ($file->thumb) {
 			$url = $file->ref("thumb")->url;
 		} else {
-			// \Tracy\Debugger::barDump("thumb gen");
+			// bdump("thumb gen");
 			$thumbPath = $this->saveImageFile($file->url, $name, true);
 
 			if ($this->aws) {
@@ -401,7 +401,7 @@ class FilesManager extends BaseManager {
 
 	public function isImage($id) {
 		$file = $this->getFile($id);
-		// \Tracy\Debugger::barDump($file, "file");
+		// bdump($file, "file");
 
 		return Helper::isImage(FILES_DIR . $file->key);
 	}
@@ -415,12 +415,12 @@ class FilesManager extends BaseManager {
 	public function cleanUpFilesDir()
 	{
 		$files = Helper::getFilesArray(__DIR__ . "/../../../www/files");
-		\Tracy\Debugger::barDump($files, "files");
+		bdump($files, "files");
 
 		foreach ($files as $file) {
-			\Tracy\Debugger::barDump($file, "file");
+			bdump($file, "file");
 			$used = $this->isFileUsed($file);
-			\Tracy\Debugger::barDump($used, "used");
+			bdump($used, "used");
 
 			if (!$used) $this->fileDelete($file);
 		}

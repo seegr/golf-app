@@ -89,7 +89,7 @@ class Cropper extends BaseControl {
 		$form->addSubmit("upload");
 
 		$form->onSuccess[] = function($form, $vals) {
-			\Tracy\Debugger::barDump("image loaded...");
+			bdump("image loaded...");
 			$fileName = $this->uploadTempImage($vals);
 
 			//$this["bubbleForm"]["image"]->setValue($fileName);
@@ -116,10 +116,10 @@ class Cropper extends BaseControl {
 		$form->addSubmit("save");
 
 		$form->onSuccess[] = function($form, $vals) {
-			#\Tracy\Debugger::barDump($vals, "vals");
+			#bdump($vals, "vals");
 
 			$imageData = json_decode($vals->image_data);
-			\Tracy\Debugger::barDump($imageData, "imageData");
+			bdump($imageData, "imageData");
 
 			$path = $this->tempFolder ? $this->tempFolder : self::CROPPER_TEMP_FOLDER;
 			$path = $path . "/" . $vals->image;
@@ -129,7 +129,7 @@ class Cropper extends BaseControl {
 			$destPath = $this->destinationPath ? $this->destinationPath : self::CROPPER_TEMP_FOLDER;
 			$destPath .= $vals->image;
 			$imgName = $image->save($destPath);
-			#\Tracy\Debugger::barDump($imgName, "imgName");
+			#bdump($imgName, "imgName");
 
 			
 			$vals["path"] = $destPath;
@@ -143,13 +143,13 @@ class Cropper extends BaseControl {
 	}
 
 	public function uploadTempImage($vals) {
-		\Tracy\Debugger::barDump($vals, "vals");
+		bdump($vals, "vals");
 		$folder = self::CROPPER_TEMP_FOLDER;
 		FileSystem::createDir($folder);
 
 		$file = $vals->image;
 		$prefix = $this->prefix ? $this->prefix . "_" : null;
-		\Tracy\Debugger::barDump($file, "image");
+		bdump($file, "image");
 
 		//$imageName = $parent . "_" . $file->getName() . "_" . uniqid() . ".jpg";
 		$imageName = \Monty\Helper::generateUniqueFileName($file, $prefix);

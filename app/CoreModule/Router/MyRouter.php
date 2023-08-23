@@ -34,56 +34,56 @@ class MyRouter implements \Nette\Routing\Router
 
 		$this->contentTypes = $this->ContentsManager->getContentTypes()->fetchAssoc("short->");
     	$this->langs = $this->NavigationsManager->getLangs(true)->fetchAssoc("code->");
-		// \Tracy\Debugger::barDump($this->contentTypes, "MyRouer contentTypes");
+		// bdump($this->contentTypes, "MyRouer contentTypes");
 	}
 
 	public function match(HttpRequest $httpReq): ?array
 	{
-		// \Tracy\Debugger::barDump("router match");
-		// \Tracy\Debugger::barDump($httpReq, "httpRequest");
+		// bdump("router match");
+		// bdump($httpReq, "httpRequest");
 		$url = $httpReq->getUrl();
-		// \Tracy\Debugger::barDump($url, "url");
+		// bdump($url, "url");
 		$path = $url->getPath();
-		// \Tracy\Debugger::barDump($path, "path");
+		// bdump($path, "path");
 		$queryPars = $url->getQueryParameters();
-		// \Tracy\Debugger::barDump($queryPars, "query parameters");
+		// bdump($queryPars, "query parameters");
 
 		$navItem = $this->NavigationsManager->getItemBySlugTrace($path);
-		// \Tracy\Debugger::barDump($item, "end item");
+		// bdump($item, "end item");
 		$pathArr = explode("/", $path);
-		// \Tracy\Debugger::barDump($pathArr, "pathArr");
+		// bdump($pathArr, "pathArr");
 		$itemId = end($pathArr);
 		$item = $this->ContentsManager->getContent($itemId);
-		// \Tracy\Debugger::barDump($item, "item by url id");
+		// bdump($item, "item by url id");
 
 		$basePath = $url->getBasePath();
 		$path =	str_replace($basePath, "", $path);
 		$parts = trim($path, "/");
 		$parts = explode("/", $parts);
-		// \Tracy\Debugger::barDump($parts, "parts");
+		// bdump($parts, "parts");
 
-		// \Tracy\Debugger::barDump($this->langs, "langs");
-		// \Tracy\Debugger::barDump($parts[0], "part 0");
+		// bdump($this->langs, "langs");
+		// bdump($parts[0], "part 0");
 		if (isset($this->langs[$parts[0]])) {
 			$queryPars["lang"] = $parts[0];
 		}
 
-		// \Tracy\Debugger::barDump($queryPars, "queryPars");
+		// bdump($queryPars, "queryPars");
 
 		if ($navItem) {
 			$item = $navItem;
-			// \Tracy\Debugger::barDump($item, "item");
+			// bdump($item, "item");
 			$pars = $queryPars;
 			$pars["nav_item_id"] = $item->id;
 
 			if (!empty($item->route)) {
-				// \Tracy\Debugger::barDump($item->route, "route");
+				// bdump($item->route, "route");
 				$routePars = Helper::explodeRoute($item->route);
-				// \Tracy\Debugger::barDump($pars, "pars route");
+				// bdump($pars, "pars route");
 				$pars = $pars + $routePars;
 			}
 			if (!empty($item->params)) {
-				// \Tracy\Debugger::barDump($item->params, "params");
+				// bdump($item->params, "params");
 				$itemPars = Json::decode($item->params, Json::FORCE_ARRAY);
 				$pars = $pars + $itemPars;
 			}
@@ -92,7 +92,7 @@ class MyRouter implements \Nette\Routing\Router
 				$pars["template"] = $navItem->template;
 			}
 
-			// \Tracy\Debugger::barDump($pars, "match pars");
+			// bdump($pars, "match pars");
 
 			return $pars ? $pars : null;
 		} else if ($item) {
@@ -103,14 +103,14 @@ class MyRouter implements \Nette\Routing\Router
 			$pars["presenter"] = "Core:Front:Contents";
 			$pars["action"] = "contentDetail";
 			$pars["id"] = $item->id;
-			// \Tracy\Debugger::barDump($type, "type");
+			// bdump($type, "type");
 			if ($parentNavItem) {
 				$pars["parent_nav_item_id"] = $parentNavItem->id;
 			}
 
 			return $pars;
 		} else {
-			// \Tracy\Debugger::barDump($queryPars, "match pars 2");
+			// bdump($queryPars, "match pars 2");
 			// return $queryPars ? $queryPars : null;
 			return null;
 		}
@@ -118,26 +118,26 @@ class MyRouter implements \Nette\Routing\Router
 
 	public function constructUrl(array $params, UrlScript $refUrl): ?string
 	{
-		// \Tracy\Debugger::barDump($refUrl, "refUrl");
+		// bdump($refUrl, "refUrl");
 		$url = $refUrl->getHostUrl() . $refUrl->getPath();
 		$queryPars = $refUrl->getQueryParameters();
-		// \Tracy\Debugger::barDump($queryPars, "queryPars");
+		// bdump($queryPars, "queryPars");
 			
-		// \Tracy\Debugger::barDump("router construct");
-		// \Tracy\Debugger::barDump($params, "params");
-		// \Tracy\Debugger::barDump($url, "url");
+		// bdump("router construct");
+		// bdump($params, "params");
+		// bdump($url, "url");
 
 		$pars = ArrayHash::from($params);
-		// \Tracy\Debugger::barDump($pars, "pars");
+		// bdump($pars, "pars");
 
 		$url .= !empty($pars["lang"]) ? $pars["lang"] . "/" : null;
 
 		if (!empty($pars["nav_item_id"])) {
-			// \Tracy\Debugger::barDump(1);
-			// \Tracy\Debugger::barDump($pars["nav_item_id"], "pars nav_item_id");
+			// bdump(1);
+			// bdump($pars["nav_item_id"], "pars nav_item_id");
 			$slug = $this->NavigationsManager->getItemSlugTrace($pars["nav_item_id"]);
 
-			// \Tracy\Debugger::barDump($slug, "slug");
+			// bdump($slug, "slug");
 			$url .= $slug;
 
 			// $queryPars = [
@@ -146,7 +146,7 @@ class MyRouter implements \Nette\Routing\Router
 
 			// return $url;
 		} elseif ($pars->presenter == "Core:Front:Contents" && $pars->action == "contentDetail") {
-			// \Tracy\Debugger::barDump(2);
+			// bdump(2);
 			// $alias = $this->AliasesManager->getAliasByItem("contents", $id);
 			// $alias = $this->AliasesManager->getItemByAlias($id);
 			$item = $this->ContentsManager->getContent($pars->id);
@@ -154,12 +154,12 @@ class MyRouter implements \Nette\Routing\Router
 			if (!$item) return null;
 			
 			$type = $item->ref("type");
-			// \Tracy\Debugger::barDump($type, "type");
+			// bdump($type, "type");
 			// $url .= Strings::webalize($this->Translator->translate("global.content.types." . $type->short, 1)) . "/";
 
 			$parentItem = $this->NavigationsManager->getParentItemByRoute(":Core:Front:ContentsList:contentsList", ["type" => $type->short]);
 			if ($parentItem) {
-				// \Tracy\Debugger::barDump($parentItem, "parentItem");
+				// bdump($parentItem, "parentItem");
 				$url .= $this->NavigationsManager->getItemSlugTrace($parentItem->id) . "/";
 			}
 
@@ -175,7 +175,7 @@ class MyRouter implements \Nette\Routing\Router
 
 			// return $url;
 		} else {
-			// \Tracy\Debugger::barDump(3);
+			// bdump(3);
 			// $url .= $pars->presenter . "/" . $pars->action;
 			// $pres = str_replace(":", replace, subject)
 			// $url
@@ -188,19 +188,19 @@ class MyRouter implements \Nette\Routing\Router
 			$queryPars["do"] = $pars->do;
 		}
 
-		// \Tracy\Debugger::barDump($queryPars, "queryPars");
+		// bdump($queryPars, "queryPars");
 		// $url .= $queryPars ? "?" . implode("&", $queryPars) : null;
 		if ($queryPars) {
 			$i = 1;
 			foreach ($queryPars as $par => $val) {
-				// \Tracy\Debugger::barDump($url, "url");
+				// bdump($url, "url");
 				$url .= $i == 1 ? "?" : "&";
 				$url .= $par . "=" . $val;
 				$i++;
 			}
 		}
 
-		// \Tracy\Debugger::barDump($url, "constructUrl url");
+		// bdump($url, "constructUrl url");
 		return $url;
 	}
 }

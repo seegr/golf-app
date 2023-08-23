@@ -142,11 +142,11 @@ class EventsManager extends ContentsManager
 
         if ($onlyActive) $sel->where("active", true);
 
-        // \Tracy\Debugger::barDump($start, "getEventsInPeriod start");
-        // \Tracy\Debugger::barDump($end, "getEventsInPeriod end");
+        // bdump($start, "getEventsInPeriod start");
+        // bdump($end, "getEventsInPeriod end");
 
         $timeIntervalCond = self::getIntervalCond($start, $end, "TIME");
-        // \Tracy\Debugger::barDump($timeIntervalCond, "timeIntervalCond");
+        // bdump($timeIntervalCond, "timeIntervalCond");
 
         $startCol = $this->getEventStartCol();
         $endCol = $this->getEventEndCol();
@@ -165,13 +165,13 @@ class EventsManager extends ContentsManager
             "$startCol >= ? AND $endCol <= ?" => [$start, $end],        //** zacatek akce v intervalu konec v intervalu
         ];
 
-        // \Tracy\Debugger::barDump($orConds, "orConds");
+        // bdump($orConds, "orConds");
         $sel->whereOr($orConds);
 
 
         $sel->select("events.*");
 
-        // \Tracy\Debugger::barDump($sel, "sel");
+        // bdump($sel, "sel");
         return $sel;
     }
 
@@ -182,8 +182,8 @@ class EventsManager extends ContentsManager
         $start = $date->modify("00:00:00");
         $end = (clone $date)->modify("23:59:00");
 
-        \Tracy\Debugger::barDump($start, "start");
-        \Tracy\Debugger::barDump($end, "end");
+        bdump($start, "start");
+        bdump($end, "end");
 
         $events = $this->getEventsInPeriod($start, $end)->order("TIME(start)");
 
@@ -203,39 +203,39 @@ class EventsManager extends ContentsManager
         $end = clone $start;
         $end->modify("23:59:00")->modify("last day of this month");
 
-        \Tracy\Debugger::barDump($start, "getMonthEvents start");
-        \Tracy\Debugger::barDump($end, "getMonthEvents end");
+        bdump($start, "getMonthEvents start");
+        bdump($end, "getMonthEvents end");
 
         $diff = $start->diff($end);
-        \Tracy\Debugger::barDump($diff, "diff");
+        bdump($diff, "diff");
 
         $interval = \DateInterval::createFromDateString('1 day');
         $period = new \DatePeriod($start, $interval, $end);
 
         $arr = [];
         foreach ($period as $dt) {
-            \Tracy\Debugger::barDump($dt, "period dt");
+            bdump($dt, "period dt");
             // $dtStart = $dt;
             // $dtEnd = clone($dt)->modify("23:59:00");
 
             // $events = $this->getEventsInPeriod($dtStart, $dtEnd)->fetchAll();
             $events = $this->getDayEvents($dt);
             if ($type) {
-                \Tracy\Debugger::barDump($type, "type");
+                bdump($type, "type");
                 $type = $this->getEventType($type);
-                \Tracy\Debugger::barDump($type, "type");
+                bdump($type, "type");
                 $events->where("type.short", $type->short);
             }
             $events = $events->fetchAll();
             $events = array_values($events);
-            \Tracy\Debugger::barDump($events, "events");
+            bdump($events, "events");
             // $arr[] = $dt;
             if (count($events)) $arr[$dt->format("Y-m-d")] = $events;
         }
 
         // $arr = ArrayHash::from($arr);
 
-        \Tracy\Debugger::barDump($arr, "events arr");
+        bdump($arr, "events arr");
         return $arr;
     }
 
@@ -317,7 +317,7 @@ class EventsManager extends ContentsManager
         bdump($date, 'date');
         $event = $this->getEvent($id);
         $all = $this->getEventPersons($id, $date)->where("record.active", true);
-        // \Tracy\Debugger::barDump($all, "submitters");
+        // bdump($all, "submitters");
 
         $part = (clone $all)->where("role", "part");
         $sub = (clone $all)->where("role", "sub");

@@ -64,18 +64,18 @@ class FormsFactory extends \App\CoreModule\Components\BaseFormsFactory {
 	}
 
 	public function customForm($id, $records = null) {
-		// \Tracy\Debugger::barDump($id, "custom form");
-		// if ($records) \Tracy\Debugger::barDump($records->fetchAll(), "records");
+		// bdump($id, "custom form");
+		// if ($records) bdump($records->fetchAll(), "records");
 
 		$form = $this->newForm();
-		// \Tracy\Debugger::barDump($form, "form");
+		// bdump($form, "form");
 		// $renderer = $form->getRenderer();
-		// \Tracy\Debugger::barDump($renderer, "renderer");
+		// bdump($renderer, "renderer");
 		// $template = $renderer->template;
 		// $template->setFile(__DIR__ . "/../templates/Forms/customForm.latte");
 
 		$f = $this->FormsManager->getForm($id);
-		// \Tracy\Debugger::barDump($f, "f");
+		// bdump($f, "f");
 		$formId = $f->id;
 		$fields = $this->FormsManager->getFormFields($id)->order("order");
 		if ($records) {
@@ -84,12 +84,12 @@ class FormsFactory extends \App\CoreModule\Components\BaseFormsFactory {
 				$data[] = Json::decode($rec->data);
 			}
 			$records = $data;
-			// \Tracy\Debugger::barDump($records, "records");
+			// bdump($records, "records");
 		}
-		// \Tracy\Debugger::barDump($fields->fetchAll(), "fields");
+		// bdump($fields->fetchAll(), "fields");
 
 		foreach ($fields as $field) {
-			// \Tracy\Debugger::barDump($field, "field");
+			// bdump($field, "field");
 			$type = $field->ref("type");
 			$method = $type->method;
 
@@ -103,13 +103,13 @@ class FormsFactory extends \App\CoreModule\Components\BaseFormsFactory {
 				$items = [];
 				foreach ($options as $opt) {
 					if ($records && $opt->selects_limit) {
-						// \Tracy\Debugger::barDump($opt->selects_limit, "je tam limit");
+						// bdump($opt->selects_limit, "je tam limit");
 						$count = 0;
 						foreach ($records as $rec) {
 							$fieldName = $field->name;
 							if (!empty($rec->$fieldName) && $rec->$fieldName == $opt->label) $count++;
 						}
-						// \Tracy\Debugger::barDump($count, "count");
+						// bdump($count, "count");
 						if ($count >= $opt->selects_limit) continue;
 					}
 
@@ -120,7 +120,7 @@ class FormsFactory extends \App\CoreModule\Components\BaseFormsFactory {
 				// if ($type == "radio") $control->setDefaultValue();
 			}
 
-			// \Tracy\Debugger::barDump($type, "type");
+			// bdump($type, "type");
 			switch ($type->short) {
 				case "tel":
 						if ($control->isRequired()) {
@@ -130,7 +130,7 @@ class FormsFactory extends \App\CoreModule\Components\BaseFormsFactory {
 			}
 		}
 
-		// \Tracy\Debugger::barDump($form, "form");
+		// bdump($form, "form");
 		unset($form["save"], $form["save_stay"], $form["cancel"]);
 
 		$form->addHidden("id");
@@ -141,21 +141,21 @@ class FormsFactory extends \App\CoreModule\Components\BaseFormsFactory {
 			]);
 
 		// $form["save"]->onClick[] = function($f, $v) use ($formId) {
-		// 	\Tracy\Debugger::barDump("save click");
+		// 	bdump("save click");
 		// 	$this->submitCustomForm($formId, $v);
 		// };
 
 		// $form["save_stay"]->onClick[] = function($f, $v) use ($formId) {
-		// 	\Tracy\Debugger::barDump("save_stay click");
+		// 	bdump("save_stay click");
 		// 	$this->submitCustomForm($formId, $v);
 		// };
 
 		// $form->onSuccess[] = function($f, $v) {
-		// 	\Tracy\Debugger::barDump("success");
+		// 	bdump("success");
 		// };
 
 		// $form->onError[] = function($f, $v) {
-		// 	\Tracy\Debugger::barDump("error");
+		// 	bdump("error");
 		// };
 
 		return $form;
@@ -165,11 +165,11 @@ class FormsFactory extends \App\CoreModule\Components\BaseFormsFactory {
 		$list = new DataGrid;
 
 		$fields = $this->FormsManager->getFormFields($id);
-		// \Tracy\Debugger::barDump($fields->fetchAll(), "fields");
+		// bdump($fields->fetchAll(), "fields");
 		foreach ($fields as $field) {
 			$name = $field->name;
 			$label = $field->summary_label ? $field->summary_label : $field->label;
-			// \Tracy\Debugger::barDump($name, "records list - field name");
+			// bdump($name, "records list - field name");
 
 			switch ($field->ref("type")->short) {
 				case "email":
@@ -220,7 +220,7 @@ class FormsFactory extends \App\CoreModule\Components\BaseFormsFactory {
 	// }
 
 	// public function submitCustomForm($formId, $vals) {
-	// 	\Tracy\Debugger::barDump($vals, "vals");
+	// 	bdump($vals, "vals");
 	// 	$this->FormsManager->saveFormData($formId, $vals);
 	// }
 

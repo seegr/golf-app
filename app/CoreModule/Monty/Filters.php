@@ -22,12 +22,12 @@ class Filters {
 		$today = new Datetime;
 		$dayToday = $today->format("j");
 		$dayDate = $DateTime->format("j");
-		#\Tracy\Debugger::barDump($dayToday, "dayToday");
-		#\Tracy\Debugger::barDump($dayDate, "dayDate");
+		#bdump($dayToday, "dayToday");
+		#bdump($dayDate, "dayDate");
 
 
 		$diff = $today->diff($DateTime);
-		#\Tracy\Debugger::barDump($diff, "diff");
+		#bdump($diff, "diff");
 
 		$daysLeft = $diff->days;
 		
@@ -68,33 +68,33 @@ class Filters {
 	}
 
 	public static function tel($num, $prefix = null) {
-		// \Tracy\Debugger::barDump($num, "num");
+		// bdump($num, "num");
 		$num = str_replace(" ", "", $num);
 		// $num = str_replace("00", "+", $num);
-		// \Tracy\Debugger::barDump($num, "num");
+		// bdump($num, "num");
 		$el = Html::el("span class=tel");
 		$preEl = Html::el("span class=prefix");
 		$numEl = Html::el("span class=num");
 
 		$len = strlen($num);
 
-		// \Tracy\Debugger::barDump($num, "num");
+		// bdump($num, "num");
 
-		// \Tracy\Debugger::barDump(strpos($num, "00"));
-		// \Tracy\Debugger::barDump(strpos($num, "+"));
+		// bdump(strpos($num, "00"));
+		// bdump(strpos($num, "+"));
 		if (strpos($num, "+") === 0 || strpos($num, "00") === 0) {
-			\Tracy\Debugger::barDump("with prefix");
+			bdump("with prefix");
 			if (strpos($num, "00") === 0) {
 				$num = str_replace("00", "+", $num);
 			}
 			$pref = substr($num, 0, 4);
 			$num = substr($num, 4);
 			$preEl->setText($pref);
-			\Tracy\Debugger::barDump($num, "num");
+			bdump($num, "num");
 			$numEl->setText(number_format($num, 0, "", " "));
 			$el->addHtml($preEl . " ")->addHtml($numEl);
 		} else {
-			\Tracy\Debugger::barDump("no prefix");
+			bdump("no prefix");
 			if ($prefix) {
 				$preEl->setText($prefix);
 				$el->addHtml($preEl . " ");
@@ -107,12 +107,12 @@ class Filters {
 	}
 
 	public static function removeTables($string) {
-		\Tracy\Debugger::barDump($string, "string");
+		bdump($string, "string");
 		$pattern[] = '/<table(.*)<\/table>/iUs';
 		$replace[] = '';
 
 		$replaced = preg_replace($pattern, $replace, $string);
-		\Tracy\Debugger::barDump($replaced, "replaced");
+		bdump($replaced, "replaced");
 
 		return $replaced;
 	}
@@ -120,8 +120,8 @@ class Filters {
 	public static function dateTimeInterval($start, $end = null, $time = true, $showYear = true, $showDayStr = false) {
 		if (!$start) return;
 
-		\Tracy\Debugger::barDump($time, "time");
-		\Tracy\Debugger::barDump($showYear, "showYear");
+		bdump($time, "time");
+		bdump($showYear, "showYear");
 
 		if ($end) {
 			$endEl = Html::el("span");
@@ -157,8 +157,8 @@ class Filters {
 
 			$endDateEl = self::dateEl($end, $showYear);
 			$endTimeEl = self::timeEl($end);
-			// \Tracy\Debugger::barDump($start->format("j.n.Y"));
-			// \Tracy\Debugger::barDump($end->format("j.n.Y"));
+			// bdump($start->format("j.n.Y"));
+			// bdump($end->format("j.n.Y"));
 			if ($start->format("j.n.Y") != $end->format("j.n.Y")) {
 				$endEl->addHtml($endDateEl);
 			} else {

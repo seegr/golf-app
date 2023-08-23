@@ -10,7 +10,7 @@ class SettingsExtension extends BaseExtension
 
 	public function loadConfiguration()
 	{
-		// \Tracy\Debugger::barDump($this->config, "config");
+		// bdump($this->config, "config");
 	}
 
 	public function beforeCompile(): void
@@ -18,11 +18,11 @@ class SettingsExtension extends BaseExtension
 		$builder = $this->getContainerBuilder();
 
 		$BaseManager = $builder->getDefinition("BaseManager");
-		// \Tracy\Debugger::barDump($BaseManager, "BaseManager");
+		// bdump($BaseManager, "BaseManager");
 		
 		foreach ($this->config as $setting => $val) {
-			// \Tracy\Debugger::barDump($setting, "setting");
-			// \Tracy\Debugger::barDump($val, "val");
+			// bdump($setting, "setting");
+			// bdump($val, "val");
 			$BaseManager->addSetup("setSetting", [$setting, $val]);
 		}
 

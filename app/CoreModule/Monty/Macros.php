@@ -17,21 +17,21 @@ class Macros extends \Latte\Macros\MacroSet
     }
 
     public static function sassToCss(\Latte\MacroNode $node, \Latte\PhpWriter $writer) {
-    	\Tracy\Debugger::barDump($node, "node");
+    	bdump($node, "node");
     	return "ob_start();";
     }  
 
     public static function sassToCssEnd(\Latte\MacroNode $node, \Latte\PhpWriter $writer) {
-    	\Tracy\Debugger::barDump($node, "node");
+    	bdump($node, "node");
     	$sass = $node->content;
-    	\Tracy\Debugger::barDump($sass, "sass");
+    	bdump($sass, "sass");
     	$sass = trim($sass);
     	$sass = str_replace(["<style>", "</style>"], "", $sass);
-    	\Tracy\Debugger::barDump($sass, "sass stripped");
+    	bdump($sass, "sass stripped");
 
     	$scss = new ScssCompiler();
     	$css = $scss->compile($sass);
-    	\Tracy\Debugger::barDump($css, "css");
+    	bdump($css, "css");
 
     	return "\$content = ob_get_clean();"
     		. "echo '" . $css . "'";

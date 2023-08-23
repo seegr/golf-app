@@ -165,16 +165,16 @@ class Image {
 	}
 
 	public function getSrc($type = "src") {
-		#\Tracy\Debugger::barDump("getSrc");
+		#bdump("getSrc");
 
 		#if (!$this->gallery->srcGenerator) return $this->$type;
 
 		if (strpos($this->$type, "http") !== false) {
 			return $this->$type;
 		} else {
-			#\Tracy\Debugger::barDump($this->src, "src");
+			#bdump($this->src, "src");
 			$base = $this->gallery->getBase();
-			#\Tracy\Debugger::barDump($base, "base");
+			#bdump($base, "base");
 
 			return $base . "/" . $this->$type;
 		}
@@ -217,7 +217,7 @@ class Image {
 
 		// $attrs = $attrs + $this->attributes;
 
-		\Tracy\Debugger::barDump($this->attributes, "image attributes");
+		bdump($this->attributes, "image attributes");
 		return $this->attributes;
 	}
 
@@ -230,7 +230,7 @@ class Image {
 	}
 
 	public function addAction($name, $label, $link) {
-		\Tracy\Debugger::barDump("addAction");
+		bdump("addAction");
 		$action = new Action($name, $label, $link);
 
 		return $this;

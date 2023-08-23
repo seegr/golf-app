@@ -55,18 +55,18 @@ class File {
 		$url = "";
 		$url .= $this->getBase() . "/";
 
-		//\Tracy\Debugger::barDump("getBaseUrl - url", $url);
+		//bdump("getBaseUrl - url", $url);
 
 		return $url;
 	}
 
 	public function getUrl() {
-		// \Tracy\Debugger::barDump($this->fileInfo, "fileInfo");
-		// \Tracy\Debugger::barDump(new \SplFileInfo($this->path), "splFileInfo");
+		// bdump($this->fileInfo, "fileInfo");
+		// bdump(new \SplFileInfo($this->path), "splFileInfo");
 		$url = $this->getBaseUrl();
 		$url .= $this->src;
 
-		// \Tracy\Debugger::barDump($url, "url");
+		// bdump($url, "url");
 
 		return $url;
 	}
@@ -88,7 +88,7 @@ class File {
 	}
 
 	public function getThumbSrc() {
-		#\Tracy\Debugger::barDump($this->src, "src");
+		#bdump($this->src, "src");
 		$srcArr = explode("/", $this->src);
 		array_pop($srcArr);
 		$src = implode("/", $srcArr) . "/";
@@ -104,7 +104,7 @@ class File {
 
 	public function isImage() {
 		$imageSize = getimagesize($this->path);
-		#\Tracy\Debugger::barDump($imageSize, "imageSize");
+		#bdump($imageSize, "imageSize");
 
 		if (isset($imageSize[0])) {
 			return true;
@@ -118,7 +118,7 @@ class File {
 	}
 
 	public function getBasename() {
-		#\Tracy\Debugger::barDump($this->fileInfo, "fileInfo");
+		#bdump($this->fileInfo, "fileInfo");
 		return $this->fileInfo->basename;
 	}
 

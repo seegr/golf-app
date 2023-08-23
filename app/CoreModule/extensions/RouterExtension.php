@@ -14,10 +14,10 @@ class RouterExtension extends Nette\DI\CompilerExtension
 	public function loadConfiguration()
 	{
 		$config = $this->config;
-		// \Tracy\Debugger::barDump($config, "config");
+		// bdump($config, "config");
 
 		$builder = $this->getContainerBuilder();
-		// \Tracy\Debugger::barDump($builder, "builder");
+		// bdump($builder, "builder");
 
 		$routers = [];
 		foreach ($config["routers"] as $name => $class) {
@@ -42,7 +42,7 @@ class RouterExtension extends Nette\DI\CompilerExtension
 	public function beforeCompile(): void
 	{
 		$builder = $this->getContainerBuilder();
-		// \Tracy\Debugger::barDump($builder, "builder");
+		// bdump($builder, "builder");
 
 		$BaseManager = $builder->getDefinition("BaseManager");
 

@@ -29,7 +29,7 @@ class FilesListPresenter extends AdminPresenter {
 		parent::startup();
 
 		// $filter = $this["filter"]->getFilter();
-		// \Tracy\Debugger::barDump($filter, "filter");
+		// bdump($filter, "filter");
 
 		$this["fileUploadForm"]->onSuccess[] = function() {
 			$this->redrawFilesList();
@@ -41,7 +41,7 @@ class FilesListPresenter extends AdminPresenter {
 
 		$this->template->contentBlock = "content";
 		$this->getFilesList($type, $page);
-		\Tracy\Debugger::barDump("renderFilesList");
+		bdump("renderFilesList");
 
 		$template->picker = $this->picker;
 	}
@@ -49,11 +49,11 @@ class FilesListPresenter extends AdminPresenter {
 	// public function renderFilePicker($type = "all", $page = 1) {
 	// 	$this->getFilesList($type, $page);
 	// 	$this->template->contentBlock = "custom";
-	// 	\Tracy\Debugger::barDump("renderFilePicker");
+	// 	bdump("renderFilePicker");
 	// }
 
 	public function getFilesList($type, $page) {
-		\Tracy\Debugger::barDump($type, "type");
+		bdump($type, "type");
 
 		$template = $this->template;
 		$template->setFile(__DIR__ . "/../templates/FilesList/filesList.latte");
@@ -85,7 +85,7 @@ class FilesListPresenter extends AdminPresenter {
 		}
 
 		$filter = $this["filter"]->getFilter();
-		\Tracy\Debugger::barDump($filter, "filter");
+		bdump($filter, "filter");
 
 		if (!empty($filter->order)) {
 			$files->order($filter->order);

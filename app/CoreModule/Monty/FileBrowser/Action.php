@@ -48,7 +48,7 @@ class Action {
 	}
 
 	public function addClass($class) {
-		\Tracy\Debugger::barDump("browser action add class");
+		bdump("browser action add class");
 		$this->class[] = $class;
 
 		return $this;

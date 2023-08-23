@@ -115,9 +115,9 @@ class BasePresenter extends Nette\Application\UI\Presenter
 	public function startup(): void
 	{
 		parent::startup();
-		// \Tracy\Debugger::barDump($this, "presenter");
-		// \Tracy\Debugger::barDump($this->name, "name");
-		// \Tracy\Debugger::barDump($this->getParameters(), "parameters");
+		// bdump($this, "presenter");
+		// bdump($this->name, "name");
+		// bdump($this->getParameters(), "parameters");
 		
 		// $locales = \ResourceBundle::getLocales('');
 		// bdump($locales);
@@ -137,7 +137,7 @@ class BasePresenter extends Nette\Application\UI\Presenter
 
 	public function beforeRender(): void
 	{
-		// \Tracy\Debugger::barDump("beforerender");
+		// bdump("beforerender");
 		parent::beforeRender();
 
 		$template = $this->template;
@@ -147,15 +147,15 @@ class BasePresenter extends Nette\Application\UI\Presenter
 		$this->setMainNavigation();
 		$this->navItem = $this->getCurrentNavItem();
 		// $templateFile = $this->getTemplateFile();
-		// \Tracy\Debugger::barDump($templateFile, "templateFile");
+		// bdump($templateFile, "templateFile");
 		// $template->setFile($templateFile);
 
-		// \Tracy\Debugger::barDump($this->formatTemplateFiles(), "formatTemplateFiles");
+		// bdump($this->formatTemplateFiles(), "formatTemplateFiles");
 	}
 
 	public function afterRender(): void
 	{
-		// \Tracy\Debugger::barDump("afterRender");
+		// bdump("afterRender");
 		parent::afterRender();
 		$this->getBigMessage();
 	}
@@ -218,7 +218,7 @@ class BasePresenter extends Nette\Application\UI\Presenter
 	{
 		$class = new \ReflectionClass(__CLASS__);
 		$consts = $class->getConstants();
-		// \Tracy\Debugger::barDump($consts, "constants");
+		// bdump($consts, "constants");
 
 		foreach ($consts as $name => $val) {
 			if (!defined($name)) define($name, $val);
@@ -234,14 +234,14 @@ class BasePresenter extends Nette\Application\UI\Presenter
 	public function getTemplateFile($route = null): ?string
 	{
 		$route = $route ? $route : $this->name . ":" . $this->action;
-		// \Tracy\Debugger::barDump($route, "route");
+		// bdump($route, "route");
 		$route = explode(":", $route);
-		// \Tracy\Debugger::barDump($route, "route");
+		// bdump($route, "route");
 
 		$roots = [self::FRONT_ROOT, self::APP_ROOT];
 
 		$len = count($route);
-		// \Tracy\Debugger::barDump($len, "len");
+		// bdump($len, "len");
 		foreach ($roots as $root) {
 			$path = $root;
 			$i = 1;
@@ -263,13 +263,13 @@ class BasePresenter extends Nette\Application\UI\Presenter
 
 			$path .= ".latte";
 
-			// \Tracy\Debugger::barDump($path, "path");
+			// bdump($path, "path");
 			if (file_exists($path)) {
 				return $path;
 			}
 		}
 
-		// \Tracy\Debugger::barDump($path, "path");
+		// bdump($path, "path");
 		return null;
 	}
 
@@ -281,10 +281,10 @@ class BasePresenter extends Nette\Application\UI\Presenter
 	public function getFormTemplatePath($form): ?string
 	{
 		// $path = explode(":", $this->name);
-		// \Tracy\Debugger::barDump($path, "path");
+		// bdump($path, "path");
 
 		$form = $form ? $form : $this->action;
-		// \Tracy\Debugger::barDump($form, "form");
+		// bdump($form, "form");
 
 		$file = $form . ".latte";
 
@@ -295,11 +295,11 @@ class BasePresenter extends Nette\Application\UI\Presenter
 			self::FRONT_FORMS_TEMPLATES
 		];
 
-		// \Tracy\Debugger::barDump($dirs, "dirs");
+		// bdump($dirs, "dirs");
 
 		foreach ($dirs as $dir) {
 			$path = $dir . $file;
-			// \Tracy\Debugger::barDump($path, "path");
+			// bdump($path, "path");
 			if (is_file($path)) {
 				return $path;
 			}
@@ -351,7 +351,7 @@ class BasePresenter extends Nette\Application\UI\Presenter
 		}
 
 		$this->payload->modal = $settings;
-		\Tracy\Debugger::barDump($this->payload, "payload");
+		bdump($this->payload, "payload");
 		
 		if (!empty($setting["class"])) $this->template->_modalClass = $setting["class"];
 
@@ -365,7 +365,7 @@ class BasePresenter extends Nette\Application\UI\Presenter
 
 	public function bigMessage($text, $fixed = false): void
 	{
-		\Tracy\Debugger::barDump("bigMessage");
+		bdump("bigMessage");
 		$sess = $this->getSession("bigMessage");
 		$template = $this->template;
 
@@ -374,7 +374,7 @@ class BasePresenter extends Nette\Application\UI\Presenter
 			"fixed" => $fixed
 		];
 
-		\Tracy\Debugger::barDump($data, "data");
+		bdump($data, "data");
 		$sess->data = $data;
 		$template->bigMessage = $data;
 
@@ -388,19 +388,19 @@ class BasePresenter extends Nette\Application\UI\Presenter
 	public function getBigMessage(): void
 	{
 		$sess = $this->getSession("bigMessage");
-		// \Tracy\Debugger::barDump($sess, "bigMsg sess");
+		// bdump($sess, "bigMsg sess");
 
 		$data = $sess->data;
-		// \Tracy\Debugger::barDump($data, "bigMsg data");
+		// bdump($data, "bigMsg data");
 
 		if ($data) {
-			// \Tracy\Debugger::barDump("jo bigMsg");
+			// bdump("jo bigMsg");
 			$this->template->bigMessage = $data;
 			$this->redrawControl("bigMessage");
 
 			unset($sess->data);
 		} else {
-			// \Tracy\Debugger::barDump("ne bigMsg");
+			// bdump("ne bigMsg");
 		}
 	}
 
@@ -413,7 +413,7 @@ class BasePresenter extends Nette\Application\UI\Presenter
 		$user = $this->getUser();
 
 		if ($this->name != "Core:Front:Users" && !in_array($this->action, ["login", "loginForm", "relogin", "logout"])) {
-			// \Tracy\Debugger::barDump("storing backlink");
+			// bdump("storing backlink");
 			$this->storeBacklinkRequest();
 		}
 		if (!$user->isAllowed($this->getName(), $this->getAction())) {
@@ -464,7 +464,7 @@ class BasePresenter extends Nette\Application\UI\Presenter
 
 		$mainNav->addClass($nav->short);
 		$items = $this->NavigationsManager->getNavigationTree("main", null, true);
-		// \Tracy\Debugger::barDump($items, "items");
+		// bdump($items, "items");
 		$mainNav->addItems($items);
 
 		// $mainNav->addBrand($this->link($this->homeRoute))->setIcon("fad fa-home");
@@ -485,9 +485,9 @@ class BasePresenter extends Nette\Application\UI\Presenter
 		}
 
 		if ($navigation->brand_image) {
-			// \Tracy\Debugger::barDump($nav, "nav");
+			// bdump($nav, "nav");
 			$brand = $mainNav->addBrand($this->getHomeRoute());
-			// \Tracy\Debugger::barDump($brand, "brand");
+			// bdump($brand, "brand");
 			$brand->setImage($navigation->brand_image);
 		}
 		
@@ -501,16 +501,16 @@ class BasePresenter extends Nette\Application\UI\Presenter
 		$template = $this->template;
 
 		$bodyClass = $this->bodyClass;
-		// \Tracy\Debugger::barDump($this->name, "name");
+		// bdump($this->name, "name");
 		$routeClass = explode(":", Strings::lower($this->name));
 		array_pop($routeClass);
 		$bodyClass = $bodyClass + $routeClass;
 		$bodyClass[] = $this->view;
 		$bodyClass[] = Helper::camelToDash($this->view);
-		// \Tracy\Debugger::barDump($bodyClass, "bodyClass");
+		// bdump($bodyClass, "bodyClass");
 
 		$bodyClass = array_values(array_unique($bodyClass));
-		// \Tracy\Debugger::barDump($bodyClass, "bodyClass");
+		// bdump($bodyClass, "bodyClass");
 
 		$this->bodyClass = $bodyClass;
 	}
@@ -530,14 +530,14 @@ class BasePresenter extends Nette\Application\UI\Presenter
 			$route = $this->BaseManager->homeRoute;
 		}
 
-		// \Tracy\Debugger::barDump($route, "route");
+		// bdump($route, "route");
 		return $route;
 	}
 
 	// public function link(string $destination, $args = []): string
 	// {
-	// 	// \Tracy\Debugger::barDump($destination, "linkGen destination");
-	// 	// \Tracy\Debugger::barDump($args, "args");
+	// 	// bdump($destination, "linkGen destination");
+	// 	// bdump($args, "args");
 
 	// 	try {
 	// 		$args = func_num_args() < 3 && is_array($args)
@@ -551,13 +551,13 @@ class BasePresenter extends Nette\Application\UI\Presenter
 
 	public function formatTemplateFiles(): array
 	{
-		// \Tracy\Debugger::barDump("formatTemplateFiles...");
+		// bdump("formatTemplateFiles...");
 		[, $presenter] = Nette\Application\Helpers::splitName($this->getName());
-		// \Tracy\Debugger::barDump($presenter, "presenter");
+		// bdump($presenter, "presenter");
 		$dir = dirname(static::getReflection()->getFileName());
-		// \Tracy\Debugger::barDump($dir, "dir");
+		// bdump($dir, "dir");
 		$dir = is_dir("$dir/templates") ? $dir : dirname($dir);
-		// \Tracy\Debugger::barDump($dir, "dir");
+		// bdump($dir, "dir");
 		// $projectDir = $dir;
 		// $projectDir = str_replace("app", "projects/$this->projectAlias/www", $projectDir);
 		return [
@@ -612,8 +612,8 @@ class BasePresenter extends Nette\Application\UI\Presenter
 		$template = $this->template;
 
 		// $pars = $this->getParameters();
-		// \Tracy\Debugger::barDump($pars, "pars");
-		// \Tracy\Debugger::barDump($this->lang, "lang");
+		// bdump($pars, "pars");
+		// bdump($this->lang, "lang");
 
 		$langs = $template->langs = $this->BaseManager->getLangs(true);
 
@@ -636,8 +636,8 @@ class BasePresenter extends Nette\Application\UI\Presenter
 
 		$arr = [];
 		foreach ($coms as $com) {
-			\Tracy\Debugger::barDump($com, "com");
-			\Tracy\Debugger::barDump(method_exists($com, "renderScripts"), "renderScripts exists");
+			bdump($com, "com");
+			bdump(method_exists($com, "renderScripts"), "renderScripts exists");
 
 			if (method_exists($com, "renderScripts")) {
 				$arr[] = $com;

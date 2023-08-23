@@ -57,7 +57,7 @@ class FormsManager extends \App\CoreModule\Model\BaseManager {
 	}
 
 	public function getFormFields($id) {
-		// \Tracy\Debugger::barDump($id, "form id");
+		// bdump($id, "form id");
 		return $this->getFormsFields()->where("form", $id);
 	}
 
@@ -66,7 +66,7 @@ class FormsManager extends \App\CoreModule\Model\BaseManager {
 	}
 
 	public function saveFormField($v) {
-		\Tracy\Debugger::barDump($v, "v");
+		bdump($v, "v");
 		$type = $this->getFormFieldType($v->type);
 
 		$data = [
@@ -114,7 +114,7 @@ class FormsManager extends \App\CoreModule\Model\BaseManager {
 	}
 
 	public function saveFormFieldOption($v) {
-		\Tracy\Debugger::barDump($v, "vals");
+		bdump($v, "vals");
 		$data = [
 			"field" => $v->field,
 			"value" => Strings::webalize($v->label),
@@ -177,7 +177,7 @@ class FormsManager extends \App\CoreModule\Model\BaseManager {
 		$cols = [];
 
 		$data = array_values($data);
-		\Tracy\Debugger::barDump($data, "data");
+		bdump($data, "data");
 		foreach ($data[0] as $col => $d) {
 			$cols[] = $col;
 		}
@@ -192,13 +192,13 @@ class FormsManager extends \App\CoreModule\Model\BaseManager {
 	// }
 
 	// public function saveFormData($formId, $vals) {
-	// 	\Tracy\Debugger::barDump($vals, "vals");
+	// 	bdump($vals, "vals");
 	// 	$id = !empty($vals->id) ? $vals->id : null;
 
 	// 	unset($vals->buttons, $vals->id);
 
 	// 	$json = Json::encode($vals);
-	// 	\Tracy\Debugger::barDump($json, "json");
+	// 	bdump($json, "json");
 
 	// 	$data = [
 	// 		"form" => $formId,
@@ -238,8 +238,8 @@ class FormsManager extends \App\CoreModule\Model\BaseManager {
 	}
 
 	public function saveFormRecord($formId, $vals) {
-		// \Tracy\Debugger::barDump($formId, "formId");
-		// \Tracy\Debugger::barDump($data, "data");
+		// bdump($formId, "formId");
+		// bdump($data, "data");
 		$formFields = $this->getFormFields($formId)->fetchPairs("name", "label");
 
 //        Debugger::log($vals);
@@ -302,7 +302,7 @@ class FormsManager extends \App\CoreModule\Model\BaseManager {
 			$data = $data + Json::decode($data["data"], true);
 			unset($data["data"]);
 
-			// \Tracy\Debugger::barDump($data, "data");
+			// bdump($data, "data");
 
 			return $data;
 		} else {
@@ -315,7 +315,7 @@ class FormsManager extends \App\CoreModule\Model\BaseManager {
 	// }
 
 	/*public static function parseJsonToArray($json) {
-		\Tracy\Debugger::barDump($json, "json");
+		bdump($json, "json");
 		$arr = Json::decode($json, true);
 
 		$data = [];
@@ -332,7 +332,7 @@ class FormsManager extends \App\CoreModule\Model\BaseManager {
 	public static function parseRecordsSelectionToArray($sel, $dataCol = "data") {
 		$arr = [];
 		foreach ($sel as $r) {
-			// \Tracy\Debugger::barDump($r, "r");
+			// bdump($r, "r");
 			$arr[$r->id] = [];
 
 			foreach ($r as $col => $val) {
@@ -344,11 +344,11 @@ class FormsManager extends \App\CoreModule\Model\BaseManager {
 			foreach ($data as &$val) {
 				if (is_array($val)) $val = implode("; ", $val);
 			}
-			// \Tracy\Debugger::barDump($data, "data");
+			// bdump($data, "data");
 			$arr[$r->id] = $arr[$r->id] + $data;
 		}
 
-		// \Tracy\Debugger::barDump($arr, "arr");
+		// bdump($arr, "arr");
 
 		return $arr;
 	}
@@ -370,7 +370,7 @@ class FormsManager extends \App\CoreModule\Model\BaseManager {
 			}
 		}
 
-		\Tracy\Debugger::barDump($fields, "name fields");
+		bdump($fields, "name fields");
 
 		return $fields ? $fields : null;
 	}
@@ -378,11 +378,11 @@ class FormsManager extends \App\CoreModule\Model\BaseManager {
 	public function getSubmitterName($id) {
 		$record = $this->getFormRecord($id);
 		$nameFields = $this->getFormNameFields($record->form);
-		// \Tracy\Debugger::barDump($nameFields, "nameFields");
+		// bdump($nameFields, "nameFields");
 
 		if (count($nameFields) > 1) {
 			$vals = $this->getFormRecord($id, true);
-			// \Tracy\Debugger::barDump($vals, "vals");
+			// bdump($vals, "vals");
 			$name = "";
 			foreach ($nameFields as $field) {
 				$name .= isset($vals[$field]) ? $vals[$field] : "";
@@ -418,26 +418,26 @@ class FormsManager extends \App\CoreModule\Model\BaseManager {
 
 	public function fetchFormRecords($records, $formId = null) {
 		$fields = $this->getFormFields($formId)->fetchPairs(null, "name");
-		// \Tracy\Debugger::barDump($fields, "fields arr");
+		// bdump($fields, "fields arr");
 		
 		$arr = [];
 		foreach ($records as $r) {
-			// \Tracy\Debugger::barDump($r, "r");
+			// bdump($r, "r");
 			$arr[$r->id] = [];
 
 			foreach ($r as $col => $val) {
 				if ($col == "data") continue;
 				$arr[$r->id][$col] = $val;
-				// \Tracy\Debugger::barDump($col, "col");
-				// \Tracy\Debugger::barDump($val, "val");
+				// bdump($col, "col");
+				// bdump($val, "val");
 			}
 
 			$data = Json::decode($r->data, true);
-			// \Tracy\Debugger::barDump($data, "data");
+			// bdump($data, "data");
 			foreach ($data as $col => $val) {
 				if (is_array($val)) $data[$col] = $val;
 			}
-			// \Tracy\Debugger::barDump($data, "data");
+			// bdump($data, "data");
 
 			foreach ($fields as $field) {
 				if (!isset($data[$field])) $data[$field] = null;

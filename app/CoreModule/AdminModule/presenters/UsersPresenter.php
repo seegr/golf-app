@@ -23,14 +23,14 @@ class UsersPresenter extends AdminPresenter
 
 		if ($id) {
 			$user = $this->UsersManager->getUser($id);
-			\Tracy\Debugger::barDump($user, "user");
+			bdump($user, "user");
 			$form->setDefaults($user);
 			$form["password"]->setRequired(false);
 			$form["password_again"]->setRequired(false);
 		}
 
 		$form = $this->getForm();
-		// \Tracy\Debugger::barDump($form, "form");
+		// bdump($form, "form");
 
 		$form["cancel"]->onClick[] = function() {
 			$this->redirect("usersList");

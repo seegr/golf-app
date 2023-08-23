@@ -30,16 +30,16 @@ class UsersManager extends BaseManager
 
 	public function createUserIdentity($user) {
 		$id = is_object($user) ? $user->id : $user;
-		// \Tracy\Debugger::barDump($id, "id");
+		// bdump($id, "id");
 
 		$user = $this->getUser($id);
 		$user = ArrayHash::from($user->toArray());
-		// \Tracy\Debugger::barDump($user, "user");
+		// bdump($user, "user");
 
 		unset($user[self::COLUMN_PASSWORD_HASH]);
 
 		$roles = $this->getUserRolesArray($user->id);
-		\Tracy\Debugger::barDump($roles, "roles");
+		bdump($roles, "roles");
 		//$roles = array_unique($roles);
 
 		return new Nette\Security\Identity($user->id, $roles, $user); 
@@ -57,7 +57,7 @@ class UsersManager extends BaseManager
 		}
 
 		//$roles = $this->assignUserRoles($roles);
-		// \Tracy\Debugger::barDump($roles, "roles");
+		// bdump($roles, "roles");
 
 		return $roles;
 	}
@@ -65,7 +65,7 @@ class UsersManager extends BaseManager
 	/*public function assignUserRoles($roles) {
 		foreach ($roles as $role) {
 			$role = $this->getUserRole($role);
-			#\Tracy\Debugger::barDump($role, "role");
+			#bdump($role, "role");
 			if ($role) {
 				if (!in_array($role->short, $roles)) {
 					$roles[] = $role;
@@ -84,10 +84,10 @@ class UsersManager extends BaseManager
 	public function getUserRole($role) {
 		$table = $this->getRoles();
 		if (is_numeric($role)) {
-			#\Tracy\Debugger::barDump($role, "is numeric");
+			#bdump($role, "is numeric");
 			$role = $table->get($role);
 		} else {
-			#\Tracy\Debugger::barDump($role, "is NOT numeric");
+			#bdump($role, "is NOT numeric");
 			$role = $table->where("short", $role)->fetch();
 		}
 
@@ -104,7 +104,7 @@ class UsersManager extends BaseManager
 	 * @throws DuplicateNameException
 	 */
 	public function userSave($vals) {
-		\Tracy\Debugger::barDump($vals, "vals");
+		bdump($vals, "vals");
 
 		if (is_array($vals)) $vals = ArrayHash::from($vals);
 
@@ -134,7 +134,7 @@ class UsersManager extends BaseManager
 			$data["tel"] = $vals->tel;
 		}
 		if (empty($vals->password)) {
-			\Tracy\Debugger::barDump("heslo prazdne");
+			bdump("heslo prazdne");
 			unset($data["password"]);
 		}
 
@@ -149,7 +149,7 @@ class UsersManager extends BaseManager
 				$this->getUser($id)->update($data);
 			} else {
 				//** vokativ
-				\Tracy\Debugger::barDump("neni vocative");
+				bdump("neni vocative");
 				$vocative = new \Vokativ\Name;
 				$voc = $vocative->vokativ($vals->firstname);
 				
@@ -158,7 +158,7 @@ class UsersManager extends BaseManager
 				$id = $this->getUsers()->insert($data);
 			}
 		} catch (Nette\Database\UniqueConstraintViolationException $e) {
-			\Tracy\Debugger::barDump($e, "e");
+			bdump($e, "e");
 			$col = $this->getDuplicateColumn($e);
 
 			switch ($col) {
@@ -176,7 +176,7 @@ class UsersManager extends BaseManager
 			}
 		}
 
-		\Tracy\Debugger::barDump($id, "id");
+		bdump($id, "id");
 
 		if (isset($vals->image) && $vals->image->hasFile()) {
 			$this->userImageSave($id, $vals->image);
@@ -185,7 +185,7 @@ class UsersManager extends BaseManager
 		$this->generateUserHash($id);
 
 		$user = $this->getUser($id);
-		\Tracy\Debugger::barDump($user, "user");
+		bdump($user, "user");
 
 		return $id;
 	}
@@ -324,8 +324,8 @@ class UsersManager extends BaseManager
 		$output = [];
 		preg_match('/(?<=key \')(.*)(?=\')/', $e, $output);
 
-		#\Tracy\Debugger::barDump($e, "sql error");
-		#\Tracy\Debugger::barDump($output, "output");
+		#bdump($e, "sql error");
+		#bdump($output, "output");
 
 		return $output[0];
 	}

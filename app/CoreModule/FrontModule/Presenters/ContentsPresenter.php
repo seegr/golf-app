@@ -14,14 +14,14 @@ class ContentsPresenter extends FrontPresenter
 
 	public function renderContentDetail($id): void
 	{
-		// \Tracy\Debugger::barDump($this->getParameters(), "renderContentDetail pars");
+		// bdump($this->getParameters(), "renderContentDetail pars");
 		$template = $this->template;
 		$config = $this->SettingsManager;
 		$content = $template->content = $this->ContentsManager->getContent($id);
 
 		if (!$content) $this->error("Stránka nenalezena", 404);
 
-		// \Tracy\Debugger::barDump($content, "content");
+		// bdump($content, "content");
 
 		$type = $content->ref("type");
 
@@ -34,8 +34,8 @@ class ContentsPresenter extends FrontPresenter
 		$template->type = $type->short;
 
 		$user = $this->getUser();
-		// \Tracy\Debugger::barDump($user, "user");
-		// \Tracy\Debugger::barDump($user->id, "user id");
+		// bdump($user, "user");
+		// bdump($user->id, "user id");
 		$template->iamContentEditor = !$this->iamContentEditor($id, $user) ? false : true;
 
 		$gal = $this["contentGallery"];
@@ -44,7 +44,7 @@ class ContentsPresenter extends FrontPresenter
 		$images->order("order " . $imagesOrder);
 
 		foreach ($images as $image) {
-			#\Tracy\Debugger::barDump($image, "image");
+			#bdump($image, "image");
 			$file = $image->ref("file");
 			$gal->addImage($file->url, $this->getThumb($file->id))
 				->setTitle($image->title)
@@ -53,14 +53,14 @@ class ContentsPresenter extends FrontPresenter
 
 		if ($type->short == "photos") $this["contentGallery"]->setRowHeight(200);
 
-		// \Tracy\Debugger::barDump($content, "content");
+		// bdump($content, "content");
 
 		// header image
 		$headerImgConfig = $template->headerImgConfig = $config->getSetting("content_header_image");
 		switch ($config->getSetting("content_header_image")) {
 			case "custom":
 			case "cropper":
-				// \Tracy\Debugger::barDump($content->header_image, "headerimage");
+				// bdump($content->header_image, "headerimage");
 				if ($content->header_image) {
 					$template->headerImage = $content->ref("header_image")->url;
 				} else if ($defaultImg = $config->getSetting("content_header_image_default")) {
@@ -78,10 +78,10 @@ class ContentsPresenter extends FrontPresenter
 
 		// if ($customFields = $content->custom_fields) {
 		// 	$fields = $this->ContentsManager->getContentCustomFields($type->short);
-		// 	// \Tracy\Debugger::barDump($fields, "fields");
+		// 	// bdump($fields, "fields");
 		// 	$template->customFields = ArrayHash::from($fields);
 		// 	$template->customData = $customData = Json::decode($customFields);
-		// 	// \Tracy\Debugger::barDump($customData, "customData");
+		// 	// bdump($customData, "customData");
 		// }
 
 		$template->customData = $this->getContentCustomData($id);

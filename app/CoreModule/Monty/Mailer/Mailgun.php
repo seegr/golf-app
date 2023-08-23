@@ -63,7 +63,7 @@ class Mailgun {
 
 			$this->to[] = $to;
 		} else {
-			\Tracy\Debugger::barDump($email, "email");
+			bdump($email, "email");
 
 			foreach ($email as $address => $name) {
 				$mail = is_numeric($address) ? $name : $address;
@@ -96,8 +96,8 @@ class Mailgun {
 
 	public function send() {
 		$mg = MG::create($this->config["key"]);
-		\Tracy\Debugger::barDump($this->config, "config");
-		\Tracy\Debugger::barDump($mg, "mg");
+		bdump($this->config, "config");
+		bdump($mg, "mg");
 		$from = $this->getFrom();
 
 		$pars = [
@@ -130,24 +130,24 @@ class Mailgun {
 			$pars["text"] = $this->body;
 		}
 
-		\Tracy\Debugger::barDump($this->mode, "send mode");
+		bdump($this->mode, "send mode");
 		switch ($this->mode) {
 			case "send":
-				\Tracy\Debugger::barDump("mail send");
-				\Tracy\Debugger::barDump($pars, "pars");
+				bdump("mail send");
+				bdump($pars, "pars");
 				$resp = $mg->messages()->send($this->config["domain"], $pars);
 
 				$this->onSend($pars + ["mg" => $resp]);
 			break;
 
 			case "log":
-				\Tracy\Debugger::barDump("mail log");
-				\Tracy\Debugger::barDump($this, "mail");
+				bdump("mail log");
+				bdump($this, "mail");
 			break;
 
 			default:
-				\Tracy\Debugger::barDump("mail test mode");
-				\Tracy\Debugger::barDump($pars, "pars");
+				bdump("mail test mode");
+				bdump($pars, "pars");
 				if (strpos($this->mode, "@") !== false) {
 					$pars["to"] = $this->mode;
 					$pars["bcc"] = null;
@@ -172,22 +172,22 @@ class Mailgun {
 			$msg->setHtmlBody($this->body);
 		}
 
-		\Tracy\Debugger::barDump($this->to, "to");
-		\Tracy\Debugger::barDump($this->mode, "mode");
+		bdump($this->to, "to");
+		bdump($this->mode, "mode");
 		switch ($this->mode) {
 			case "send":
 				foreach ($this->to as $email) {
-					\Tracy\Debugger::barDump($email, "email");
+					bdump($email, "email");
 					$msg->addToRecipient($email);
 				}
 
-				\Tracy\Debugger::barDump($msg, "msg");
+				bdump($msg, "msg");
 				$msg->finalize();
 			break;
 
 			case "log":
-				\Tracy\Debugger::barDump("mail log");
-				\Tracy\Debugger::barDump($this, "mail");
+				bdump("mail log");
+				bdump($this, "mail");
 			break;
 
 			default:
@@ -195,7 +195,7 @@ class Mailgun {
 					$msg->addToRecipient($this->mode);
 				}
 				
-				\Tracy\Debugger::barDump($msg, "msg");
+				bdump($msg, "msg");
 				$msg->finalize();
 			break;
 		}
@@ -215,11 +215,11 @@ class Mailgun {
 				foreach ($this->styles as $style) {
 					$css .= file_get_contents($style);
 				}
-				\Tracy\Debugger::barDump($css, "css");
+				bdump($css, "css");
 
 				$styledHtml = $cssToInlineStyles->convert($html, $css);
 				$this->body = $styledHtml;
-				\Tracy\Debugger::barDump($this->body, "body");
+				bdump($this->body, "body");
 			}
 		}
 	}

@@ -78,7 +78,7 @@ class ImageNew {
 			throw new ImageException($message);
 		}));
 
-		\Tracy\Debugger::barDump($image, "image");
+		bdump($image, "image");
 
 		self::$image = $image;
 
@@ -201,14 +201,14 @@ class ImageNew {
 		//$filePath .= $thumb ? "_" . $thumb : null;
 		$filePath .= "." . $format;
 
-		#\Tracy\Debugger::barDump($filePath, "filePath");
+		#bdump($filePath, "filePath");
 
 		return $filePath;
 	}
 
 	public function addText($text) {
-		\Tracy\Debugger::barDump($this->width, "width");
-		\Tracy\Debugger::barDump($this->height, "height");
+		bdump($this->width, "width");
+		bdump($this->height, "height");
 
 		$watermark = new Watermark($text);
 
@@ -232,22 +232,22 @@ class ImageNew {
 
 		FileSystem::createDir($folder);
 
-		\Tracy\Debugger::barDump(self::$image, "this image");
-		#\Tracy\Debugger::barDump($this, "image");
+		bdump(self::$image, "this image");
+		#bdump($this, "image");
 
 		// if ($this->thumbs) {
 		// 	$originalImage = clone($this);
 		// }
 
 		if ($this->maxWidth && $this->width > $this->maxWidth) {
-			\Tracy\Debugger::barDump($this->width, "width");
-			\Tracy\Debugger::barDump($this->height, "height");
+			bdump($this->width, "width");
+			bdump($this->height, "height");
 			$this->resize($this->maxWidth, null);
 		}
 
-		// \Tracy\Debugger::barDump($filePath, "filePath");
-		// \Tracy\Debugger::barDump($quality, "quality");
-		// \Tracy\Debugger::barDump($type, "type");
+		// bdump($filePath, "filePath");
+		// bdump($quality, "quality");
+		// bdump($type, "type");
 		if (!$this->thumbs) {
 			$this->placeWatermarks();
 			parent::save($filePath, $quality, $type);
@@ -261,16 +261,16 @@ class ImageNew {
 				$thumbs = [];
 
 				foreach ($this->thumbs as $thumb) {
-					\Tracy\Debugger::barDump($thumb, "thumb");
+					bdump($thumb, "thumb");
 					$thumbImage = $originalImage;
 					$thumbImage->resize($thumb, null);
 					$thumbImage->thumbs([]);
 					#$thumbName = $name . "_" . $thumb;
 					$thumbPath = $thumbImage->getFilePath($name, $thumb);
 
-					\Tracy\Debugger::barDump($thumbPath, "filePath");
-					\Tracy\Debugger::barDump($quality, "quality");
-					\Tracy\Debugger::barDump($type, "type");
+					bdump($thumbPath, "filePath");
+					bdump($quality, "quality");
+					bdump($type, "type");
 
 					$thumbFolder = $this->getFolder($thumb);
 					FileSystem::createDir($thumbFolder);
@@ -286,7 +286,7 @@ class ImageNew {
 				"thumbs" => $thumbs
 			]);*/
 
-			\Tracy\Debugger::barDump($filePath, "filePath");
+			bdump($filePath, "filePath");
 			return ArrayHash::from($this->getFileData($filePath));
 		}
 
@@ -321,7 +321,7 @@ class ImageNew {
 	}
 
 	public function getWatermarkPosition($watermark) {
-		#\Tracy\Debugger::barDump("getWatermarkPosition...");
+		#bdump("getWatermarkPosition...");
 
 		$imageOrigin = [$this->width / 2, $this->height / 2];
 		$watermarkOrigin = [$watermark->width / 2, $watermark->height / 2];
