@@ -69,8 +69,13 @@ trait CoursesTrait
                         ($ev->start->format("H:i") < $next || !$next)) {
                         if (!in_array($ev->content, $coursesParents)) {
                             $content = $ev->ref('content');
-                            $customFields = Json::decode($content['custom_fields']);
-                            $course = $customFields->course ? $courseType[$customFields->course] : null;
+
+                            $course = null;
+                            if ($content['custom_fields']) {
+                                $customFields = Json::decode($content['custom_fields']);
+                                $course = isset($customFields->course) ? $courseType[$customFields->course] : null;
+                            }
+
                             $data = [
                                 'id' => $ev->id,
                                 'content' => $ev->content,

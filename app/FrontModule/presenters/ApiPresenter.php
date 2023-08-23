@@ -105,7 +105,7 @@ class ApiPresenter extends Nette\Application\UI\Presenter
       $data = [
           'id' => $date->id,
           'title' => $event->title,
-          'course' => $customFields->course ? $this->golfConfig->get('courses')[$customFields->course] : null,
+          'course' => isset($customFields->course) ? $this->golfConfig->get('courses')[$customFields->course] : null,
           'start' => $date->start,
           'end' => $date->end,
           'lektor' => !empty($customFields->lektor) ? $customFields->lektor : null,
@@ -146,7 +146,7 @@ class ApiPresenter extends Nette\Application\UI\Presenter
       $this->sendResponse(new JsonResponse([
           'status' => 'registered',
           'role' => $role
-          ]));
+      ]));
   }
 
   public function notFoundResponse()
@@ -207,9 +207,9 @@ class ApiPresenter extends Nette\Application\UI\Presenter
   public function sendConfirmationEmail($vals, $event)
   {
       $mailer = $this->mailer;
-      $eventCustomFields = Json::decode($event->custom_fields);
+      $eventCustomFields = $event->custom_fields ? Json::decode($event->custom_fields) : null;
 
-      if ($courseType = $eventCustomFields->course) {
+      if ($courseType = $eventCustomFields['course'] ?? null) {
           $template = $this->templateFactory->createTemplate();
           $html = $template->renderToString(__DIR__ . "/../templates/mails/registrationConfirm-$courseType.latte", [
               'title' => $event->title
