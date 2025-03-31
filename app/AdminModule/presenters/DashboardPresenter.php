@@ -15,6 +15,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Tracy\Debugger;
 
@@ -76,16 +77,19 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
                     $sheet = $spreadsheet->setActiveSheetIndex($i);
                 }
 
-                $date = $e->related('contents_events_dates')->order('start ASC')->fetch();
+	            $sheet->getPageSetup()->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
+	            $sheet->getPageSetup()->setPaperSize(PageSetup::PAPERSIZE_A4);
+	            $sheet->getPageSetup()->setFitToWidth(1);
+	            $sheet->getPageSetup()->setFitToHeight(0);
+
+	            $date = $e->related('contents_events_dates')->order('start ASC')->fetch();
                 if (!$date) continue;
 
                 $i++;
 //
                 $this->addCourseText($sheet, $e, $date);
                 $this->addPersonsTable($sheet, $e);
-                //        bdump($rows, 'rows');
-                //        $sheet->fromArray($rows);
-            } //course end
+            }
 
             $this->setSummarySheet($spreadsheet, $i);
             bdump($spreadsheet, 'spreadsheet');
@@ -125,7 +129,7 @@ class DashboardPresenter extends \App\CoreModule\AdminModule\Presenters\AdminPre
 
         $sheet->setCellValue('C1', 'BUDU GOLFISTA');
         $sheet->setCellValue('C3', $this->formatHtml('Vždy se ptejte, zda si budou půjčovat hole a pokud ano, rovnou si vezměte <strong>zálohu.</strong>'));
-        $sheet->setCellValue('C5', $this->formatHtml('Na první lekci každému odbavit <strong>Karta ke kurzu zdarma</strong>.'));
+        $sheet->setCellValue('C5', $this->formatHtml('Na první lekci každému odbavit <strong>Karta Budu golfista</strong>.'));
         $sheet->setCellValue('C6', $this->formatHtml('Na každou <strong>lekci s trenérem</strong> jim odbavte půjčení hole a 2 koše na driving, <strong>nebo</strong> akademii - pokud tak rozhodne trenér, ale většinou to budou koše.'));
         $sheet->setCellValue('C7', 'Při tréninku mimo lekci se musí odbavovat jako běžný člen - tzn. čerpat z členství (pozor v typu platby z čeho čerpáte), nebo platit.');
         $sheet->setCellValue('C8', $this->formatHtml('Pokud lekci vynechají, <strong>na náhradu nemají nárok</strong>.'));

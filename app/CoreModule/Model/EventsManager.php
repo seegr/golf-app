@@ -313,8 +313,6 @@ class EventsManager extends ContentsManager
 
     public function getEventRegSummary($id, $date = null, $forPublic = false): ArrayHash
     {
-        bdump($id, 'id');
-        bdump($date, 'date');
         $event = $this->getEvent($id);
         $all = $this->getEventPersons($id, $date)->where("record.active", true);
         // bdump($all, "submitters");

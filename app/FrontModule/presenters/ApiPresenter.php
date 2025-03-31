@@ -61,28 +61,30 @@ class ApiPresenter extends Nette\Application\UI\Presenter
 
   public function actionCalendarInit($dump = false): void
   {
-		// $template->range = self::getCoursesRange();
-		// $template->courses = $this->getFutureCoursesBegins();
-    
-    // $range = self::getCoursesRange();
     $courses = $this->getFutureCoursesBegins();
 
-    // bdump($range);
-    bdump($courses);
-
     $days = \Monty\Helper::getDaysArr();
-    unset($days[6], $days[7]);
+
+	$isWeekend = false;
+
+	foreach ($courses as $_days) {
+		if ($_days[6] || $_days[7]) {
+			$isWeekend = true;
+			break;
+		}
+	}
+
+	if (!$isWeekend) {
+		unset($days[6], $days[7]);
+	}
 
     $data = [
-      // 'range' => $range,
       'courses' => $courses,
-      "days" => $days
+      "days" => $days,
+      "isWeekend" => $isWeekend
     ];
 
     if ($dump) {
-      // dump($range);
-      dump($courses);
-      dump($data);
       exit();
     } else {
       $this->sendResponse(new JsonResponse($data));
@@ -91,9 +93,7 @@ class ApiPresenter extends Nette\Application\UI\Presenter
 
   public function actionGetCourse(int $date_id)
   {
-      bdump($date_id);
       $date = $this->EventsManager->getEventDate($date_id);
-      bdump($date);
 
       if (!$date) {
           $this->notFoundResponse();
@@ -138,8 +138,6 @@ class ApiPresenter extends Nette\Application\UI\Presenter
       $this->EventsManager->insertEventPerson($event->id, $recId, "part");
 
       Debugger::log('event:' . $event->id . ' role:' . $role);
-
-      //todo mailer service
 
       $this->sendConfirmationEmail($vals, $event);
 
@@ -197,8 +195,6 @@ class ApiPresenter extends Nette\Application\UI\Presenter
           ->setSubject('Potvrzení registrace')
           ->setBody('Děkujeme za registraci na náš golf kurz. Ozveme se Vám');
 
-      bdump($mail->getHeaders());
-      bdump($mailer);
       $mailer->send($mail);
 
       exit();
@@ -209,7 +205,7 @@ class ApiPresenter extends Nette\Application\UI\Presenter
       $mailer = $this->mailer;
       $eventCustomFields = $event->custom_fields ? Json::decode($event->custom_fields) : null;
 
-      if ($courseType = $eventCustomFields['course'] ?? null) {
+      if ($courseType = $eventCustomFields->course ?? null) {
           $template = $this->templateFactory->createTemplate();
           $html = $template->renderToString(__DIR__ . "/../templates/mails/registrationConfirm-$courseType.latte", [
               'title' => $event->title
